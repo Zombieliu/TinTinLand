@@ -195,47 +195,59 @@ const Course = () => {
     const Signup = async (courseName) => {
         if(loginState){
             setOpenLogin(true)
-                const CourseId = await client.callApi('v1/teachable/GetCourseId', {
-                    course_name:courseName
-                });
-                       const TaUser = await client.callApi('v1/teachable/GetTaUser', {
-                           user_email: user_email.user_email
-                       });
+            const CourseId = await client.callApi('v1/teachable/GetCourseId', {
+                course_name:courseName
+            });
+            const TaUser = await client.callApi('v1/teachable/GetTaUser', {
+                user_email: user_email.user_email
+            });
+            console.log(CourseId,TaUser)
 
-                       if (CourseId.res !==undefined && TaUser.res!==undefined) {
-                           if(CourseId.isSucc && TaUser.isSucc){
-                               const data = await client.callApi('v1/teachable/EnrollCourse', {
-                                   course_id: CourseId.res.course_id,
-                                   user_id: TaUser.res.user_id
-                               });
-                               console.log(data)
-                               setOpenLogin(false)
-                               setPop_up_boxData({
-                                   state:true,
-                                   type:"报名",
-                                   title:"",
-                               })
-                               setSop_up_boxState(true)
-                           }else {
-                               setOpenLogin(false)
-                               setPop_up_boxData({
-                                   state:false,
-                                   type:"报名",
-                                   title:"你已经报过该课程了",
-                               })
-                               setSop_up_boxState(true)
-                           }
+            if (CourseId.res !==undefined && TaUser.res!==undefined) {
+                if(CourseId.isSucc && TaUser.isSucc){
+                    const data = await client.callApi('v1/teachable/EnrollCourse', {
+                        course_id: CourseId.res.course_id,
+                        user_id: TaUser.res.user_id
+                    });
+                    console.log(data)
+                    if(data.isSucc){
+                        setOpenLogin(false)
+                        setPop_up_boxData({
+                            state:true,
+                            type:"报名",
+                            title:"",
+                        })
+                        setSop_up_boxState(true)
+                    }else {
+                        setOpenLogin(false)
+                        setPop_up_boxData({
+                            state:false,
+                            type:"报名",
+                            title:"你已经报过该课程了",
+                        })
+                        setSop_up_boxState(true)
+                    }
 
-                           // console.log(CourseId.res.course_id,TaUser.res.user_id)
-                       }else {
-                           setOpenLogin(false)
-                           setPop_up_boxData({
-                               state:false,
-                               type:"报名",
-                               title:"请检查网络",
-                           })
-                           setSop_up_boxState(true)
-                       }
+                }else {
+                    setOpenLogin(false)
+                    setPop_up_boxData({
+                        state:false,
+                        type:"报名",
+                        title:"请检查网络",
+                    })
+                    setSop_up_boxState(true)
+                }
+
+                // console.log(CourseId.res.course_id,TaUser.res.user_id)
+            }else {
+                setOpenLogin(false)
+                setPop_up_boxData({
+                    state:false,
+                    type:"报名",
+                    title:"请检查网络",
+                })
+                setSop_up_boxState(true)
+            }
 
         }
     }
