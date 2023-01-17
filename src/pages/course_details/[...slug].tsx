@@ -240,7 +240,7 @@ const CourseDetails = () =>{
             });
 
             if (CourseId.res !==undefined && TaUser.res!==undefined) {
-                if(!CourseId.isSucc && !TaUser.isSucc){
+                if(CourseId.isSucc && TaUser.isSucc){
                     const data = await client.callApi('v1/teachable/EnrollCourse', {
                         course_id: CourseId.res.course_id,
                         user_id: TaUser.res.user_id

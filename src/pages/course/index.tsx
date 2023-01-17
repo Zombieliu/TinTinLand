@@ -39,7 +39,7 @@ const Course = () =>{
                     },
 
                 ],
-                h1:"以太坊开发快速入门-轻松创建智能合约",
+                h1:"区块链入门课程——0基础创建以太坊智能合约",
                 link: "https://hkr.xet.tech/s/Pe8p8",
                 state: false,
                 AboutStart:true,
@@ -185,27 +185,39 @@ const Course = () =>{
             const TaUser = await client.callApi('v1/teachable/GetTaUser', {
                 user_email: user_email.user_email
             });
+            console.log(CourseId,TaUser)
 
             if (CourseId.res !==undefined && TaUser.res!==undefined) {
-                if(!CourseId.isSucc && !TaUser.isSucc){
+                if(CourseId.isSucc && TaUser.isSucc){
                     const data = await client.callApi('v1/teachable/EnrollCourse', {
                         course_id: CourseId.res.course_id,
                         user_id: TaUser.res.user_id
                     });
                     console.log(data)
-                    setOpenLogin(false)
-                    setPop_up_boxData({
-                        state:true,
-                        type:"报名",
-                        title:"",
-                    })
-                    setSop_up_boxState(true)
+                    if(data.isSucc){
+                        setOpenLogin(false)
+                        setPop_up_boxData({
+                            state:true,
+                            type:"报名",
+                            title:"",
+                        })
+                        setSop_up_boxState(true)
+                    }else {
+                        setOpenLogin(false)
+                        setPop_up_boxData({
+                            state:false,
+                            type:"报名",
+                            title:"你已经报过该课程了",
+                        })
+                        setSop_up_boxState(true)
+                    }
+
                 }else {
                     setOpenLogin(false)
                     setPop_up_boxData({
                         state:false,
                         type:"报名",
-                        title:"你已经报过该课程了",
+                        title:"请检查网络",
                     })
                     setSop_up_boxState(true)
                 }

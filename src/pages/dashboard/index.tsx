@@ -669,7 +669,6 @@ const UserCourse = () =>{
                 const ret = await client.callApi('v1/user/GetUserCourseList', {
                     email: user_email.user_email
                 });
-                console.log("....",JSON.parse(ret.res.courses))
                 if(JSON.parse(ret.res.courses).length !==0){
                    const data = JSON.parse(ret.res.courses)
                     let course_list = []
@@ -682,7 +681,7 @@ const UserCourse = () =>{
                         const course = await client.callApi('v1/course/GetCourse', {
                             course_name: data[i].course_name
                         });
-                        console.log(course.res.course_details.course_tab)
+
 
                         const  survey =  await client.callApi('v1/course/GetCourseWjResult', {
                             course_name: data[i].course_name,

@@ -106,13 +106,11 @@ const Login = () =>{
                                         onClick={next}
                                         className={classNames(emailType && emailNumber?"  text-white ":" text-gray-400 border-gray-400 cursor-not-allowed","bg-black w-28 flex justify-center py-2 px-4 border border-black  rounded-full shadow-sm text-sm font-medium items-center")}
                                     >
-
                                        <div >
                                            继续
                                        </div>
                                     </button>
                                 </div>
-
                             <div className={loginState?"flex justify-center sm:justify-end mt-10":"hidden"}>
                                 <button
                                     type="submit"
@@ -121,9 +119,6 @@ const Login = () =>{
                                     <div className={" animate-spin"}><i className="fa fa-spinner f-spin fa-x fa-fw"></i></div>
                                 </button>
                             </div>
-
-
-
 
                         </div>
                     </div>
