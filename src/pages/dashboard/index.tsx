@@ -15,6 +15,7 @@ import {user} from "../../shared/interface/user";
 import {Pop_up_box} from "../../components/pop_up_box";
 import ChevronUpIcon from "@heroicons/react/outline/ChevronUpIcon";
 import {flag} from "arg";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 
 function classNames(...classes) {
@@ -491,9 +492,10 @@ const UserInfo = () =>{
                                     钱包绑定
                                 </div>
                                 <div className="text-gray-700 flex  items-center">
-                                    <button onClick={()=>{setOpenWallet(true)}}
-                                            className="bg-white border border-black text-black rounded-full py-1 px-3 mr-5 w-24">
-                                        绑定钱包</button>
+                                    <ConnectButton  accountStatus="address"  />
+                                    {/*<button onClick={()=>{setOpenWallet(true)}}*/}
+                                    {/*        className="bg-white border border-black text-black rounded-full py-1 px-3 mr-5 w-24">*/}
+                                    {/*    绑定钱包</button>*/}
 
                                 </div>
                             </div>

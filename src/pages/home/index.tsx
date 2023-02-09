@@ -66,7 +66,7 @@ const Course = () => {
                     },
 
                 ],
-                h1: "第三期｜Internet Computer：从核心技术入门到开发实战",
+                h1: "第3期｜Internet Computer：从核心技术入门到开发实战",
                 link: "https://hkr.h5.xeknow.com/s/xRaCr",
                 state: true,
                 AboutStart:false,
