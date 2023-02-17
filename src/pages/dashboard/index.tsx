@@ -137,6 +137,7 @@ const UserInfo = () =>{
                 state:true,
                 type:"保存",
                 title:"",
+                hash: ""
             })
             setSop_up_boxState(true)
             // location.reload();
@@ -147,6 +148,7 @@ const UserInfo = () =>{
                 state:false,
                 type:"保存",
                 title:"请重试",
+                hash: ""
             })
             setSop_up_boxState(true)
         }
@@ -562,7 +564,7 @@ const UserInfo = () =>{
                         </div>
                     </div>
                     <div className="flex justify-center mx-4 mt-5 md:mt-10">
-                        <button onClick={()=>location.reload()} className="bg-white border border-black text-black rounded-full py-1 px-3 mr-5 w-24">取消</button>
+                        {/*<button onClick={()=>location.reload()} className="bg-white border border-black text-black rounded-full py-1 px-3 mr-5 w-24">取消</button>*/}
                         <button onClick={Revise} className="bg-black text-white rounded-full py-1 px-3 w-24 flex justify-center ">
                             <div>
                                 保存
@@ -665,6 +667,22 @@ const UserCourse = () =>{
     ]
     const [courseInfo,setCourseInfo] = useState(course_info)
     const [courseDataState,setCourseDataState] =useState(false)
+    const [promptBox,setPromptBox] = useState(false)
+    const [promptTime,setPromptTime] = useState(0)
+
+    let TimeOut
+    useEffect(() => {
+        TimeOut =   setTimeout(() => {
+            if (promptTime > 0) {
+                setPromptTime(promptTime - 1);
+            }else {
+                setPromptBox(false)
+            }
+        }, 1000);
+        return ()=>clearTimeout(TimeOut)
+    }, [promptTime]);
+
+
     useEffect(() => {
         if(router.isReady){
             const query = async() =>{
@@ -770,8 +788,13 @@ const UserCourse = () =>{
 
             window.open('about:blank').location.href=userCourseWjUrl
         }
-
-
+    }
+    const goToSchool = (link)=>{
+        setPromptBox(true)
+        setPromptTime(10)
+        setTimeout(()=>{
+            window.open(link, "_blank")
+        },3000)
     }
 
     if(!courseDataState) {
@@ -820,11 +843,11 @@ const UserCourse = () =>{
                                                         领取奖励
                                                     </a>
                                                 </Link>
-                                                <Link href={items.course_link}>
-                                                    <a className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "hidden":"text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5"}>
+                                                <button onClick={()=>goToSchool(items.course_link)}>
+                                                    <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "hidden":"text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5"}>
                                                         跳转上课
-                                                    </a>
-                                                </Link>
+                                                    </div>
+                                                </button>
                                             </div>
                                         </div>
 
@@ -855,6 +878,64 @@ const UserCourse = () =>{
                         ))}
 
                     </div>
+                    <Transition.Root show={promptBox} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPromptBox}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-3/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md ">
+                                            <div className="flex justify-center">
+                                                <img className="rounded-full w-14 h-14" src="/tintinlogo.svg" alt=""/>
+                                            </div>
+                                            <div className='text-center my-5 text-sm'>
+                                                正在为你打开www.tintin school.com <br/>您将需要账号密码登陆
+                                            </div>
+                                            <div className='text-sm text-center'>
+                                                账号密码在您首次注册TinTinLand时发送的邮件中，如需重新发送，
+                                                <br/>
+                                                <div className="flex justify-center">
+                                                    请点击
+                                                    <div className="text-indigo-800">
+                                                        重新发送
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setPromptBox(false)}  className="bg-white border border-black text-black w-32 py-1.5 rounded-full mr-5">
+                                                    关闭 {promptTime}s
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
                 </>
             )
         }else {

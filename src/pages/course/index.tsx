@@ -7,9 +7,18 @@ import Activity_Info from "../../components/activity_info";
 import Heads from "../../components/head";
 import {client} from "../../client";
 import {useAtom} from "jotai";
-import {LoginState, OpenLoginState, PopUpBoxInfo, PopUpBoxState, UserEmail} from "../../jotai";
+import {
+    LoginState,
+    OpenLoginState,
+    PopUpBoxInfo,
+    PopUpBoxState,
+    SignUpCourseBoxData,
+    SignUpCourseBoxState,
+    UserEmail
+} from "../../jotai";
 import {Dialog, Transition} from "@headlessui/react";
-import {Pop_up_box} from "../../components/pop_up_box";
+import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
+import Loading from "../../components/loading";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -170,70 +179,16 @@ const Course = () =>{
 
             },
         ]
-    const [loginState,] = useAtom(LoginState)
-    const [user_email,] = useAtom(UserEmail)
-    const [openLogin,setOpenLogin] =useAtom(OpenLoginState)
-    const [pop_up_boxState,setSop_up_boxState] = useAtom(PopUpBoxState)
-    const [pop_up_boxData,setPop_up_boxData] =useAtom(PopUpBoxInfo)
 
-    const Signup = async (courseName) => {
-        if(loginState){
-            setOpenLogin(true)
-            const CourseId = await client.callApi('v1/teachable/GetCourseId', {
-                course_name:courseName
-            });
-            const TaUser = await client.callApi('v1/teachable/GetTaUser', {
-                user_email: user_email.user_email
-            });
-            console.log(CourseId,TaUser)
-
-            if (CourseId.res !==undefined && TaUser.res!==undefined) {
-                if(CourseId.isSucc && TaUser.isSucc){
-                    const data = await client.callApi('v1/teachable/EnrollCourse', {
-                        course_id: CourseId.res.course_id,
-                        user_id: TaUser.res.user_id
-                    });
-                    console.log(data)
-                    if(data.isSucc){
-                        setOpenLogin(false)
-                        setPop_up_boxData({
-                            state:true,
-                            type:"报名",
-                            title:"",
-                        })
-                        setSop_up_boxState(true)
-                    }else {
-                        setOpenLogin(false)
-                        setPop_up_boxData({
-                            state:false,
-                            type:"报名",
-                            title:"你已经报过该课程了",
-                        })
-                        setSop_up_boxState(true)
-                    }
-
-                }else {
-                    setOpenLogin(false)
-                    setPop_up_boxData({
-                        state:false,
-                        type:"报名",
-                        title:"请检查网络",
-                    })
-                    setSop_up_boxState(true)
-                }
-
-                // console.log(CourseId.res.course_id,TaUser.res.user_id)
-            }else {
-                setOpenLogin(false)
-                setPop_up_boxData({
-                    state:false,
-                    type:"报名",
-                    title:"请检查网络",
-                })
-                setSop_up_boxState(true)
-            }
-
-        }
+    const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
+    const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
+    const Signup = (img,courseName) =>{
+        setSignUpCourseBox(true)
+        setSignUpCourseData({
+            img,
+            courseName,
+            price: "100"
+        })
     }
 
     return (
@@ -284,12 +239,12 @@ const Course = () =>{
                                         {items.h1}
                                     </div>
                                     <div className="flex mt-5 ">
-                                        <button onClick={()=>Signup(items.h1)}>
+                                        <button onClick={()=>{Signup(items.img,items.h1)}}>
                                             <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                 立刻报名
                                             </div>
                                         </button>
-                                        <button onClick={()=>Signup(items.h1)} >
+                                        <button onClick={()=>{Signup(items.img,items.h1)}} >
                                             <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                 即将开始
                                             </div>
@@ -348,43 +303,9 @@ const Course = () =>{
 
                 </div>
             </div>
-            <Transition.Root show={openLogin} as={Fragment}>
-                <Dialog as="div" className="relative z-30" onClose={()=>false}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                    </Transition.Child>
-
-                    <div className="fixed inset-0 z-10 overflow-y-auto">
-                        <div className="flex min-h-full items-center  justify-center p-4 text-center sm:items-center sm:p-0">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                enterTo="opacity-100 translate-y-0 sm:scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                            >
-                                <Dialog.Panel className="">
-
-                                    <div className="animate-spin text-white">
-                                        <i className="fa fa-spinner f-spin fa-2x fa-fw"></i>
-                                    </div>
-                                </Dialog.Panel>
-                            </Transition.Child>
-                        </div>
-                    </div>
-                </Dialog>
-            </Transition.Root>
+       <Loading/>
             <Pop_up_box/>
+            <SignUpCourseBox/>
             <Tail/>
         </div>
 

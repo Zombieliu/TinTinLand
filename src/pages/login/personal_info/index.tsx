@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import {Router, useRouter} from "next/router";
 import Heads from "../../../components/head";
 import {useAtom} from "jotai";
-import {LoginState, UserEmail,} from "../../../jotai";
+import {LoginState, PromptBoxState, UserEmail,} from "../../../jotai";
 import login from "../index";
 import {client} from "../../../client";
 
@@ -19,7 +19,7 @@ const Personal_info = () =>{
     const [,setLoginState] = useAtom(LoginState)
     const [userEmail,setUserEmail] =useAtom(UserEmail)
     const [nextState,setNextState] = useState(false)
-
+    const [promptBox,setPromptBox] = useAtom(PromptBoxState)
     const checkNumber = async (e) =>{
         // e.target.value= e.target.value.replace(/[ ]/g,'')
         if (e.target.value.replace(/[ ]/g,'') =='') {
@@ -60,6 +60,7 @@ const Personal_info = () =>{
                 setUserEmail(userName)
                 setLoginState(true)
                 setNextState(false)
+                setPromptBox(true)
                 await  router.push(
                     {
                         pathname:"/homepage",

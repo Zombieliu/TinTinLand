@@ -39,7 +39,8 @@ const detail = {
 const PopUpBoxInfo = atom({
     type:"",
     state:false,
-    title:""
+    title:"",
+    hash:""
 })
 const PopUpBoxState = atom(false)
 
@@ -54,4 +55,23 @@ const OpenLoginState = atom(false)
 const userEmail = { user_email: "",username:""}
 const UserEmail = atomWithStorage("UserEmail",userEmail)
 
-export {Course_Detail,JobFairInfoState,LoginState,UserEmail,PopUpBoxState,PopUpBoxInfo,OpenLoginState}
+const OpenPayState = atom(false)
+
+//修改支付状态
+const PayState = atom("pending")
+
+//等待页面倒计时
+const PendingPayState = atom(0)
+
+//个人主页弹出框
+const PromptBoxState = atom(false)
+
+//课程报名弹出框
+const SignUpCourseBoxState = atom(false)
+//课程信息
+const SignUpCourseBoxData = atom({
+    img:"",
+    courseName:"",
+    price:""
+})
+export {Course_Detail,JobFairInfoState,LoginState,UserEmail,PopUpBoxState,PopUpBoxInfo,OpenLoginState,OpenPayState,PayState,PendingPayState,PromptBoxState,SignUpCourseBoxState,SignUpCourseBoxData}

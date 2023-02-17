@@ -17,14 +17,16 @@ const Verify = () =>{
     const [verifyState,SetVerifyState] =useState(true)
     const [hidden,setHidden] = useState(false)
     const [time,setTime] = useState(0)
+    let TimeOut
     useEffect(() => {
-        setTimeout(() => {
+        TimeOut =  setTimeout(() => {
             if (time > 0) {
                 setTime(time - 1);
             }else {
                 setHidden(false)
             }
         }, 1000);
+        return ()=>clearTimeout(TimeOut)
     }, [time]);
 
     const checkNumber = async (e) =>{

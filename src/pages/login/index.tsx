@@ -55,7 +55,8 @@ const Login = () =>{
                   setPop_up_boxData({
                       state:false,
                       type:"发送验证码",
-                      title: "请检查网络"
+                      title: "请检查网络",
+                      hash: ""
                   })
                   setSop_up_boxState(true)
               }

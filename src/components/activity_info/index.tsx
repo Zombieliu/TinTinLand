@@ -338,7 +338,7 @@ const latestIssueTinTinLand ={
     img:"/activity/TTL/TinTinLand_1_L.png",
     subscriptionLink:"https://jinshuju.net/f/xZGD2o?x_field_1=%E5%B0%8FT",
     more:"https://youtu.be/VQMIWFIQU-4",
-    state:true,
+    state:false,
 }
 const TinTinLandHistory = [
     {
@@ -352,11 +352,9 @@ const TinTinLandHistory = [
         img:"/activity/TTL/TinTinLand_1_L.png",
         subscriptionLink:"https://jinshuju.net/f/xZGD2o?x_field_1=%E5%B0%8FT",
         more:"https://youtu.be/VQMIWFIQU-4",
-        state:true,
+        state:false,
     }
 ]
-
-
 
 const Activity_Info = {
         TinTinMeeting:{
