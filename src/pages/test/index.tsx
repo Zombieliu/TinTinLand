@@ -2,13 +2,21 @@ import {Dialog,Transition} from "@headlessui/react";
 import {useAtom} from "jotai";
 import React, {Fragment, useEffect, useState} from "react";
 import {ConnectButton, useAccountModal, useConnectModal} from "@rainbow-me/rainbowkit";
-import {useAccount} from 'wagmi'
+import {useAccount, useContract,  useSigner, useSignMessage} from 'wagmi'
 import {CheckIcon} from "@heroicons/react/solid";
 import {OpenLoginState, OpenPayState, PayState, PendingPayState, PopUpBoxInfo, PopUpBoxState} from "../../jotai";
 import {Pop_up_box} from "../../components/pop_up_box";
 import Loading from "../../components/loading";
 import { WaitPayPoPUpBox} from "../../components/payState";
-import {router} from "next/client";
+
+import { useDebounce } from 'use-debounce'
+import {
+    usePrepareSendTransaction,
+    useSendTransaction,
+    useWaitForTransaction,
+} from 'wagmi'
+import {parseEther, verifyMessage} from "ethers/lib/utils";
+import {utils} from "ethers";
 
 export default function App() {
     const { address, isConnected } = useAccount()
@@ -42,6 +50,9 @@ export default function App() {
         setConnectWallet(false)
     // 登陆后关闭提醒框
     },[openConnectModal])
+
+
+
 
 
     let TimeOut
@@ -118,18 +129,30 @@ export default function App() {
         setTimeout(()=>{
             window.open("https://www.google.com/", "_blank")
         },3000)
-
     }
+
+    const { data,error, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+        message: 'Give me all the money',
+        onSuccess(data, variables) {
+            // Verify signature when sign message succeeds
+            const address = verifyMessage(variables.message, data)
+            recoveredAddress.current = address
+        },
+    })
+    const recoveredAddress = React.useRef<string>()
+    // const { data, error, isLoading, signMessage } = useSignMessage({
+    //
+    // })
+
     return (
         <>
-
             <Pop_up_box/>
             <Loading/>
             <WaitPayPoPUpBox/>
             <div className="flex mt-10 justify-center">
                 <ConnectButton  accountStatus="address"/>
             </div>
-            <div className="flex mt-10 justify-center">
+            <div className="flex mt-10 justify-center items-center">
                 <button onClick={()=>receive(true)} className="rounded-full mx-10  px-4 py-1 bg-black text-white mt-20">
                   免费版  领取奖励
                 </button>
@@ -137,6 +160,7 @@ export default function App() {
                 <button onClick={()=>receive(false)} className="rounded-full  px-4 py-1 bg-black text-white mt-20">
                     付费版  领取奖励
                 </button>
+
             </div>
 
             <div className="flex mt-5 justify-center">
@@ -152,6 +176,43 @@ export default function App() {
                     付款成功界面
                 </button>
 
+            </div>
+            <div className="flex justify-center mt-5">
+                <form
+                    onSubmit={(event) => {
+                        event.preventDefault()
+                        // @ts-ignore
+                        const formData = new FormData(event.target)
+                        const message = formData.get('message')
+                        // @ts-ignore
+                        signMessage({ message })
+                    }}
+                >
+                    {/*<label htmlFor="message">Enter a message to sign</label>*/}
+                    <textarea
+                        id="message"
+                        name="message"
+                        placeholder="The quick brown fox…"
+                    />
+                    <button disabled={isLoading} className="rounded-full  px-4 py-1 bg-black text-white mt-20">
+                        {isLoading ? 'Check Wallet' : 'Sign Message'}
+                    </button>
+
+                    {data && (
+                        <div>
+                            <div>Recovered Address: {recoveredAddress.current}</div>
+                            <div>Signature: {data}</div>
+                        </div>
+                    )}
+
+                    {error && <div>{error.message}</div>}
+                </form>
+
+            </div>
+            <div className="flex justify-center mt-5">
+                <button disabled={isLoading} onClick={() => signMessage()}  className="rounded-full  px-4 py-1 bg-black text-white mt-20">
+                    Sign message
+                </button>
             </div>
 
             <Transition.Root show={promptBox} as={Fragment}>

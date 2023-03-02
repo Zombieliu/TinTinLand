@@ -10,6 +10,7 @@ import {
     rainbowWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets";
+import {arbitrum, polygonMumbai} from "@wagmi/chains";
 
 const { chains, provider } = configureChains(
     [

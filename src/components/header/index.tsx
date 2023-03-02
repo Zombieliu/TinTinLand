@@ -55,8 +55,6 @@ const Header = () =>{
             }
     },[])
 
-
-
     return (
         <header>
             <Popover className="relative bg-white  ">
@@ -269,10 +267,57 @@ const Header = () =>{
                                             </Switch>
                                         </div>
                                     <Link href="/login">
-                                        <a className=" text-base border border-gray-500 rounded-full cursor-pointer px-5">
+                                        <a className={loginState?"hidden":" ml-4 text-base border border-gray-500 rounded-full cursor-pointer px-5"}>
                                             登陆
                                         </a>
                                     </Link>
+                                    <div className={loginState?"mt-1.5 ml-4":"hidden"}>
+                                        <Menu as="div" className=" relative ">
+                                            <Menu.Button className="inline-flex w-7  rounded-full ">
+                                                <img className="rounded-full " src="/login.png" alt=""/>
+                                            </Menu.Button>
+                                            <Transition
+                                                as={Fragment}
+                                                enter="transition ease-out duration-100"
+                                                enterFrom="transform opacity-0 scale-95"
+                                                enterTo="transform opacity-100 scale-100"
+                                                leave="transition ease-in duration-75"
+                                                leaveFrom="transform opacity-100 scale-100"
+                                                leaveTo="transform opacity-0 scale-95"
+                                            >
+                                                <Menu.Items className="absolute right-0 mt-2 w-28  divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                    <div className="px-1 py-1 text-center">
+                                                        <Menu.Item>
+                                                            <Link href="/homepage">
+                                                                <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
+                                                                    个人主页
+                                                                </a>
+                                                            </Link>
+                                                        </Menu.Item>
+                                                    </div>
+                                                    <div className="px-1 py-1 ">
+                                                        <Menu.Item>
+                                                            <Link  href="/dashboard">
+                                                                <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
+                                                                    Dashboard
+                                                                </a>
+                                                            </Link>
+                                                        </Menu.Item>
+                                                    </div>
+                                                    <div className="px-1 py-1 ">
+                                                        <Menu.Item>
+
+                                                            <button onClick={loginOut} className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
+                                                                登出
+                                                            </button>
+                                                        </Menu.Item>
+                                                    </div>
+
+
+                                                </Menu.Items>
+                                            </Transition>
+                                        </Menu>
+                                    </div>
                                 </div>
                             </div>
                         </Popover.Panel>
