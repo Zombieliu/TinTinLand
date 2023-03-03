@@ -17,6 +17,7 @@ import {
 } from 'wagmi'
 import {parseEther, verifyMessage} from "ethers/lib/utils";
 import {utils} from "ethers";
+import {SignMessageArgs} from "@wagmi/core";
 
 export default function App() {
     const { address, isConnected } = useAccount()
@@ -50,9 +51,6 @@ export default function App() {
         setConnectWallet(false)
     // 登陆后关闭提醒框
     },[openConnectModal])
-
-
-
 
 
     let TimeOut
@@ -133,10 +131,13 @@ export default function App() {
 
     const { data,error, isError, isLoading, isSuccess, signMessage } = useSignMessage({
         message: 'Give me all the money',
+
         onSuccess(data, variables) {
             // Verify signature when sign message succeeds
             const address = verifyMessage(variables.message, data)
+
             recoveredAddress.current = address
+            console.log(address)
         },
     })
     const recoveredAddress = React.useRef<string>()
@@ -185,7 +186,8 @@ export default function App() {
                         const formData = new FormData(event.target)
                         const message = formData.get('message')
                         // @ts-ignore
-                        signMessage({ message })
+                        signMessage({message})
+
                     }}
                 >
                     {/*<label htmlFor="message">Enter a message to sign</label>*/}

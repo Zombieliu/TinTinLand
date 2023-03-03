@@ -727,18 +727,14 @@ const ProjectManagement = () =>{
                         <button onClick={()=> {
                             setCreateJobState(true),
                                 setOpenCreateJob({type:"",data:{}})
-                        }} className="flex items-center px-6 py-1 border border-[#CCCCCC] rounded-2xl mt-4">
+                        }} className="flex items-center px-6 py-1 border border-gray-500 rounded-2xl mt-4">
                             添加岗位
                             <i className="fa fa-plus-circle ml-2"/>
                         </button>
                     </div>
-
                 </div>
-
                 </>
             )
-
-
 }
 const Project_Homepage= () =>{
 
