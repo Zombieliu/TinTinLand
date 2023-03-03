@@ -5,7 +5,7 @@ export default function handler(req, res) {
     // res.end(`Post: ${pid}`)
     try {
         if (pid == '1'){
-            res.status(200).json({ icp })
+            res.status(200).json(icp)
         }else{
             res.status(200).json({ hello:"1" })
         }
