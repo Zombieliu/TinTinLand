@@ -16,7 +16,7 @@ const { chains, provider } = configureChains(
     [
         {
             ...polygon,
-            iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/20221118991d7966cd16173e.png',
+            // iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/20221118991d7966cd16173e.png',
         },
         {
             ...bsc,
