@@ -1,4 +1,4 @@
-import  icp from '../../json/icp.json'
+import  icp from '../json/icp.json'
 
 export default function handler(req, res) {
     const { pid } = req.query

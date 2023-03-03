@@ -1,4 +1,4 @@
-import contractUri from '../json/tintin.json'
+import contractUri from '../../json/tintin.json'
 
 export default async function handler(req, res) {
     try {
