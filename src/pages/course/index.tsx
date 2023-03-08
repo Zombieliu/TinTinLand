@@ -19,6 +19,7 @@ import {
 import {Dialog, Transition} from "@headlessui/react";
 import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
 import Loading from "../../components/loading";
+import {WaitPayPoPUpBox} from "../../components/payState";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -305,6 +306,7 @@ const Course = () =>{
             </div>
        <Loading/>
             <Pop_up_box/>
+            <WaitPayPoPUpBox/>
             <SignUpCourseBox/>
             <Tail/>
         </div>

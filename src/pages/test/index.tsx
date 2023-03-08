@@ -2,23 +2,24 @@ import {Dialog,Transition} from "@headlessui/react";
 import {useAtom} from "jotai";
 import React, {Fragment, useEffect, useState} from "react";
 import {ConnectButton, useAccountModal, useConnectModal} from "@rainbow-me/rainbowkit";
-import {useAccount, useContract,  useSigner, useSignMessage} from 'wagmi'
+import {
+    useAccount,
+    useContract,
+    useNetwork, usePrepareSendTransaction,
+    useSendTransaction,
+    useSigner,
+    useSignMessage,
+    useSwitchNetwork
+} from 'wagmi'
 import {CheckIcon} from "@heroicons/react/solid";
 import {OpenLoginState, OpenPayState, PayState, PendingPayState, PopUpBoxInfo, PopUpBoxState} from "../../jotai";
 import {Pop_up_box} from "../../components/pop_up_box";
 import Loading from "../../components/loading";
 import { WaitPayPoPUpBox} from "../../components/payState";
 
-import { useDebounce } from 'use-debounce'
-import {
-    usePrepareSendTransaction,
-    useSendTransaction,
-    useWaitForTransaction,
-} from 'wagmi'
 import {parseEther, verifyMessage} from "ethers/lib/utils";
-import {utils} from "ethers";
-import {SignMessageArgs} from "@wagmi/core";
-
+import {BigNumber} from "ethers";
+import {client} from "../../client";
 export default function App() {
     const { address, isConnected } = useAccount()
     //获取登陆状态 和地址
@@ -34,6 +35,7 @@ export default function App() {
     const [paidCourse1,setPaidCourse1] =useState(false)
     const [paidCourse2,setPaidCourse2] =useState(false)
     const [paidCourse3,setPaidCourse3] =useState(false)
+    const [paidCourse4,setPaidCourse4] =useState(false)
 
     //点击上课提醒框
     const [promptBox,setPromptBox] = useState(false)
@@ -115,26 +117,19 @@ export default function App() {
                     hash: "12312"
                 })
                 setSop_up_boxState(true)
-                setPaidCourse2(false),
-                    setPaidCourse3(true)
+                    setPaidCourse3(false)
+                    setPaidCourse4(true)
             },
             3000);
     }
 
-    const goSchool = ()=>{
-       setPromptBox(true)
-        setPromptTime(10)
-        setTimeout(()=>{
-            window.open("https://www.google.com/", "_blank")
-        },3000)
-    }
 
-    const { data,error, isError, isLoading, isSuccess, signMessage } = useSignMessage({
+    const { data:data1, isSuccess:isSuccess1,error, signMessage } = useSignMessage({
         message: 'Give me all the money',
 
-        onSuccess(data, variables) {
+        onSuccess(data1, variables) {
             // Verify signature when sign message succeeds
-            const address = verifyMessage(variables.message, data)
+            const address = verifyMessage(variables.message, data1)
 
             recoveredAddress.current = address
             console.log(address)
@@ -145,11 +140,53 @@ export default function App() {
     //
     // })
 
+    const { config } = usePrepareSendTransaction({
+        request: { to: '0x5F008811D7f065058a1b38f3c04e39a60C8CA28d', value: BigNumber.from('1000000000000000') },
+    })
+    const {sendTransaction } = useSendTransaction({
+        ...config,
+        async onSuccess(data) {
+
+            console.log(data.hash)
+            const CourseId = await client.callApi('v1/teachable/GetCourseId', {
+                course_name: "第3期｜Internet Computer：从核心技术入门到开发实战"
+            });
+            const TaUser = await client.callApi('v1/teachable/GetTaUser', {
+                user_email: "937104001@qq.com"
+            });
+            const singerState = await client.callApi('v1/tx/CheckTx', {
+                course_id: CourseId.res.course_id,
+                tx_hash: data.hash,
+                user_id: TaUser.res.user_id,
+
+            });
+            console.log(singerState)
+        }
+    })
+    const { chain, chains } = useNetwork()
+
+    const send =  async () =>{
+        await sendTransaction?.()
+
+        // if(isSuccess){
+        //       console.log("chenggong ")
+        // }
+
+    }
+
     return (
         <>
             <Pop_up_box/>
             <Loading/>
             <WaitPayPoPUpBox/>
+            <div>
+                <button disabled={!sendTransaction} onClick={send}>
+                    Send Transaction
+                </button>
+                {/*{isLoading && <div>Check Wallet</div>}*/}
+                {/*{isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}*/}
+            </div>
+
             <div className="flex mt-10 justify-center">
                 <ConnectButton  accountStatus="address"/>
             </div>
@@ -165,7 +202,7 @@ export default function App() {
             </div>
 
             <div className="flex mt-5 justify-center">
-                <button onClick={()=>{setOpenPayState(true);setPayState("pending");setTime(10)}} className="rounded-full mx-10  px-4 py-1 bg-black text-white mt-20">
+                <button onClick={()=>{setOpenPayState(true);setPayState("pending");setTime(120)}} className="rounded-full mx-10  px-4 py-1 bg-black text-white mt-20">
                    付款等待界面
                 </button>
 
@@ -196,25 +233,25 @@ export default function App() {
                         name="message"
                         placeholder="The quick brown fox…"
                     />
-                    <button disabled={isLoading} className="rounded-full  px-4 py-1 bg-black text-white mt-20">
-                        {isLoading ? 'Check Wallet' : 'Sign Message'}
-                    </button>
+                    {/*<button disabled={isLoading} className="rounded-full  px-4 py-1 bg-black text-white mt-20">*/}
+                    {/*    {isLoading ? 'Check Wallet' : 'Sign Message'}*/}
+                    {/*</button>*/}
 
-                    {data && (
-                        <div>
-                            <div>Recovered Address: {recoveredAddress.current}</div>
-                            <div>Signature: {data}</div>
-                        </div>
-                    )}
+                    {/*{data && (*/}
+                    {/*    <div>*/}
+                    {/*        <div>Recovered Address: {recoveredAddress.current}</div>*/}
+                    {/*        <div>Signature: {data1}</div>*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
 
                     {error && <div>{error.message}</div>}
                 </form>
 
             </div>
             <div className="flex justify-center mt-5">
-                <button disabled={isLoading} onClick={() => signMessage()}  className="rounded-full  px-4 py-1 bg-black text-white mt-20">
-                    Sign message
-                </button>
+                {/*<button disabled={isLoading} onClick={() => signMessage()}  className="rounded-full  px-4 py-1 bg-black text-white mt-20">*/}
+                {/*    Sign message*/}
+                {/*</button>*/}
             </div>
 
             <Transition.Root show={promptBox} as={Fragment}>
@@ -370,7 +407,7 @@ export default function App() {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
                                 <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
                                         <div className="font-normal">
@@ -477,7 +514,7 @@ export default function App() {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
                                 <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
                                         <div className="font-normal">
@@ -582,7 +619,7 @@ export default function App() {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
                                 <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
                                         <div className="font-normal">
@@ -683,7 +720,7 @@ export default function App() {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
                                 <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
                                         <div className="font-normal">
@@ -711,6 +748,13 @@ export default function App() {
 
                                                     </div>
                                                     <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                </div>
+                                                <div className="flex flex-col items-center ">
+                                                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                        <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                    </div>
+                                                    <span className="text-sm mt-1 text-gray-500">课程奖励</span>
                                                 </div>
 
                                                 <div className="flex flex-col items-center ">
@@ -793,7 +837,7 @@ export default function App() {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
                                 <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
                                         <div className="font-normal">
@@ -821,6 +865,13 @@ export default function App() {
 
                                                     </div>
                                                     <span className="text-sm mt-1 text-black font-semibold">领取NFT</span>
+                                                </div>
+                                                <div className="flex flex-col items-center ">
+                                                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                        <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                    </div>
+                                                    <span className="text-sm mt-1 text-gray-500">课程奖励</span>
                                                 </div>
 
                                                 <div className="flex flex-col items-center ">
@@ -858,8 +909,10 @@ export default function App() {
                                         <button onClick={() => setPaidCourse2(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
                                             取消
                                         </button>
-                                        <button  onClick={claimNFTAndTuition} className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
-                                            领取
+                                        <button  onClick={() => {
+                                            setPaidCourse2(false)
+                                            setPaidCourse3(true)}} className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                            下一步
                                         </button>
 
                                     </div>
@@ -897,13 +950,129 @@ export default function App() {
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
                                 <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
                                         <div className="font-normal">
                                             领取奖励
                                         </div>
                                         <button   onClick={() => setPaidCourse3(false)}
+                                                  className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                    </div>
+                                    <nav aria-label="Progress">
+                                        <ol role="list" className="flex justify-center items-center">
+                                            <li  className='relative flex justify-between w-1/2'>
+                                                <div className="flex flex-col items-center">
+                                                    <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                        <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                    </div>
+                                                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                        <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                    </div>
+                                                    <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                </div>
+                                                <div className="flex flex-col items-center">
+                                                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                        <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+                                                    </div>
+                                                    <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                </div>
+                                                <div className="flex flex-col items-center ">
+                                                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-black">
+                                                        <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+                                                    </div>
+                                                    <span className="text-sm mt-1 text-gray-500">课程奖励</span>
+                                                </div>
+                                                <div className="flex flex-col items-center ">
+                                                    <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                        <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                    </div>
+                                                    <span className="text-sm mt-1  text-black font-semibold">完成</span>
+                                                </div>
+                                            </li>
+                                        </ol>
+                                    </nav>
+
+                                    <div className="flex flex-col justify-between text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                        <div>
+                                          <div className="text-xl">
+                                              课程奖励
+                                          </div>
+                                          <div className="mt-5">
+                                              课程名称 押金
+                                          </div>
+                                          <div className="flex justify-center py-1">
+                                              <div className="px-4 py-2 rounded-full border-black border w-36 ">
+                                                  123.45USDT
+                                              </div>
+                                          </div>
+                                          <div>
+                                              将有我们的工作人员发送至下方地址:
+                                          </div>
+                                          <div>
+                                              {address}
+                                          </div>
+                                      </div>
+
+                                        <div className="mt-10 font-semibold text-sm">
+                                            确认无误后请点击确认
+                                        </div>
+
+                                    </div>
+                                    <div className="flex justify-center mt-5">
+                                        <button onClick={() => setPaidCourse3(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                            返回
+                                        </button>
+                                        <button  onClick={claimNFTAndTuition} className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                            确认
+                                        </button>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </Transition.Child>
+                    </div>
+                </Dialog>
+            </Transition.Root>
+
+            <Transition.Root show={paidCourse4} as={Fragment}>
+                <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse4}>
+                    <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                        >
+                            <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                        </Transition.Child>
+
+                        {/* This element is to trick the browser into centering the modal contents. */}
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            enterTo="opacity-100 translate-y-0 sm:scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                        >
+                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                    <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                        <div className="font-normal">
+                                            领取奖励
+                                        </div>
+                                        <button   onClick={() => setPaidCourse4(false)}
                                                   className="fa fa-times  outline-none" aria-hidden="true"></button>
                                     </div>
                                     <nav aria-label="Progress">

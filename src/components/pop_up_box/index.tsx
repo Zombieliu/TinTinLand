@@ -7,10 +7,14 @@ import {
     PromptBoxState,
     SignUpCourseBoxState,
     SignUpCourseBoxData,
-    LoginState, UserEmail, OpenLoginState,
+    LoginState, UserEmail, OpenLoginState, OpenPayState, PayState, PendingPayState,
 } from "../../jotai";
 import Link from "next/link";
 import {client} from "../../client";
+import {useAccount, usePrepareSendTransaction, useSendTransaction, useSignMessage} from "wagmi";
+import {useConnectModal} from "@rainbow-me/rainbowkit";
+import {verifyMessage} from "ethers/lib/utils";
+import {BigNumber} from "ethers";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -28,7 +32,7 @@ const Pop_up_box = () =>{
                // if(pop_up_boxData.state){
                //     location.reload()
                // }
-            },3000)
+            },6000)
         }
         const Pop_up_box = document.getElementById('SwapSuccessPop_up_box');
         Pop_up_box.onmouseover = function(){
@@ -40,7 +44,7 @@ const Pop_up_box = () =>{
                 // if(pop_up_boxData.state){
                 //     location.reload()
                 // }
-            },2000)
+            },3000)
         }
     },[pop_up_boxState])
     return(
@@ -70,7 +74,7 @@ const Pop_up_box = () =>{
                                     <p className="font-medium">{pop_up_boxData.type}{classNames(pop_up_boxData.state?"成功":"失败")}</p>
                                     <p className={pop_up_boxData.state?"hidden":"mt-1 "}>{pop_up_boxData.title}</p>
                                     <div className={pop_up_boxData.hash == ""? "hidden":""}>
-                                        <Link legacyBehavior href={`https://explorer.sui.io/transaction/${pop_up_boxData.hash}?network=devnet` } target="_Blank">
+                                        <Link legacyBehavior href={`https://mumbai.polygonscan.com/tx/${pop_up_boxData.hash}`} target="_Blank">
                                             <a className={"mt-1 underline font-semibold text-black"}
                                                target="_Blank">
                                                 在浏览器中查看
@@ -189,74 +193,245 @@ const SignUpCourseBox = () =>{
     const [,setOpenLogin] =useAtom(OpenLoginState)
     const [,setSop_up_boxState] = useAtom(PopUpBoxState)
     const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
+    const [,setOpenPayState] = useAtom(OpenPayState)
+    const [,setPayState] = useAtom(PayState)
+    const [,setTime] = useAtom(PendingPayState)
 
+    const { address, isConnected } = useAccount()
+    const { openConnectModal } = useConnectModal();
 
-    const Signup = async () => {
-        const courseName = signUpCourseData.courseName
-        if(loginState){
-            setOpenLogin(true)
+    const {signMessage:PaySignMessage } = useSignMessage({
+        message: 'Give me all the Pay  money',
+        async onSuccess(data, variables) {
+            const address = verifyMessage(variables.message, data)
+            const singerState = await client.callApi('v1/user/AddUserBind', {
+                user_email:user_email.user_email,
+                user_evm_address: address,
+            });
+            if(singerState.isSucc){
+                await PayRegisterCourses()
+            }else {
+                alert("绑定失败钱包请重试")
+            }
+        },
+        onError(){
+            setOpenLogin(false)
+            setPop_up_boxData({
+                state: false,
+                type: "签名",
+                title: "",
+                hash: ""
+            })
+            setSop_up_boxState(true)
+        }
+    })
+    const {signMessage:FreeSignMessage } = useSignMessage({
+        message: 'Give me all the Free money',
+        async onSuccess(data, variables) {
+            const address = verifyMessage(variables.message, data)
+            const singerState = await client.callApi('v1/user/AddUserBind', {
+                user_email:user_email.user_email,
+                user_evm_address: address,
+            });
+            if(singerState.isSucc){
+                await FreeRegisterCourses()
+            }else {
+                alert("绑定失败钱包请重试")
+            }
+        },
+    })
+
+    const { config } = usePrepareSendTransaction({
+        request: { to: '0x5F008811D7f065058a1b38f3c04e39a60C8CA28d', value: BigNumber.from('1000000000000000') },
+    })
+    const {sendTransaction } = useSendTransaction({
+        ...config,
+        async onSuccess(data) {
+            setOpenLogin(false)
+            setOpenPayState(true);setPayState("pending");setTime(120)
             const CourseId = await client.callApi('v1/teachable/GetCourseId', {
-                course_name:courseName
+                course_name: signUpCourseData.courseName
             });
             const TaUser = await client.callApi('v1/teachable/GetTaUser', {
                 user_email: user_email.user_email
             });
-            console.log(CourseId,TaUser)
+            const singerState = await client.callApi('v1/tx/CheckTx', {
+                course_id: CourseId.res.course_id,
+                tx_hash: data.hash,
+                user_id: TaUser.res.user_id,
+            });
+            if(singerState.isSucc){
+                setOpenPayState(true);setPayState("done");
+            }else {
+                setPop_up_boxData({
+                    state: false,
+                    type: "报名",
+                    title: "请检查网络",
+                    hash: data.hash
+                })
+                setSop_up_boxState(true)
+                setOpenPayState(true);setPayState("fail");
+            }
+        },
+        async onError(){
+            setOpenLogin(false)
+            setPop_up_boxData({
+                state: false,
+                type: "交易失败",
+                title: "请检查账号",
+                hash: ""
+            })
+            setSop_up_boxState(true)
+            setOpenPayState(true);setPayState("fail");
+        }
+    })
 
-            if (CourseId.res !==undefined && TaUser.res!==undefined) {
-                if(CourseId.isSucc && TaUser.isSucc){
-                    const data = await client.callApi('v1/teachable/EnrollCourse', {
-                        course_id: CourseId.res.course_id,
-                        user_id: TaUser.res.user_id
-                    });
-                    console.log(data)
-                    if(data.isSucc){
-                        setOpenLogin(false)
-                        setPop_up_boxData({
-                            state:true,
-                            type:"报名",
-                            title:"",
-                            hash: ""
-                        })
-                        setSop_up_boxState(true)
-                    }else {
-                        setOpenLogin(false)
-                        setPop_up_boxData({
-                            state:false,
-                            type:"报名",
-                            title:"你已经报过该课程了",
-                            hash: ""
-                        })
-                        setSop_up_boxState(true)
-                    }
+    const PaySignup = async () => {
 
+        if(loginState){
+            if(isConnected){
+                setOpenLogin(true)
+
+                const singerState = await client.callApi('v1/user/GetUserBind', {
+                    user_email:user_email.user_email,
+                });
+                console.log(singerState.isSucc,"singerState.isSucc")
+                if(!singerState.isSucc){
+                    await PaySignMessage()
                 }else {
+                    await PayRegisterCourses()
+                }
+
+            }else {
+                openConnectModal()
+            }
+
+        }else {
+            alert("请先登陆账号")
+        }
+    }
+    const PayRegisterCourses = async () =>{
+        const CourseId = await client.callApi('v1/teachable/GetCourseId', {
+            course_name: signUpCourseData.courseName
+        });
+        const TaUser = await client.callApi('v1/teachable/GetTaUser', {
+            user_email: user_email.user_email
+        });
+
+        console.log(CourseId.res,TaUser.res)
+        if (CourseId.res !== undefined && TaUser.res !== undefined) {
+            if (CourseId.isSucc && TaUser.isSucc) {
+                sendTransaction?.()
+            } else {
+                setOpenLogin(false)
+                setPop_up_boxData({
+                    state: false,
+                    type: "报名",
+                    title: "请检查网络",
+                    hash: ""
+                })
+                setSop_up_boxState(true)
+            }
+            // console.log(CourseId.res.course_id,TaUser.res.user_id)
+        } else {
+            setOpenLogin(false)
+            setPop_up_boxData({
+                state: false,
+                type: "报名",
+                title: "请检查网络",
+                hash: ""
+            })
+            setSop_up_boxState(true)
+        }
+        setSignUpCourseBox(false)
+    }
+    const FreeRegisterCourses = async () => {
+
+        const courseName = signUpCourseData.courseName
+        const CourseId = await client.callApi('v1/teachable/GetCourseId', {
+            course_name: courseName
+        });
+        const TaUser = await client.callApi('v1/teachable/GetTaUser', {
+            user_email: user_email.user_email
+        });
+
+        console.log(CourseId, TaUser)
+
+        if (CourseId.res !== undefined && TaUser.res !== undefined) {
+            if (CourseId.isSucc && TaUser.isSucc) {
+                const data = await client.callApi('v1/teachable/EnrollCourse', {
+                    course_id: CourseId.res.course_id,
+                    user_id: TaUser.res.user_id
+                });
+                console.log(data)
+                if (data.isSucc) {
                     setOpenLogin(false)
                     setPop_up_boxData({
-                        state:false,
-                        type:"报名",
-                        title:"请检查网络",
+                        state: true,
+                        type: "报名",
+                        title: "",
+                        hash: ""
+                    })
+                    setSop_up_boxState(true)
+                } else {
+                    setOpenLogin(false)
+                    setPop_up_boxData({
+                        state: false,
+                        type: "报名",
+                        title: "你已经报过该课程了",
                         hash: ""
                     })
                     setSop_up_boxState(true)
                 }
 
-                // console.log(CourseId.res.course_id,TaUser.res.user_id)
-            }else {
+            } else {
                 setOpenLogin(false)
                 setPop_up_boxData({
-                    state:false,
-                    type:"报名",
-                    title:"请检查网络",
+                    state: false,
+                    type: "报名",
+                    title: "请检查网络",
                     hash: ""
                 })
                 setSop_up_boxState(true)
             }
-            setSignUpCourseBox(false)
+
+            // console.log(CourseId.res.course_id,TaUser.res.user_id)
+        } else {
+            setOpenLogin(false)
+            setPop_up_boxData({
+                state: false,
+                type: "报名",
+                title: "请检查网络",
+                hash: ""
+            })
+            setSop_up_boxState(true)
+        }
+        setSignUpCourseBox(false)
+    }
+
+    const FreeSignup = async () => {
+
+        if(loginState){
+            if(isConnected){
+                setOpenLogin(true)
+                const singerState = await client.callApi('v1/user/GetUserBind', {
+                    user_email:user_email.user_email,
+                });
+                console.log(singerState.isSucc)
+                if(!singerState.isSucc){
+                   await FreeSignMessage()
+                }else {
+                    await FreeRegisterCourses()
+                }
+            }else {
+                openConnectModal()
+            }
         }else {
-            alert("请登陆")
+            alert("请先登陆账号")
         }
     }
+
+
     return(
         <>
             <Transition.Root show={signUpCourseBox} as={Fragment}>
@@ -308,22 +483,20 @@ const SignUpCourseBox = () =>{
                                                 </div>
                                             </button>
 
-                                            <button onClick={Signup}>
+                                            <button onClick={PaySignup}>
                                                 <img  className="rounded-lg w-12 h-12 mx-auto" src="/rainbow.svg" alt=""/>
                                                 <div>
                                                     {signUpCourseData.price}USDT
                                                 </div>
                                             </button>
-                                            <button>
+                                            <button onClick={FreeSignup}>
                                                 <img  className="rounded-lg w-12 h-12 mx-auto" src="/rainbow.svg" alt=""/>
                                                 <div>
-                                                    {signUpCourseData.price}USDT
+                                                    免费报名
                                                 </div>
                                             </button>
                                         </div>
                                     </div>
-
-
 
                                     <div className="flex justify-center mt-5">
                                         <button onClick={() => setSignUpCourseBox(false)}  className="bg-white border border-black text-black w-28 py-1.5 rounded-full mr-5">

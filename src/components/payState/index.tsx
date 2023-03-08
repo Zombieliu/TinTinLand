@@ -12,7 +12,7 @@ const WaitPayPoPUpBox = () =>{
 
     useEffect(()=>{
         if(payState =="pending"){
-            setTime(10)
+            setTime(120)
         }
     },[])
     let TimeOut
@@ -86,10 +86,12 @@ const WaitPayPoPUpBox = () =>{
                                                 购买失败
                                             </div>
                                             <div className="font-light">
-                                                无查询到您的支付结果，如需帮助请联系xxxx@tintin.com 或查阅「TinTinLand 指南」。
+                                                无法查询到您的支付结果
+                                                <div className="text-red-600 font-semibold">
+                                                    ( 如已经扣款但是没有报名成功 )
+                                                </div>请联系xxxx@tintin.com 或查阅「TinTinLand 指南」。
                                             </div>
                                         </div>
-
 
                                         <div className="flex justify-center mt-5">
                                             <button onClick={() => setOpenPayState(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">

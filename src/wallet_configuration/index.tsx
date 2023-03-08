@@ -10,7 +10,7 @@ import {
     rainbowWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets";
-import {arbitrum, polygonMumbai} from "@wagmi/chains";
+import {polygonMumbai} from "@wagmi/chains";
 
 const { chains, provider } = configureChains(
     [
@@ -18,10 +18,14 @@ const { chains, provider } = configureChains(
             ...polygon,
             // iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/20221118991d7966cd16173e.png',
         },
+        // {
+        //     ...bsc,
+        //     iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
+        // },
         {
-            ...bsc,
-            iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
+            ...polygonMumbai,
         },
+
     ],
     [
         alchemyProvider({ apiKey: process.env.ALCHEMY_ID }),
