@@ -18,10 +18,10 @@ const { chains, provider } = configureChains(
         //     ...polygon,
         //     // iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/20221118991d7966cd16173e.png',
         // },
-        // {
-        //     ...iotex,
-        //     iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
-        // },
+        {
+            ...iotex,
+            iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
+        },
         {
             ...polygonMumbai,
         },
