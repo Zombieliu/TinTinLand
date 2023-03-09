@@ -27,13 +27,10 @@ function classNames(...classes) {
 }
 
 const Course = () => {
-    const [loginState,] = useAtom(LoginState)
-    const [user_email,] = useAtom(UserEmail)
-    const [,setOpenLogin] =useAtom(OpenLoginState)
-    const [,setSop_up_boxState] = useAtom(PopUpBoxState)
-    const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
+    let index = 0
+    let autoTimer
     const Course_info =
         [
             {
@@ -164,19 +161,18 @@ const Course = () => {
             },
         ]
     useEffect(()=>{
+        autoTimer = createAuto()
         return ()=> {
             clearInterval(autoTimer)
         }
     },[])
 
-    let index = 0
     function createAuto() {
         return  setInterval(() => {
             index = index + 26
             run()
         }, 8000)
     }
-    let autoTimer = createAuto()
     function run() {
         clearInterval(autoTimer)
         if(typeof window !== 'undefined'){
@@ -193,12 +189,14 @@ const Course = () => {
         }
     }
     const left = ()=>{
+        clearInterval(autoTimer)
         if(index !== 0){
             index = index-26
             run()
         }
     }
     const right = ()=>{
+        clearInterval(autoTimer)
         index = index + 26
         run()
     }

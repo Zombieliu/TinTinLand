@@ -366,13 +366,7 @@ const SignUpCourseBox = () =>{
                 console.log(data)
                 if (data.isSucc) {
                     setOpenLogin(false)
-                    setPop_up_boxData({
-                        state: true,
-                        type: "报名",
-                        title: "",
-                        hash: ""
-                    })
-                    setSop_up_boxState(true)
+                    setOpenPayState(true);setPayState("done");
                 } else {
                     setOpenLogin(false)
                     setPop_up_boxData({
@@ -408,7 +402,6 @@ const SignUpCourseBox = () =>{
         }
         setSignUpCourseBox(false)
     }
-
     const FreeSignup = async () => {
 
         if(loginState){
@@ -430,8 +423,6 @@ const SignUpCourseBox = () =>{
             alert("请先登陆账号")
         }
     }
-
-
     return(
         <>
             <Transition.Root show={signUpCourseBox} as={Fragment}>
