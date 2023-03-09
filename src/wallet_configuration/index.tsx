@@ -10,7 +10,7 @@ import {
     rainbowWallet,
     walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets";
-import {polygonMumbai} from "@wagmi/chains";
+import {iotex, polygonMumbai} from "@wagmi/chains";
 
 const { chains, provider } = configureChains(
     [
@@ -19,7 +19,7 @@ const { chains, provider } = configureChains(
         //     // iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/20221118991d7966cd16173e.png',
         // },
         // {
-        //     ...bsc,
+        //     ...iotex,
         //     iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
         // },
         {

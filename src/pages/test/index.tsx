@@ -163,8 +163,9 @@ export default function App() {
             console.log(singerState)
         }
     })
-    const { chain, chains } = useNetwork()
-
+    const { chain,  } = useNetwork()
+    const { chains,  isLoading, pendingChainId, switchNetwork } =
+        useSwitchNetwork()
     const send =  async () =>{
         await sendTransaction?.()
 
@@ -179,6 +180,19 @@ export default function App() {
             <Pop_up_box/>
             <Loading/>
             <WaitPayPoPUpBox/>
+            {chain && <div>Connected to {chain.name}</div>}
+
+            {chains.map((x) => (
+                <button
+                    disabled={!switchNetwork || x.id === chain?.id}
+                    key={x.id}
+                    onClick={() => switchNetwork?.(x.id)}
+                >
+                    {x.name}
+                    {isLoading && pendingChainId === x.id && ' (switching)'}
+                </button>
+            ))}
+
             <div>
                 <button disabled={!sendTransaction} onClick={send}>
                     Send Transaction
