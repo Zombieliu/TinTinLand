@@ -1,5 +1,5 @@
 import {configureChains, createClient} from "wagmi";
-import {bsc, polygon} from "@wagmi/core/chains";
+import {bsc, polygon, taraxa} from "@wagmi/core/chains";
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import {AvatarComponent, connectorsForWallets} from "@rainbow-me/rainbowkit";
@@ -18,10 +18,10 @@ const { chains, provider } = configureChains(
         //     ...polygon,
         //     // iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/20221118991d7966cd16173e.png',
         // },
-        {
-            ...iotex,
-            iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
-        },
+        // {
+        //     ...taraxa,
+        //     // iconUrl: 'https://web3games-prod.oss-cn-hongkong.aliyuncs.com/202203022ff7021a7352e13d.png',
+        // },
         {
             ...polygonMumbai,
         },

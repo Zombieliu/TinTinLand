@@ -56,8 +56,8 @@ const Course = () => {
                 ],
                 h1:"区块链入门课程——0基础创建以太坊智能合约",
                 link: "https://hkr.xet.tech/s/Pe8p8",
-                state: false,
-                AboutStart:true,
+                state: true,
+                AboutStart:false,
             },
 
             {
@@ -225,6 +225,7 @@ const Course = () => {
                             创造未来开放网络
                         </div>
                     </div>
+
                     <div className="mb-5 text-sm md:text-base">
                         <div>
                             生态官方合作课程，项目 CTO &核心开发者亲自授课

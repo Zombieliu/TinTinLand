@@ -21,7 +21,7 @@ import {parseEther, verifyMessage} from "ethers/lib/utils";
 import {BigNumber} from "ethers";
 import {client} from "../../client";
 export default function App() {
-    const { address, isConnected } = useAccount()
+    const { address, isConnected,} = useAccount()
     //获取登陆状态 和地址
     const { openConnectModal } = useConnectModal();
     const { openAccountModal } = useAccountModal();
@@ -49,6 +49,7 @@ export default function App() {
     const [,setPayState] = useAtom(PayState)
     const [,setTime] = useAtom(PendingPayState)
     const [promptTime,setPromptTime] = useState(0)
+    const [open, setOpen] = useState(true)
     useEffect(()=>{
         setConnectWallet(false)
     // 登陆后关闭提醒框
@@ -193,12 +194,108 @@ export default function App() {
                 </button>
             ))}
 
+            <ConnectButton.Custom>
+                {({
+                      account,
+                      chain,
+                      openAccountModal,
+                      openChainModal,
+                      openConnectModal,
+                      authenticationStatus,
+                      mounted,
+                  }) => {
+                    // Note: If your app doesn't use authentication, you
+                    // can remove all 'authenticationStatus' checks
+                    const ready = mounted && authenticationStatus !== 'loading';
+                    const connected =
+                        ready &&
+                        account &&
+                        chain &&
+                        (!authenticationStatus ||
+                            authenticationStatus === 'authenticated');
+
+                    return (
+                        <div
+                            {...(!ready && {
+                                'aria-hidden': true,
+                                'style': {
+                                    opacity: 0,
+                                    pointerEvents: 'none',
+                                    userSelect: 'none',
+                                },
+                            })}
+                        >
+                            {(() => {
+                                if (!connected) {
+                                    return (
+                                        <button onClick={openConnectModal} type="button">
+                                            Connect Wallet
+                                        </button>
+                                    );
+                                }
+
+                                if (chain.unsupported) {
+                                    return (
+                                        <button onClick={openChainModal} type="button">
+                                            Wrong network
+                                        </button>
+                                    );
+                                }
+
+                                return (
+                                    <div style={{ display: 'flex', gap: 12 }}>
+                                        <button
+                                            onClick={openChainModal}
+                                            style={{ display: 'flex', alignItems: 'center' }}
+                                            type="button"
+                                        >
+                                            {chain.hasIcon && (
+                                                <div
+                                                    style={{
+                                                        background: chain.iconBackground,
+                                                        width: 12,
+                                                        height: 12,
+                                                        borderRadius: 999,
+                                                        overflow: 'hidden',
+                                                        marginRight: 4,
+                                                    }}
+                                                >
+                                                    {chain.iconUrl && (
+                                                        <img
+                                                            alt={chain.name ?? 'Chain icon'}
+                                                            src={chain.iconUrl}
+                                                            style={{ width: 12, height: 12 }}
+                                                        />
+                                                    )}
+                                                </div>
+                                            )}
+                                            {chain.name}
+                                        </button>
+
+                                        <button onClick={openAccountModal} type="button">
+                                            {account.displayName}
+                                            {account.displayBalance
+                                                ? ` (${account.displayBalance})`
+                                                : ''}
+                                        </button>
+                                    </div>
+                                );
+                            })()}
+
+                        </div>
+
+                    );
+                }}
+            </ConnectButton.Custom>
             <div>
                 <button disabled={!sendTransaction} onClick={send}>
                     Send Transaction
                 </button>
                 {/*{isLoading && <div>Check Wallet</div>}*/}
                 {/*{isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}*/}
+                <div>
+
+                </div>
             </div>
 
             <div className="flex mt-10 justify-center">
@@ -393,6 +490,65 @@ export default function App() {
                     </div>
                 </Dialog>
             </Transition.Root>
+            <Transition.Root show={open} as={Fragment}>
+                <div className="relative z-10" >
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-10 overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+                                    <div>
+                                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                                            <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                                        </div>
+                                        <div className="mt-3 text-center sm:mt-5">
+                                            <div className="text-base font-semibold leading-6 text-gray-900">
+                                                Payment successful
+                                            </div>
+                                            <div className="mt-2">
+                                                <p className="text-sm text-gray-500">
+                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur amet labore.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ConnectButton  accountStatus="address"  />
+                                    <div className="mt-5 sm:mt-6">
+                                        <button
+                                            type="button"
+                                            className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            Go back to dashboard
+                                        </button>
+                                    </div>
+                                </div>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </div>
+            </Transition.Root>
+
+
 
             <Transition.Root show={freeCourse1} as={Fragment}>
                 <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setFreeCourse1}>
@@ -1052,7 +1208,6 @@ export default function App() {
                     </div>
                 </Dialog>
             </Transition.Root>
-
             <Transition.Root show={paidCourse4} as={Fragment}>
                 <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse4}>
                     <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">

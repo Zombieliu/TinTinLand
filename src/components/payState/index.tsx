@@ -3,6 +3,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import {CheckIcon} from "@heroicons/react/solid";
 import {useAtom} from "jotai";
 import {OpenPayState, PayState, PendingPayState} from "../../jotai";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const WaitPayPoPUpBox = () =>{
     const [openPayState,setOpenPayState] = useAtom(OpenPayState)
@@ -85,6 +86,7 @@ const WaitPayPoPUpBox = () =>{
                                             <div>
                                                 购买失败
                                             </div>
+
                                             <div className="font-light">
                                                 无法查询到您的支付结果
                                                 <div className="text-red-600 font-semibold">

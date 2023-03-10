@@ -51,8 +51,8 @@ const Course = () =>{
                 ],
                 h1:"区块链入门课程——0基础创建以太坊智能合约",
                 link: "https://hkr.xet.tech/s/Pe8p8",
-                state: false,
-                AboutStart:true,
+                state: true,
+                AboutStart:false,
             },
             {
                 id: "EVM_102",

@@ -9,13 +9,12 @@ import Heads from "../../components/head";
 import {client} from "../../client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {PopUpBoxInfo, PopUpBoxState, UserEmail} from "../../jotai";
+import {OpenLoginState, PopUpBoxInfo, PopUpBoxState, UserEmail} from "../../jotai";
 import {name} from "ci-info";
 import {user} from "../../shared/interface/user";
 import {Pop_up_box} from "../../components/pop_up_box";
-import ChevronUpIcon from "@heroicons/react/outline/ChevronUpIcon";
-import {flag} from "arg";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
+import Loading from "../../components/loading";
 
 
 function classNames(...classes) {
@@ -669,10 +668,25 @@ const UserCourse = () =>{
     const [courseDataState,setCourseDataState] =useState(false)
     const [promptBox,setPromptBox] = useState(false)
     const [promptTime,setPromptTime] = useState(0)
+    const [,setOpenLogin] =useAtom(OpenLoginState)
+    const [courseDetail,setCourseDetail] = useState({
+        name: "",
+        price: 0,
+        address:""})
+    const [,setSop_up_boxState] = useAtom(PopUpBoxState)
+    const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
+    const [freeCourse1,setFreeCourse1] =useState(false)
+    const [freeCourse2,setFreeCourse2] =useState(false)
+    const [freeCourse3,setFreeCourse3] =useState(false)
+
+    const [paidCourse1,setPaidCourse1] =useState(false)
+    const [paidCourse2,setPaidCourse2] =useState(false)
+    const [paidCourse3,setPaidCourse3] =useState(false)
+    const [paidCourse4,setPaidCourse4] =useState(false)
 
     let TimeOut
     useEffect(() => {
-        TimeOut =   setTimeout(() => {
+        TimeOut = setTimeout(() => {
             if (promptTime > 0) {
                 setPromptTime(promptTime - 1);
             }else {
@@ -748,7 +762,6 @@ const UserCourse = () =>{
                             }
 
                             course_list.push(result)
-
                             // console.log("course_list",course_list)
                             // console.log(result.course_homework_id)
                         }
@@ -797,6 +810,30 @@ const UserCourse = () =>{
         },3000)
     }
 
+    const ReceiveAward = async (name) => {
+        setOpenLogin(true)
+        const singerState = await client.callApi('v1/user/GetUserBind', {
+            user_email: user_email.user_email,
+        });
+
+        if(singerState.isSucc){
+            setCourseDetail({name: name,price: 100,address:singerState.res.user_evm_address})
+            setOpenLogin(false)
+            setFreeCourse1(true)
+        } else {
+            setOpenLogin(false)
+            setPop_up_boxData({
+                state: false,
+                type: "领取",
+                title: `请检查网络`,
+                hash: ""
+            })
+            setSop_up_boxState(true)
+        }
+
+
+    }
+
     if(!courseDataState) {
         return (
             <div className="py-72 flex justify-center">
@@ -838,11 +875,11 @@ const UserCourse = () =>{
                                                 {items.course_name}
                                             </div>
                                             <div className="flex mt-5 ">
-                                                <Link href=''>
-                                                    <a className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                                <button onClick={()=>ReceiveAward(items.course_name)}>
+                                                    <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5":""}>
                                                         领取奖励
-                                                    </a>
-                                                </Link>
+                                                    </div>
+                                                </button>
                                                 <button onClick={()=>goToSchool(items.course_link)}>
                                                     <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "hidden":"text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5"}>
                                                         跳转上课
@@ -863,14 +900,11 @@ const UserCourse = () =>{
                                                                 <div  className={list.state?"bg-[#0B9C7E] cursor-not-allowed w-4 h-4 mr-1 rounded-full":"bg-gray-200 w-4 h-4 mr-1 rounded-full"}>
                                                                 </div>
                                                             </button>
-
                                                     ))}
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
-
                                     <img className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "rounded-b-2xl h-70  w-full":"hidden "} src="/workDone.png" alt=""/>
 
                                 </div>
@@ -878,6 +912,8 @@ const UserCourse = () =>{
                         ))}
 
                     </div>
+                    <Loading/>
+                    <Pop_up_box/>
                     <Transition.Root show={promptBox} as={Fragment}>
                         <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPromptBox}>
                             <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
@@ -927,6 +963,758 @@ const UserCourse = () =>{
                                             <div className="flex justify-center mt-5">
                                                 <button onClick={() => setPromptBox(false)}  className="bg-white border border-black text-black w-32 py-1.5 rounded-full mr-5">
                                                     关闭 {promptTime}s
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+
+                    <Transition.Root show={freeCourse1} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setFreeCourse1}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setFreeCourse1(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black font-semibold" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                        </div>
+
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div className="">
+                                                    恭喜你完成
+                                                </div>
+                                                <div className="my-2  text-xl">
+                                                    {courseDetail.name}
+                                                </div>
+                                                <div className=" text-sm mt-10">
+                                                    你将获得由TinTin Land颁发的课程NFT，请根据指引完成领取吧
+                                                </div>
+                                                <div className="text-sm  mt-8">
+                                                    此NFT将被记录至你的TinTinLand的数字身份，
+                                                    <br/>
+                                                    <div className="flex  justify-center">
+                                                        领取后可进入<div className="text-indigo-800">个人主页</div>  查看
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setFreeCourse1(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    取消
+                                                </button>
+                                                <button  onClick={()=>{
+                                                    setFreeCourse1(false),
+                                                        setFreeCourse2(true)
+                                                }} className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                    下一步
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+                    <Transition.Root show={freeCourse2} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={()=>false}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setFreeCourse2(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full   bg-black">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-black font-semibold">领取NFT</span>
+                                                        </div>
+
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div className="">
+                                                    确认领取
+                                                </div>
+
+                                                <div className="font-light  mt-5">
+                                                    课程名称 NFT 将发送中下方地址
+                                                </div>
+                                                <div className="text-xs md:text-sm xl:text-lg mt-2 font-semibold">
+                                                    {courseDetail.address}
+                                                </div>
+                                                <div className="flex justify-center my-2">
+                                                    <img className="w-36 h-36 " src="/award/tintin_nft.png" alt=""/>
+                                                </div>
+
+                                                <div className="  text-sm ">
+                                                    确认无误后请点击领取
+                                                </div>
+                                            </div>
+
+
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setFreeCourse2(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    取消
+                                                </button>
+                                                <button   className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                    领取
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+                    <Transition.Root show={freeCourse3} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setFreeCourse3}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setFreeCourse3(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                        </div>
+
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-black">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+                                                            </div>
+                                                            <span className="text-sm mt-1  text-black font-semibold">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div className="">
+                                                    领取成功
+                                                </div>
+                                                <div className="t  mt-5 flex justify-center">
+                                                    恭喜您领取成功，现在可进入
+                                                    <div className="text-indigo-800">
+                                                        个人主页
+                                                    </div>
+                                                    查看NFT
+                                                </div>
+                                                <div>
+                                                    关于TinTin Land NFT更多信息，请查阅XXXX
+                                                </div>
+
+                                                <div className="flex justify-center my-2">
+                                                    <img className="w-36 h-36 " src="/award/tintin_nft.png" alt=""/>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setFreeCourse3(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    关闭
+                                                </button>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+
+                    <Transition.Root show={paidCourse1} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse1}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setPaidCourse1(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black font-semibold" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">课程奖励</span>
+                                                        </div>
+
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div className="">
+                                                    恭喜你完成
+                                                </div>
+                                                <div className="my-2  text-xl">
+                                                   {courseDetail.name}
+                                                </div>
+                                                <div className=" text-sm mt-10">
+                                                    <div>
+                                                        你将获得全额的学费退款
+                                                    </div>
+                                                    及由TinTin Land颁发的课程NFT，请根据指引完成领取吧
+                                                </div>
+                                                <div className="text-sm  mt-10">
+                                                    此NFT将被记录至你的TinTinLand的数字身份，
+                                                    <br/>
+                                                    <div className="flex  justify-center">
+                                                        领取后可进入<div className="text-indigo-800">个人主页</div>  查看
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setPaidCourse1(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    取消
+                                                </button>
+                                                <button  onClick={()=>{
+                                                    setPaidCourse1(false),
+                                                        setPaidCourse2(true)
+                                                }} className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                    下一步
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+                    <Transition.Root show={paidCourse2} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={()=>false}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setPaidCourse2(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full   bg-black">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-black font-semibold">领取NFT</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">课程奖励</span>
+                                                        </div>
+
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div className="">
+                                                    确认领取
+                                                </div>
+
+                                                <div className="font-light  mt-5">
+                                                     NFT 及学费 {courseDetail.price} USDT 将发送中下方地址
+                                                </div>
+                                                <div className="text-xs md:text-sm xl:text-lg mt-2 font-semibold">
+                                                    {courseDetail.address}
+                                                </div>
+                                                <div className="flex justify-center my-2">
+                                                    <img className="w-36 h-36 " src="/award/tintin_nft.png" alt=""/>
+                                                </div>
+                                                <div className="  text-sm ">
+                                                    确认无误后请点击领取
+                                                </div>
+                                            </div>
+
+
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setPaidCourse2(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    取消
+                                                </button>
+                                                <button  onClick={() => {
+                                                    setPaidCourse2(false)
+                                                    setPaidCourse3(true)}} className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                    下一步
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+                    <Transition.Root show={paidCourse3} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse3}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setPaidCourse3(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-black">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">课程奖励</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full ">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-black" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1  text-black font-semibold">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="flex flex-col justify-between text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div>
+                                                    <div className="text-xl">
+                                                        课程奖励
+                                                    </div>
+                                                    <div className="mt-5">
+                                                        {courseDetail.name} <br/>押金
+                                                    </div>
+                                                    <div className="flex justify-center py-1">
+                                                        <div className="px-4 py-2 rounded-full border-black border w-36 ">
+                                                            {courseDetail.price}USDT
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        将有我们的工作人员发送至下方地址:
+                                                    </div>
+                                                    <div>
+                                                        {courseDetail.address}
+                                                    </div>
+                                                </div>
+
+                                                <div className="mt-10 font-semibold text-sm">
+                                                    确认无误后请点击确认
+                                                </div>
+
+                                            </div>
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setPaidCourse3(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    返回
+                                                </button>
+                                                <button   className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                    确认
+                                                </button>
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </Transition.Child>
+                            </div>
+                        </Dialog>
+                    </Transition.Root>
+                    <Transition.Root show={paidCourse4} as={Fragment}>
+                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse4}>
+                            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0"
+                                    enterTo="opacity-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                >
+                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                </Transition.Child>
+
+                                {/* This element is to trick the browser into centering the modal contents. */}
+                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                                <Transition.Child
+                                    as={Fragment}
+                                    enter="ease-out duration-300"
+                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                    leave="ease-in duration-200"
+                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                >
+                                    <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-6/12 2xl:w-4/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
+                                        <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                            <div className='flex justify-between text-xl font-light text-black 	mb-5 items-centers'>
+                                                <div className="font-normal">
+                                                    领取奖励
+                                                </div>
+                                                <button   onClick={() => setPaidCourse4(false)}
+                                                          className="fa fa-times  outline-none" aria-hidden="true"></button>
+                                            </div>
+                                            <nav aria-label="Progress">
+                                                <ol role="list" className="flex justify-center items-center">
+                                                    <li  className='relative flex justify-between w-1/2'>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="absolute inset-0 bottom-6 flex items-center w-full" aria-hidden="true">
+                                                                <div className="h-0.5 w-full mx-4 bg-gray-200" />
+                                                            </div>
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">介绍</span>
+                                                        </div>
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full  bg-black">
+                                                                <CheckIcon className="h-3.5 w-3.5 text-white" aria-hidden="true" />
+                                                            </div>
+                                                            <span className="text-sm mt-1 text-gray-500">领取NFT</span>
+                                                        </div>
+
+                                                        <div className="flex flex-col items-center ">
+                                                            <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-black">
+                                                                <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden="true" />
+                                                            </div>
+                                                            <span className="text-sm mt-1  text-black font-semibold">完成</span>
+                                                        </div>
+                                                    </li>
+                                                </ol>
+                                            </nav>
+
+                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                                <div className="text-xl">
+                                                    登记成功
+                                                </div>
+                                                <div className="mt-5">
+                                                    我们将在3个工作日内将课程NFT及课程奖金发放至您的钱包账户
+                                                </div>
+                                                <div>
+                                                    关于TinTin Land NFT更多信息，请查阅XXXX
+                                                </div>
+                                                <div className="flex justify-center my-2">
+                                                    <img className="w-36 h-36 " src="/award/tintin_nft.png" alt=""/>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex justify-center mt-5">
+                                                <button onClick={() => setPaidCourse3(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
+                                                    关闭
                                                 </button>
                                             </div>
 
