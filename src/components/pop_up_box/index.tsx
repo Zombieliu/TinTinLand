@@ -275,13 +275,13 @@ const SignUpCourseBox = () =>{
             if(singerState.isSucc){
                 setOpenPayState(true);setPayState("done");
             }else {
-                setPop_up_boxData({
-                    state: false,
-                    type: "报名",
-                    title: "请检查网络",
-                    hash: ""
-                })
-                setSop_up_boxState(true)
+                // setPop_up_boxData({
+                //     state: false,
+                //     type: "报名",
+                //     title: "请检查网络",
+                //     hash: ""
+                // })
+                // setSop_up_boxState(true)
                 setOpenPayState(true);setPayState("fail");
             }
         },
