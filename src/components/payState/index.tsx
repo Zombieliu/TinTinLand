@@ -1,9 +1,7 @@
 import {Dialog, Transition} from "@headlessui/react";
-import React, {Fragment, useEffect, useState} from "react";
-import {CheckIcon} from "@heroicons/react/solid";
+import React, {Fragment, useEffect, useState} from "react";;
 import {useAtom} from "jotai";
 import {OpenPayState, PayState, PendingPayState} from "../../jotai";
-import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const WaitPayPoPUpBox = () =>{
     const [openPayState,setOpenPayState] = useAtom(OpenPayState)
@@ -30,8 +28,8 @@ const WaitPayPoPUpBox = () =>{
     return(
         <>
             <Transition.Root show={openPayState} as={Fragment}>
-                <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={()=>false}>
-                    <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
+                <Dialog as="div" className="fixed z-30 inset-0 overflow-y-auto " onClose={()=>false}>
+
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -44,9 +42,8 @@ const WaitPayPoPUpBox = () =>{
                             <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
                         </Transition.Child>
 
-                        {/* This element is to trick the browser into centering the modal contents. */}
-                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
-          </span>
+                    <div className="fixed inset-0 z-10 overflow-y-auto">
+                        <div className="flex min-h-full items-center  justify-center p-4 text-center sm:items-center sm:p-0">
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -56,8 +53,7 @@ const WaitPayPoPUpBox = () =>{
                             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                         >
-                            <div className="inline-block align-bottom p-0.5 rounded-lg  w-11/12 md:w-5/12 2xl:w-3/12  rounded-lg  text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle   ">
-                                <div className="bg-white px-4 py-5 sm:px-6 rounded-md">
+                                <Dialog.Panel className="bg-white px-4 py-5 sm:px-6 rounded-md">
                                     <div className={payState=="pending"?"":"hidden"}>
                                     <div  className="flex justify-center">
                                     <img className="w-16" src="/payState/pending_60dp@2x.png" alt=""/>
@@ -121,10 +117,12 @@ const WaitPayPoPUpBox = () =>{
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </Dialog.Panel>
+
+
                         </Transition.Child>
-                    </div>
+                        </div>
+                        </div>
                 </Dialog>
             </Transition.Root>
         </>

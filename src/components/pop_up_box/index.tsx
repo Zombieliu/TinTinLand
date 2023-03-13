@@ -32,7 +32,7 @@ const Pop_up_box = () =>{
                // if(pop_up_boxData.state){
                //     location.reload()
                // }
-            },6000)
+            },600000)
         }
         const Pop_up_box = document.getElementById('SwapSuccessPop_up_box');
         Pop_up_box.onmouseover = function(){
@@ -44,7 +44,7 @@ const Pop_up_box = () =>{
                 // if(pop_up_boxData.state){
                 //     location.reload()
                 // }
-            },3000)
+            },300000)
         }
     },[pop_up_boxState])
     return(
@@ -65,7 +65,7 @@ const Pop_up_box = () =>{
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className=" pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg text-black bg-[#FFFFFF] shadow-lg shadow-[0_2px_16px_-1px_rgb(0,0,0,0.1)] ">
+                    <div className="pointer-events-auto  w-full max-w-sm overflow-hidden rounded-lg text-black bg-[#FFFFFF] shadow-lg shadow-[0_2px_16px_-1px_rgb(0,0,0,0.1)] ">
                         <div className="p-4">
                             <div className="flex items-center">
                                 <img className={pop_up_boxData.state?"w-10  mt-1":"hidden"} src="/successful.svg" alt=""/>
@@ -131,7 +131,7 @@ const PromptBox = () =>{
     return(
         <>
             <Transition.Root show={promptBox} as={Fragment}>
-                <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPromptBox}>
+                <Dialog as="div" className="fixed z-50 inset-0 overflow-y-auto " onClose={setPromptBox}>
                     <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
                         <Transition.Child
                             as={Fragment}
@@ -279,7 +279,7 @@ const SignUpCourseBox = () =>{
                     state: false,
                     type: "报名",
                     title: "请检查网络",
-                    hash: data.hash
+                    hash: ""
                 })
                 setSop_up_boxState(true)
                 setOpenPayState(true);setPayState("fail");

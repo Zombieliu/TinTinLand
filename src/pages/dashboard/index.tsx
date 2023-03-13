@@ -15,6 +15,7 @@ import {user} from "../../shared/interface/user";
 import {Pop_up_box} from "../../components/pop_up_box";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import Loading from "../../components/loading";
+import getMerkleProof from "../../nft/getMerkleProof";
 
 
 function classNames(...classes) {
@@ -834,6 +835,12 @@ const UserCourse = () =>{
 
     }
 
+    const claimNFT = () =>{
+        setOpenLogin(true)
+
+        // const proof = getMerkleProof(WHITELIST, index, courseDetail.address);
+    }
+
     if(!courseDataState) {
         return (
             <div className="py-72 flex justify-center">
@@ -1173,7 +1180,7 @@ const UserCourse = () =>{
                                                 <button onClick={() => setFreeCourse2(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
                                                     取消
                                                 </button>
-                                                <button   className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                <button onClick={claimNFT}  className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
                                                     领取
                                                 </button>
 
