@@ -32,7 +32,7 @@ const Pop_up_box = () =>{
                // if(pop_up_boxData.state){
                //     location.reload()
                // }
-            },600000)
+            },6000)
         }
         const Pop_up_box = document.getElementById('SwapSuccessPop_up_box');
         Pop_up_box.onmouseover = function(){
@@ -44,7 +44,7 @@ const Pop_up_box = () =>{
                 // if(pop_up_boxData.state){
                 //     location.reload()
                 // }
-            },300000)
+            },3000)
         }
     },[pop_up_boxState])
     return(
@@ -303,12 +303,9 @@ const SignUpCourseBox = () =>{
         if(loginState){
             if(isConnected){
                 setOpenLogin(true)
-
                 const singerState = await client.callApi('v1/user/GetUserBind', {
                     user_email:user_email.user_email,
                 });
-
-
                 if(!singerState.isSucc){
                     await PaySignMessage()
                 }else {
@@ -318,9 +315,7 @@ const SignUpCourseBox = () =>{
                         }else {
                             setOpenLogin(false)
                             openChainModal()
-
                         }
-
                     }else {
                         setOpenLogin(false)
                         setPop_up_boxData({

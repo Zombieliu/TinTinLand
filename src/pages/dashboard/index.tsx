@@ -1,20 +1,18 @@
 import Header from "../../components/header";
 import Tail from "../../components/tail";
 import React, {Fragment, useEffect, useState} from "react";
-import Link from "next/link";
-import {Dialog, Disclosure, Listbox, Switch, Tab, Transition} from "@headlessui/react";
-
+import {Dialog, Listbox, Switch, Tab, Transition} from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/outline";
 import Heads from "../../components/head";
 import {client} from "../../client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {OpenLoginState, PopUpBoxInfo, PopUpBoxState, UserEmail} from "../../jotai";
-import {name} from "ci-info";
 import {user} from "../../shared/interface/user";
 import {Pop_up_box} from "../../components/pop_up_box";
-import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {ConnectButton, useChainModal, useConnectModal} from "@rainbow-me/rainbowkit";
 import Loading from "../../components/loading";
+import {useAccount, useNetwork} from "wagmi";
 import getMerkleProof from "../../nft/getMerkleProof";
 
 
@@ -685,6 +683,11 @@ const UserCourse = () =>{
     const [paidCourse3,setPaidCourse3] =useState(false)
     const [paidCourse4,setPaidCourse4] =useState(false)
 
+    const { address, isConnected } = useAccount()
+    const { openConnectModal } = useConnectModal();
+    const { chain,} = useNetwork()
+    const { openChainModal } = useChainModal();
+
     let TimeOut
     useEffect(() => {
         TimeOut = setTimeout(() => {
@@ -704,6 +707,7 @@ const UserCourse = () =>{
                 const ret = await client.callApi('v1/user/GetUserCourseList', {
                     email: user_email.user_email
                 });
+                console.log(ret.res.courses)
                 if(JSON.parse(ret.res.courses).length !==0){
                    const data = JSON.parse(ret.res.courses)
                     let course_list = []
@@ -723,35 +727,35 @@ const UserCourse = () =>{
                         });
                         // console.log(survey,"survey")
                         const userCourseWj =  await CreateUserCourseWj(data[i].course_name)
-
-                        const UserCourseWj = JSON.parse(userCourseWj.res.user_course_wj_url_list)
-                        let wj_open_username = JSON.parse(survey.res.unique_username)
-                        // console.log(wj_open_username,"------------")
-
                         let Url_list = []
-                        for (let url_list = 0 ; url_list < wj_open_username.length;url_list++){
-                            // console.log(wj_open_username,"wj_open_username")
-                            let state
-                            if(survey.res == undefined){
-                                state = undefined
-                            }else {
-                                const ret = await client.callApi('v1/user/GetUser', {
-                                    user_email: user_email.user_email
-                                });
-                                const unique_username = ret.res.user.unique_username
+                        console.log(userCourseWj.res)
+                        if(userCourseWj.res){
 
+                            const UserCourseWj = JSON.parse(userCourseWj.res.user_course_wj_url_list)
+
+                            let wj_open_username = JSON.parse(survey.res.unique_username)
+                            // console.log(wj_open_username,"------------")
+
+                            for (let url_list = 0 ; url_list < wj_open_username.length;url_list++){
+                                // console.log(wj_open_username,"wj_open_username")
+                                let state
+                                if(survey.res == undefined){
+                                    state = undefined
+                                }else {
+                                    const ret = await client.callApi('v1/user/GetUser', {
+                                        user_email: user_email.user_email
+                                    });
+                                    const unique_username = ret.res.user.unique_username
                                     state = JSON.parse(wj_open_username[url_list]).includes(unique_username)
-
-
+                                }
+                                let Url_list_result = {
+                                    id:url_list,
+                                    state:state,
+                                    url:UserCourseWj[url_list]
+                                }
+                                Url_list.push(Url_list_result)
                             }
-                           let Url_list_result = {
-                               id:url_list,
-                               state:state,
-                               url:UserCourseWj[url_list]
-                           }
-                            Url_list.push(Url_list_result)
                         }
-
                         if(course.res!==undefined && userCourseWj.res!==undefined){
                             let result = {
                                 course_name:data[i].course_name,
@@ -835,8 +839,32 @@ const UserCourse = () =>{
 
     }
 
-    const claimNFT = () =>{
-        setOpenLogin(true)
+    const claimNFT = async () => {
+        if (isConnected) {
+            setOpenLogin(true)
+                if (courseDetail.address == address) {
+                    if (!chain.unsupported) {
+                        setOpenLogin(false)
+
+
+                    } else {
+                        setOpenLogin(false)
+                        openChainModal()
+                    }
+                } else {
+                    setOpenLogin(false)
+                    setPop_up_boxData({
+                        state: false,
+                        type: "领取",
+                        title: `请切换到到${courseDetail.address}地址进行交易`,
+                        hash: ""
+                    })
+                    setSop_up_boxState(true)
+                }
+        } else {
+            openConnectModal()
+        }
+
 
         // const proof = getMerkleProof(WHITELIST, index, courseDetail.address);
     }
@@ -1088,7 +1116,7 @@ const UserCourse = () =>{
                         </Dialog>
                     </Transition.Root>
                     <Transition.Root show={freeCourse2} as={Fragment}>
-                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={()=>false}>
+                        <div className="fixed z-40 inset-0 overflow-y-auto " >
                             <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
                                 <Transition.Child
                                     as={Fragment}
@@ -1099,7 +1127,7 @@ const UserCourse = () =>{
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                    <div className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
                                 </Transition.Child>
 
                                 {/* This element is to trick the browser into centering the modal contents. */}
@@ -1155,7 +1183,7 @@ const UserCourse = () =>{
                                                 </ol>
                                             </nav>
 
-                                            <div className="text-center mt-5 rounded-lg py-6 h-80  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
+                                            <div className="text-center mt-5 rounded-lg py-6 h-96  bg-gradient-to-b from-[#E64145]/5   to-[#2823F0]/10">
                                                 <div className="">
                                                     确认领取
                                                 </div>
@@ -1173,8 +1201,10 @@ const UserCourse = () =>{
                                                 <div className="  text-sm ">
                                                     确认无误后请点击领取
                                                 </div>
+                                                <div className="flex justify-center mt-5">
+                                                    <ConnectButton  accountStatus="address"  />
+                                                </div>
                                             </div>
-
 
                                             <div className="flex justify-center mt-5">
                                                 <button onClick={() => setFreeCourse2(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
@@ -1190,7 +1220,7 @@ const UserCourse = () =>{
                                     </div>
                                 </Transition.Child>
                             </div>
-                        </Dialog>
+                        </div>
                     </Transition.Root>
                     <Transition.Root show={freeCourse3} as={Fragment}>
                         <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setFreeCourse3}>

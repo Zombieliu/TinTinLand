@@ -95,7 +95,7 @@ const Course = () =>{
                     },
 
                 ],
-                h1: "第3期｜Internet Computer：从核心技术入门到开发实战",
+                h1: "第4期｜Internet Computer：从核心技术入门到开发实战",
                 link: "https://hkr.h5.xeknow.com/s/xRaCr",
                 state: true,
                 AboutStart:false,
@@ -149,7 +149,7 @@ const Course = () =>{
                         content: "FCL(Flow Client Library)"
                     },
                 ],
-                h1: "第一期｜Flow DApp开发入门课程——从初识Cadence到搭建Marketplace",
+                h1: "Flow DApp 开发：从初识 Candence 到搭建 Makertplace",
                 link: "https://hkr.h5.xeknow.com/s/PGm9a",
                 state: true,
                 AboutStart:false,
