@@ -124,6 +124,10 @@ const LearningHighlights = {
         icon:"/icon/更新课程.svg",
         h1:"六节视频录播课程 每周更新一节",
     },
+    七节视频录播课程每周更新一节:{
+        icon:"/icon/更新课程.svg",
+        h1:"七节视频录播课程 每周更新一节",
+    },
 
     每周OfficeHour导师直播答疑:{
             icon:"/icon/导师答疑.svg",
@@ -170,6 +174,10 @@ const LearningHighlights = {
 }
 
 const projectProvider = {
+    DODO:{
+        name:"DODO",
+        img:"/dodo.svg",
+    },
     TinTinLand:{
         name:"TinTinLand",
         img:"/tintinlogo.svg",
@@ -301,13 +309,175 @@ const Course_student = {
 
 const Course_info =
     {
+        EVM_104:{
+            id: "EVM_104",
+            img: "/course/EVM_104.png",
+            cycle:"第四期",
+            name:"以太坊开发快速入门-轻松创建智能合约",
+            state: false,
+            AboutStart:true,
+            startTime:"2023.06",
+            registrationDeadline:"--",
+            link: "https://hkr.xet.tech/s/4sKJGh",
+            h1:"TinTinLand 邀请来自 DODO 的前合约工程师和数据团队负责人，希望通过自身对 Web3 的激情和专业性，以系统、简单易懂的方式，让更多人了解区块链和智能合约在课程中，你不仅能够获得：成体系且全面的接触区块链应用；理解以太坊区块链技术的运行原理；熟悉以太坊区块链运行环境搭建，" +
+                "同时还能享受：定期与行业创新开发者线上Workshop交流解惑，了解区块链公司人才招聘最新资讯，参加黑客松活动获得创业投资。",
+            type: [
+                {
+                    content: "Solidity"
+                },
+                {
+                    content: "智能合约"
+                },
+                {
+                    content: "合约安全"
+                },
+                {
+                    content: "ERC20"
+                },
+                {
+                    content: "ERC721"
+                },
+            ],
+            Course_data:[
+                {
+                    title:"第一课：从与DApp应用交互开始，认识以太坊",
+                    content:[
+                        {
+                            h1:"创建账户（助记词 + 公私钥）"
+                        },
+                        {
+                            h1:"执行交易（合约调用or普通转账 + 签名）"
+                        },
+                        {
+                            h1:"查看交易 （区块 + 交易 + 交易成本 ）"
+                        },
+                    ]
+                },
+                {
+                    title:"第二课：详解合约交易执行流程，入门Solidity",
+                    content:[
+                        {
+                            h1:"交易执行引擎 EVM"
+                        },
+                        {
+                            h1:"链上合约状态存储"
+                        },
+                        {
+                            h1:"Solidity 基础语法介绍"
+                        },
+                    ]
+                },
+                {
+                    title:"第三课：Solidity 开发实践",
+                    content:[
+                        {
+                            h1:"Remix + Truffle"
+                        },
+                        {
+                            h1:"合约测试"
+                        },
+                        {
+                            h1:"合约部署"
+                        },
+                    ]
+                },
+                {
+                    title:"第四课：合约项目工程化",
+                    content:[
+                        {
+                            h1:"ERC20"
+                        },
+                        {
+                            h1:"ERC721"
+                        },
+                        {
+                            h1:"合约安全注意事项"
+                        },
+                    ]
+                },
+                {
+                    title:"第五课：链上数据的记录与检索",
+                    content:[
+                        {
+                            h1:"Event 事件"
+                        },
+                        {
+                            h1:"The Graph 介绍与开发使用"
+                        },
+                    ]
+                },
+                {
+                    title:"第六课：前端与智能合约的交互开发",
+                    content:[
+                        {
+                            h1:"Web3.js"
+                        },
+                        {
+                            h1:"链上合约数据的读取与写入"
+                        },
+                        {
+                            h1:"Multicall 的使用"
+                        },
+
+                    ]
+                },
+                {
+                    title:"第七课：经典业务合约解析",
+                    content:[
+                        {
+                            h1:"流动性挖矿合约解析"
+                        },
+                        {
+                            h1:"时间锁与多签合约"
+                        },
+                        {
+                            h1:"Merkle Tree空投"
+                        },
+                    ]
+                },
+
+            ],
+            Learning_Highlights:[
+                LearningHighlights.七节视频录播课程每周更新一节,
+                LearningHighlights.每周OfficeHour导师直播答疑,
+                LearningHighlights.每节课后作业实践,
+                LearningHighlights.助教每晚在线解答,
+                LearningHighlights.毕业证书,
+                LearningHighlights.中文授课,
+            ],
+            teacher:[
+                Course_teacher.OwenLiu,
+                Course_teacher.Autark,
+            ],
+            project_Provider:[
+                projectProvider.TinTinLand,
+                projectProvider.DODO,
+            ],
+            community_recommendation:[
+                Course_student.Hunter,
+                Course_student.CRG,
+                Course_student.Kurtis,
+            ],
+
+            suitable_ForTheCrowd:[
+                suitableForTheCrowd.以太坊或其他区块链生态开发者,
+                suitableForTheCrowd.即将毕业的计算机专业大学生,
+                suitableForTheCrowd.从互联网想要转行的程序员,
+            ],
+            community_support:[
+                communitySupport.与全球顶尖以太坊开发者交流,
+                communitySupport.资源工作推荐,
+            ],
+
+
+        },
         EVM_103:{
             id: "EVM_103",
             img: "/course/EVM_103.png",
             cycle:"第三期",
             name:"区块链入门课程——0基础创建以太坊智能合约",
-            state: false,
-            AboutStart:true,
+            state: true,
+            AboutStart:false,
             startTime:"2023.02",
             registrationDeadline:"--",
             link: "https://hkr.xet.tech/s/Pe8p8",
@@ -634,6 +804,144 @@ const Course_info =
 
 
         },
+        IC_104:{
+            id: "IC_104",
+            img: "/course/IC_104.png",
+            cycle:"第四期",
+            name:"Internet Computer：从核心技术入门到开发实战",
+            state: false,
+            AboutStart:true,
+            startTime:"---",
+            registrationDeadline:"---",
+            link: "https://hkr.xet.tech/s/1RNB1X",
+            h1:"全球第一份 DFNITY 官方实战指南《Internet Computer：从核心技术入门到开发实战》课程由TinTinLand与DFINITY联合推出。非常适合想要了解 IC 区块链特点并在这个平台上开发应用的区块链开发者学习。我们希望通过这门课程，开发者可以深入理解 IC 区块链的特点，并在开发中发挥它的优势，掌握运用智能合约进行组合的设计理念，理解开发大型应用的基础架构。",
+            type: [
+                {
+                    content: "Motoko"
+                },
+                {
+                    content: "Canister"
+                },
+                {
+                    content: "Javescript"
+                },
+                {
+                    content: "静态网站"
+                },
+            ],
+            Course_data:[
+                {
+                    title:"第一课：新手上路 - 使用 SDK 搭建一个简易网站",
+                    content:[
+                        {
+                            h1:"安装 SDK "
+                        },
+                        {
+                            h1:"第一个实例：部署静态网站 "
+                        },
+                        {
+                            h1:"区块链与智能合约的基础概念"
+                        },
+                        {
+                            h1:"ICP 的技术优势（为什么要使用 ICP 区块链)"
+                        }
+                    ]
+                },
+                {
+                    title:"第二课：Motoko 语言入门（工具，语法，例子",
+                    content:[
+                        {
+                            h1:"VSCode 开发环境配置 "
+                        },
+                        {
+                            h1:"语法以及编程基础 "
+                        },
+                        {
+                            h1:"解释运行和沙盒环境 "
+                        },
+                    ]
+                },
+                {
+                    title:"第三课：Canister 智能合约 ",
+                    content:[
+                        {
+                            h1:"公共接口调用 (query vs. update)"
+                        },
+                        {
+                            h1:"Canister 的生命周期"
+                        },
+                        {
+                            h1:"计费标准 (cycles)"
+                        },
+                        {
+                            h1:"网页请求 (http_request) 的接口标准 "
+                        },
+                    ]
+                },
+                {
+                    title:"第四课：用 Motoko 做后端",
+                    content:[
+                        {
+                            h1:"函数类型"
+                        },
+                        {
+                            h1:"结构类型"
+                        },
+                        {
+                            h1:"Actor 类型"
+                        },
+                        {
+                            h1:"身份与权限处理"
+                        },
+                    ]
+                },
+                {
+                    title:"第五课：用 Javascript 做前端",
+                    content:[
+                        {
+                            h1:"Agent-js 代理库"
+                        },
+                        {
+                            h1:"网络资源管理"
+                        },
+                        {
+                            h1:"异步调用后端方法"
+                        },
+                    ]
+                },
+
+            ],
+            Learning_Highlights:[
+                LearningHighlights.五节视频录播课程每周更新一节,
+                LearningHighlights.每节课后作业实践,
+                LearningHighlights.每周OfficeHour导师直播答疑,
+                LearningHighlights.助教每晚在线解答,
+                LearningHighlights.DFINITY官方认证毕业证书,
+                LearningHighlights.中文授课,
+            ],
+            teacher:[
+                Course_teacher.PaulLiu,
+            ],
+            project_Provider:[
+                projectProvider.TinTinLand,
+                projectProvider.DFINITY,
+            ],
+            community_recommendation:[
+                Course_student.DominicWilliams_JanCamenisch,
+            ],
+            suitable_ForTheCrowd:[
+                suitableForTheCrowd.区块链开发者,
+                suitableForTheCrowd.IT从业人员,
+                suitableForTheCrowd.在校计算机专业学生,
+            ],
+            community_support:[
+                communitySupport.与全球顶尖以太坊开发者交流,
+                communitySupport.资源工作推荐,
+                communitySupport.DFINITY官方认证
+            ],
+
+
+        },
         IC_103:{
             id: "IC_103",
             img: "/course/IC_103.png",
@@ -655,6 +963,9 @@ const Course_info =
                 },
                 {
                     content: "Javescript"
+                },
+                {
+                    content: "静态网站"
                 },
 
             ],
@@ -805,7 +1116,6 @@ const Course_info =
                 {
                     content: "FCL(Flow Client Library)"
                 },
-
             ],
             Course_data:[
                 {

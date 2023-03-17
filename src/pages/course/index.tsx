@@ -28,6 +28,32 @@ function classNames(...classes) {
 const Course = () =>{
     const Course_info =
         [
+
+            {
+                id: "EVM_104",
+                img: "/course/EVM_104.png",
+                type: [
+                    {
+                        content: "Solidity"
+                    },
+                    {
+                        content: "智能合约"
+                    },
+                    {
+                        content: "合约安全"
+                    },
+                    {
+                        content: "ERC20"
+                    },
+                    {
+                        content: "ERC721"
+                    },
+                ],
+                h1:"以太坊开发快速入门-轻松创建智能合约",
+                state: false,
+                link: "https://hkr.xet.tech/s/4sKJGh",
+                AboutStart:true,
+            },
             {
                 id: "EVM_103",
                 img: "/course/EVM_103.png",
@@ -51,7 +77,7 @@ const Course = () =>{
                 ],
                 h1:"区块链入门课程——0基础创建以太坊智能合约",
                 link: "https://hkr.xet.tech/s/Pe8p8",
-                state: true,
+                state: false,
                 AboutStart:false,
             },
             {
@@ -81,6 +107,28 @@ const Course = () =>{
                 AboutStart:false,
             },
             {
+                id: "IC_104",
+                img: "/course/IC_104.png",
+                type: [
+                    {
+                        content: "Motoko"
+                    },
+                    {
+                        content: "Canister"
+                    },
+                    {
+                        content: "Javescript"
+                    },
+                    {
+                        content: "静态网站"
+                    },
+                ],
+                h1:"Internet Computer：从核心技术入门到开发实战",
+                state: false,
+                link: "https://hkr.xet.tech/s/1RNB1X",
+                AboutStart:true,
+            },
+            {
                 id: "IC_103",
                 img: "/course/IC_103.png",
                 type: [
@@ -97,7 +145,7 @@ const Course = () =>{
                 ],
                 h1: "第4期｜Internet Computer：从核心技术入门到开发实战",
                 link: "https://hkr.h5.xeknow.com/s/xRaCr",
-                state: true,
+                state: false,
                 AboutStart:false,
 
             },

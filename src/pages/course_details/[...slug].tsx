@@ -7,11 +7,20 @@ import {Dialog, Disclosure, Transition} from "@headlessui/react";
 import {useRouter} from "next/router";
 import Course_info from "../../components/course_info";
 import {useAtom} from "jotai";
-import {Course_Detail, LoginState, OpenLoginState, PopUpBoxInfo, PopUpBoxState, UserEmail} from "../../jotai";
+import {
+    Course_Detail,
+    LoginState,
+    OpenLoginState,
+    PopUpBoxInfo,
+    PopUpBoxState, SignUpCourseBoxData,
+    SignUpCourseBoxState,
+    UserEmail
+} from "../../jotai";
 import Heads from "../../components/head";
-import {Pop_up_box} from "../../components/pop_up_box";
+import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
 import {client} from "../../client";
 import Loading from "../../components/loading";
+import {WaitPayPoPUpBox} from "../../components/payState";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -222,63 +231,18 @@ const CourseDetails = () =>{
     const router = useRouter()
     const [open, setOpen] = useState(false)
     const [courseDetail,setCourseDetail] = useAtom(Course_Detail)
-    const [loginState,] = useAtom(LoginState)
-    const [user_email,] = useAtom(UserEmail)
-    const [openLogin,setOpenLogin] =useAtom(OpenLoginState)
-    const [pop_up_boxState,setSop_up_boxState] = useAtom(PopUpBoxState)
-    const [pop_up_boxData,setPop_up_boxData] =useAtom(PopUpBoxInfo)
+    const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
+    const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
     const WeiXinImg = {
         img:"/tintinVX.png"
     }
-    const Signup = async (courseName) => {
-        if(loginState){
-            setOpenLogin(true)
-            const CourseId = await client.callApi('v1/teachable/GetCourseId', {
-                course_name:courseName
-            });
-            const TaUser = await client.callApi('v1/teachable/GetTaUser', {
-                user_email: user_email.user_email
-            });
-
-            if (CourseId.res !==undefined && TaUser.res!==undefined) {
-                if(CourseId.isSucc && TaUser.isSucc){
-                    const data = await client.callApi('v1/teachable/EnrollCourse', {
-                        course_id: CourseId.res.course_id,
-                        user_id: TaUser.res.user_id
-                    });
-                    console.log(data)
-                    setOpenLogin(false)
-                    setPop_up_boxData({
-                        state:true,
-                        type:"报名",
-                        title:"",
-                        hash: ""
-                    })
-                    setSop_up_boxState(true)
-                }else {
-                    setOpenLogin(false)
-                    setPop_up_boxData({
-                        state:false,
-                        type:"报名",
-                        title:"你已经报过该课程了",
-                        hash: ""
-                    })
-                    setSop_up_boxState(true)
-                }
-
-                // console.log(CourseId.res.course_id,TaUser.res.user_id)
-            }else {
-                setOpenLogin(false)
-                setPop_up_boxData({
-                    state:false,
-                    type:"报名",
-                    title:"请检查网络",
-                    hash: ""
-                })
-                setSop_up_boxState(true)
-            }
-
-        }
+    const Signup = (img,courseName) =>{
+        setSignUpCourseBox(true)
+        setSignUpCourseData({
+            img,
+            courseName,
+            price: "100"
+        })
     }
     useEffect(()=>{
         if (router.isReady){
@@ -359,12 +323,12 @@ const CourseDetails = () =>{
                                         </div>
                                     </div>
                                     <div className="mt-10 xl:mt-0 flex justify-center">
-                                        <button onClick={()=>Signup(courseDetail.h1)}>
+                                        <button onClick={()=>Signup(courseDetail.img,courseDetail.h1)}>
                                             <div   className={courseDetail.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                 立刻报名
                                             </div>
                                         </button>
-                                        <button onClick={()=>Signup(courseDetail.h1)} >
+                                        <button  >
                                             <div className={courseDetail.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                 即将开始
                                             </div>
@@ -416,12 +380,12 @@ const CourseDetails = () =>{
                                     </div>
                                 </div>
                                 <div className="mt-10 xl:mt-0 flex justify-center">
-                                    <button onClick={()=>Signup(courseDetail.h1)}>
+                                    <button onClick={()=>Signup(courseDetail.img,courseDetail.h1)}>
                                         <div   className={courseDetail.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                             立刻报名
                                         </div>
                                     </button>
-                                    <button onClick={()=>Signup(courseDetail.h1)} >
+                                    <button  >
                                         <div className={courseDetail.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                             即将开始
                                         </div>
@@ -438,7 +402,10 @@ const CourseDetails = () =>{
 
             <Tail/>
          <Loading/>
+            <Loading/>
             <Pop_up_box/>
+            <WaitPayPoPUpBox/>
+            <SignUpCourseBox/>
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={setOpen}>
                     <Transition.Child

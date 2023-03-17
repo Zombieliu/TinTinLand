@@ -911,7 +911,7 @@ const UserCourse = () =>{
                                             </div>
                                             <div className="flex mt-5 ">
                                                 <button onClick={()=>ReceiveAward(items.course_name)}>
-                                                    <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5":""}>
+                                                    <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                         领取奖励
                                                     </div>
                                                 </button>

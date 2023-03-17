@@ -34,8 +34,30 @@ const Course = () => {
     const Course_info =
         [
             {
-                id: "EVM_103",
-                img: "/course/EVM_103.png",
+                id: "IC_104",
+                img: "/course/IC_104.png",
+                type: [
+                    {
+                        content: "Motoko"
+                    },
+                    {
+                        content: "Canister"
+                    },
+                    {
+                        content: "Javescript"
+                    },
+                    {
+                        content: "静态网站"
+                    },
+                ],
+                h1:"Internet Computer：从核心技术入门到开发实战",
+                state: false,
+                link: "https://hkr.xet.tech/s/1RNB1X",
+                AboutStart:true,
+            },
+            {
+                id: "EVM_104",
+                img: "/course/EVM_104.png",
                 type: [
                     {
                         content: "Solidity"
@@ -52,34 +74,36 @@ const Course = () => {
                     {
                         content: "ERC721"
                     },
-
                 ],
-                h1:"区块链入门课程——0基础创建以太坊智能合约",
-                link: "https://hkr.xet.tech/s/Pe8p8",
-                state: true,
-                AboutStart:false,
+                h1:"以太坊开发快速入门-轻松创建智能合约",
+                state: false,
+                link: "https://hkr.xet.tech/s/4sKJGh",
+                AboutStart:true,
             },
-
             {
-                id: "IC_103",
-                img: "/course/IC_103.png",
+                id: "FLOW_101",
+                img: "/course/FLOW_101.png",
                 type: [
                     {
-                        content: "Motoko"
+                        content: "Cadence"
                     },
                     {
-                        content: "Canister"
+                        content: "Flow FT"
                     },
                     {
-                        content: "Javescript"
+                        content: "Flow NFT"
                     },
-
+                    {
+                        content: "NFT Metadata"
+                    },
+                    {
+                        content: "FCL(Flow Client Library)"
+                    },
                 ],
-                h1: "第4期｜Internet Computer：从核心技术入门到开发实战",
-                link: "https://hkr.h5.xeknow.com/s/xRaCr",
+                h1:"Flow DApp 开发：从初识 Candence 到搭建 Makertplace",
                 state: true,
+                link: "https://hkr.h5.xeknow.com/s/PGm9a",
                 AboutStart:false,
-
             },
             {
                 id: "BAC_101",
@@ -109,56 +133,7 @@ const Course = () => {
                 AboutStart:false,
 
             },
-            {
-                id: "FLOW_101",
-                img: "/course/FLOW_101.png",
-                type: [
-                    {
-                        content: "Cadence"
-                    },
-                    {
-                        content: "Flow FT"
-                    },
-                    {
-                        content: "Flow NFT"
-                    },
-                    {
-                        content: "NFT Metadata"
-                    },
-                    {
-                        content: "FCL(Flow Client Library)"
-                    },
-                ],
-                h1: "Flow DApp 开发：从初识 Candence 到搭建 Makertplace",
-                link: "https://hkr.h5.xeknow.com/s/PGm9a",
-                state: true,
-                AboutStart:false,
 
-            },
-            {
-                id: "IC_201",
-                img: "/course/IC_201.png",
-                type: [
-                    {
-                        content: "Motoko"
-                    },
-                    {
-                        content: "Canister"
-                    },
-                    {
-                        content: "ICP系统服务"
-                    },
-                    {
-                        content: "Ti Jar"
-                    },
-
-                ],
-                h1: "第一期｜Internet Computer：从核心技术入门到开发实战进阶",
-                link: "",
-                state: false,
-                AboutStart:false,
-
-            },
         ]
     useEffect(()=>{
         autoTimer = createAuto()
@@ -264,7 +239,7 @@ const Course = () => {
                         {Course_info.map(items=>(
                             <div key={items.id} className="w-full ">
                                 <div  className="rounded-2xl  xl:w-96 2xl:w-99 mr-10">
-                                    <img className="rounded-t-2xl " src={items.img} alt=""/>
+                                    <img className="rounded-t-2xl h-56 2xl:h-72" src={items.img} alt=""/>
                                     <div className="px-10 py-8 bg-white rounded-b-2xl">
                                         <div className="flex  h-20 overflow-hidden flex-wrap ">
                                             {items.type.map(list=>(
@@ -282,7 +257,7 @@ const Course = () => {
                                                     立刻报名
                                                 </div>
                                             </button>
-                                            <button onClick={()=>{Signup(items.img,items.h1)}}>
+                                            <button >
                                                 <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                     即将开始
                                                 </div>
@@ -308,7 +283,7 @@ const Course = () => {
                     <div className="flex  ">
                         {Course_info.map(items=>(
                                         <div key={items.id} className="rounded-2xl snap-always snap-center md:snap-start w-90 mx-5">
-                                            <img className="rounded-t-2xl" src={items.img} alt=""/>
+                                            <img className="rounded-t-2xl h-52" src={items.img} alt=""/>
                                             <div className="px-10 py-8 bg-white rounded-b-2xl">
                                                 <div className="flex  h-20 overflow-hidden  flex-wrap">
                                                     {items.type.map(list=>(
@@ -326,7 +301,7 @@ const Course = () => {
                                                             立刻报名
                                                         </div>
                                                     </button>
-                                                    <button  onClick={()=>{Signup(items.img,items.h1)}}>
+                                                    <button >
                                                         <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                             即将开始
                                                         </div>
