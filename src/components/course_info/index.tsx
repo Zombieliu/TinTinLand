@@ -1,13 +1,13 @@
 
 const Course_teacher = {
     OwenLiu:{
-        img:"https://cdn.discordapp.com/attachments/897398778166906911/928294804633305128/20220105223158.jpg",
+        img:"/teacher/owenliu.png",
         name:"Owen Liu",
         title:"北京邮电大学硕士，DODO合约工程师",
         introduction:"多年以太坊生态的合约开发经历，目前专注于去中心化金融的生态研究与开发，具有多DeFi产品线的实战开发与多链部署经验",
     },
     Autark:{
-        img:"https://cdn.discordapp.com/attachments/897398778166906911/928294804633305128/20220105223158.jpg",
+        img:"/teacher/autark.png",
         name:"Autark",
         title:"DODO 数据团队负责人",
         introduction:"多年区块链工作经验，深耕多个DAPP产品。 17年开始参与区块链项目开发，在交易所、联盟链、区块链金融、DEFI领域从事技术开发工作，2020年加入DODO团队，在智能合约开发及数据索引上持续贡献代码。",
@@ -299,10 +299,6 @@ const Course_student = {
         position:"F996CLUB成员，Z世代00后Web3创业者",
         h1:"Paul老师讲授方法很好，一步一步带着做，作业的难度对于基础弱的我可能稍大，尤其在 VAR Int 向 Int 转变时卡住了很久。冯力全助教也给我很大信心，在群友交流中也能学到很多东西，困难是我自己的原因导致，我会努力克服的！",
     },
-
-
-
-
 
 }
 
