@@ -176,7 +176,7 @@ export default function App() {
 
 
     const { config:config1 } = usePrepareContractWrite({
-        address: '0xFBA3912Ca04dd458c843e2EE08967fC04f3579c2',
+        address: '0x8f09492B5cb6960e00a9f42238198d06D6aCbC5a',
         abi: [
             {
                 "anonymous": false,
@@ -655,8 +655,10 @@ export default function App() {
             }
         ],
         functionName: 'mint',
+        
     })
     const { data,isError,write } = useContractWrite(config1)
+
 
     const { isLoading,isSuccess } = useWaitForTransaction({
         hash: data?.hash,
@@ -677,8 +679,9 @@ export default function App() {
                 <button disabled={!write} onClick={() => write?.()}>
                     Feed
                 </button>
-                {isLoading && <div>Check Wallet</div>}
-                {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+                {error && (
+                    <div>An error occurred preparing the transaction: {error.message}</div>
+                )}
             </div>
             <div>
 

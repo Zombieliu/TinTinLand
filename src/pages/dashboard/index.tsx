@@ -824,7 +824,7 @@ const UserCourse = () =>{
         if(singerState.isSucc){
             setCourseDetail({name: name,price: 100,address:singerState.res.user_evm_address})
             setOpenLogin(false)
-            setFreeCourse1(true)
+            setPaidCourse1(true)
         } else {
             setOpenLogin(false)
             setPop_up_boxData({
@@ -911,7 +911,7 @@ const UserCourse = () =>{
                                             </div>
                                             <div className="flex mt-5 ">
                                                 <button onClick={()=>ReceiveAward(items.course_name)}>
-                                                    <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                                    <div className={Number(items.percent_complete) == 100  && items.course_homework_id.findIndex(target=>target.state ==true) !== -1 ? "text-xs  bg-black text-white rounded-full  px-8 py-2.5 mr-5":""}>
                                                         领取奖励
                                                     </div>
                                                 </button>
@@ -1554,7 +1554,7 @@ const UserCourse = () =>{
                         </Dialog>
                     </Transition.Root>
                     <Transition.Root show={paidCourse3} as={Fragment}>
-                        <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse3}>
+                        <div className="fixed z-40 inset-0 overflow-y-auto " >
                             <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center shadow-2xl   sm:block sm:p-0">
                                 <Transition.Child
                                     as={Fragment}
@@ -1565,7 +1565,7 @@ const UserCourse = () =>{
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
+                                    <div className="fixed inset-0 bg-gray-600 bg-opacity-80 transition-opacity" />
                                 </Transition.Child>
 
                                 {/* This element is to trick the browser into centering the modal contents. */}
@@ -1645,8 +1645,10 @@ const UserCourse = () =>{
                                                         {courseDetail.address}
                                                     </div>
                                                 </div>
-
-                                                <div className="mt-10 font-semibold text-sm">
+                                                <div className="flex justify-center mt-5">
+                                                    <ConnectButton  accountStatus="address"  />
+                                                </div>
+                                                <div className="mt-3 font-semibold text-sm">
                                                     确认无误后请点击确认
                                                 </div>
 
@@ -1655,7 +1657,7 @@ const UserCourse = () =>{
                                                 <button onClick={() => setPaidCourse3(false)}  className="bg-white border border-black text-black w-36 py-1.5 rounded-full mr-5">
                                                     返回
                                                 </button>
-                                                <button   className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
+                                                <button  onClick={claimNFT}  className="bg-black border border-black text-white w-36 py-1.5 rounded-full mr-5">
                                                     确认
                                                 </button>
 
@@ -1666,7 +1668,7 @@ const UserCourse = () =>{
                                     </div>
                                 </Transition.Child>
                             </div>
-                        </Dialog>
+                        </div>
                     </Transition.Root>
                     <Transition.Root show={paidCourse4} as={Fragment}>
                         <Dialog as="div" className="fixed z-40 inset-0 overflow-y-auto " onClose={setPaidCourse4}>
