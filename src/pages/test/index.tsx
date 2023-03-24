@@ -19,7 +19,10 @@ import { WaitPayPoPUpBox} from "../../components/payState";
 import {parseEther, verifyMessage} from "ethers/lib/utils";
 import {BigNumber} from "ethers";
 import {client} from "../../client";
-import {useDebounce} from "use-debounce";
+
+import WHITELIST from '../../utils/local-address.json';
+import getMerkleProof from "../../utils/get-merkle-proof";
+
 export default function App() {
     const { address, isConnected,} = useAccount()
     //获取登陆状态 和地址
@@ -173,6 +176,10 @@ export default function App() {
         //       console.log("chenggong ")
         // }
     }
+
+    
+    // const index = WHITELIST.findIndex((x: any) =>x.address === address);
+    // const proof = getMerkleProof(WHITELIST, index, address);
 
 
     const { config:config1 } = usePrepareContractWrite({
@@ -655,7 +662,7 @@ export default function App() {
             }
         ],
         functionName: 'mint',
-        
+
     })
     const { data,isError,write } = useContractWrite(config1)
 
