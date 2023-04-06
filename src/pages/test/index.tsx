@@ -177,7 +177,7 @@ export default function App() {
         // }
     }
 
-    
+
     // const index = WHITELIST.findIndex((x: any) =>x.address === address);
     // const proof = getMerkleProof(WHITELIST, index, address);
 

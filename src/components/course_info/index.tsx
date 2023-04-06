@@ -3,13 +3,13 @@ const Course_teacher = {
     OwenLiu:{
         img:"/teacher/owenliu.png",
         name:"Owen Liu",
-        title:"北京邮电大学硕士，DODO合约工程师",
+        title:"DODO Researcher,北京邮电大学硕士",
         introduction:"多年以太坊生态的合约开发经历，目前专注于去中心化金融的生态研究与开发，具有多DeFi产品线的实战开发与多链部署经验",
     },
     Autark:{
         img:"/teacher/autark.png",
         name:"Autark",
-        title:"DODO 数据团队负责人",
+        title:"Leader of DODO Trading and Aggregator Group",
         introduction:"多年区块链工作经验，深耕多个DAPP产品。 17年开始参与区块链项目开发，在交易所、联盟链、区块链金融、DEFI领域从事技术开发工作，2020年加入DODO团队，在智能合约开发及数据索引上持续贡献代码。",
     },
     JasonWan:{

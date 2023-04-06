@@ -9,6 +9,7 @@ import Heads from "../../components/head";
 import {client} from "../../client";
 import {useAtom} from "jotai";
 import {
+    Language,
     LoginState,
     OpenLoginState,
     PopUpBoxInfo,
@@ -21,12 +22,15 @@ import {Dialog, Transition} from "@headlessui/react";
 import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
 import Loading from "../../components/loading";
 import {WaitPayPoPUpBox} from "../../components/payState";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 const Course = () => {
+    const [language,setLanguage] =useAtom(Language)
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
     let index = 0
@@ -235,10 +239,10 @@ const Course = () => {
                     </div>
                 </div>
                 <div className="w-full  h-full relative  transition-all duration-700 " id="carousel">
-                    <div className="flex  "  id="container">
+                    <div className="flex gap-8"  id="container">
                         {Course_info.map(items=>(
                             <div key={items.id} className="w-full ">
-                                <div  className="rounded-2xl  xl:w-96 2xl:w-99 mr-10">
+                                <div  className="rounded-2xl  xl:w-96 2xl:w-99 ">
                                     <img className="rounded-t-2xl h-56 2xl:h-72" src={items.img} alt=""/>
                                     <div className="px-10 py-8 bg-white rounded-b-2xl">
                                         <div className="flex  h-20 overflow-hidden flex-wrap ">
@@ -252,11 +256,16 @@ const Course = () => {
                                                 {items.h1}
                                             </div>
                                         <div className="flex mt-5 ">
-                                            <button onClick={()=>{Signup(items.img,items.h1)}}>
-                                                <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
+                                            <Link href={items.link}>
+                                                <a  target="_blank" className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                     立刻报名
-                                                </div>
-                                            </button>
+                                                </a>
+                                            </Link>
+                                            {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
+                                            {/*    <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >*/}
+                                            {/*        立刻报名*/}
+                                            {/*    </div>*/}
+                                            {/*</button>*/}
                                             <button >
                                                 <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                     即将开始
@@ -296,11 +305,11 @@ const Course = () => {
                                                         {items.h1}
                                                     </div>
                                                 <div className="flex mt-5 ">
-                                                    <button  onClick={()=>{Signup(items.img,items.h1)}}>
-                                                        <div  className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                                    <Link href={items.link}>
+                                                        <a  target="_blank" className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                             立刻报名
-                                                        </div>
-                                                    </button>
+                                                        </a>
+                                                    </Link>
                                                     <button >
                                                         <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                             即将开始
@@ -783,8 +792,7 @@ const AboutUs = ()=>{
                         About Us
                     </div>
                     <div className="text-2xl xl:text-4xl 2xl:text-5xl my-5">
-                        Empowering the Next-Gen
-                        Web Developers
+                        赋能下一代开发者的技术社区
                     </div>
                     <div className="2xl:mt-14 text-base 2xl:text-xl">
                         <div>
@@ -1288,6 +1296,13 @@ const Home = () =>{
 
     )
 }
+
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['second-page', 'common',"footer","header"]),
+    },
+})
 
 export default Home
 

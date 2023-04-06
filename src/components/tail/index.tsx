@@ -5,7 +5,7 @@ import React, { Fragment, useState } from "react"
 
 const ends =[
     {
-        title:"Contact Us",
+        title:"联系我们",
         content:[
             {
                 h1:"Twitter",
@@ -22,10 +22,10 @@ const ends =[
 
     },
     {
-        title:"Products",
+        title:"产品",
         content:[
             {
-                h1:"Web3 课程",
+                h1:"课程",
                 href:"#Educate",
             },
             {
@@ -33,7 +33,7 @@ const ends =[
                 href:"#Hackathons",
             },
             {
-                h1:"TinTin 活动",
+                h1:"活动",
                 href:"#Activities",
             }
         ]
@@ -60,7 +60,7 @@ const Tail=()=>{
                             <a  target="_blank">
                         <div className="text-white text-3xl flex items-center font-light justify-center" >
                             <div>
-                                Join our Discord
+                                加入TinTinLand社区
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transform rotate-45" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd"
@@ -72,13 +72,13 @@ const Tail=()=>{
                             </a>
                         </Link>
                         <div className="my-2 text-gray-500 text-sm flex justify-center  ">
-                            Click to join Discord channel
+                            点击进入discord
                         </div>
                     </div>
 
                 </div>
                 <div className="text-white flex justify-between mx-20 py-5  items-center">
-                    <Link href="/https://twitter.com/Tintinland2021">
+                    <Link href="https://twitter.com/Tintinland2021">
                         <a className="">
                             <i className="fa fa-twitter" aria-hidden="true"></i>
                         </a>
@@ -104,7 +104,7 @@ const Tail=()=>{
                         <Link href="https://discord.gg/6b2QNSYgmz">
                             <a  className="text-white text-3xl flex items-center font-light justify-center"  target="_blank">
                             <div>
-                                Join our Discord
+                                加入TinTinLand社区
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transform rotate-45" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd"
@@ -114,7 +114,7 @@ const Tail=()=>{
                             </a>
                         </Link>
                         <div className="my-2 text-gray-500 text-sm flex justify-center md:justify-start ">
-                            Click to join Discord channel
+                            点击进入discord
                         </div>
                     </div>
                     <div>
@@ -125,10 +125,9 @@ const Tail=()=>{
                                         {end.title}
                                     </div>
                                     {end.content.map(item=>(
-                                        <div key={item.h1} className="flex my-3 md:justify-start justify-center  text-gray-400 text-sm transition  duration-300 transform hover:translate-x-1 ">
-
+                                        <div key={item.h1} className="flex my-3 justify-center  text-gray-400 text-sm transition  duration-300 transform hover:translate-x-1 ">
                                             <Link href={item.href}>
-                                                <a  target="_blank">
+                                                <a  target="_blank" className="text-center">
                                                     {item.h1}
                                                 </a>
                                             </Link>
@@ -137,11 +136,11 @@ const Tail=()=>{
                                     <div className="">
 
                                     </div>
-                                    <div className="w-full max-w-sm ">
+                                    <div className="w-full max-w-sm mx-auto ">
                                         <Popover className="">
                                                     <Popover.Button
                                                         className=
-                                                            'flex my-3 md:justify-start justify-center  text-gray-400 text-sm transition  duration-300 transform hover:translate-x-1 focus:outline-none focus:ring-offset-2 focus:ring-black'
+                                                            'flex my-3 mx-4 md:justify-start justify-center  text-gray-400 text-sm transition  duration-300 transform hover:translate-x-1 '
                                                         >
                                                         {end.weixin}
 

@@ -1,11 +1,8 @@
 import Header from "../../components/header";
-import Link from "next/link";
-import Tail from "../../components/tail";
 import React, {useEffect, useState} from "react";
 import {Router, useRouter} from "next/router";
 import Heads from "../../components/head";
 import {client} from "../../client";
-import { log } from "console";
 import {Pop_up_box} from "../../components/pop_up_box";
 import {useAtom} from "jotai";
 import {PopUpBoxInfo, PopUpBoxState} from "../../jotai";
@@ -42,6 +39,7 @@ const Login = () =>{
               const ret = await client.callApi('v1/email/SendEmail', {
                   email: (document.getElementById("email") as HTMLInputElement).value
               });
+          console.log(ret)
               if(ret.isSucc){
                   setLoginState(false)
                   await  router.push(

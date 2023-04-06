@@ -1,36 +1,37 @@
-import { Dialog, Disclosure, Listbox, Menu, Popover, Tab, Transition } from '@headlessui/react';
+import { Popover, Tab, Transition } from '@headlessui/react';
 import Link from "next/link";
 import { Switch } from '@headlessui/react'
-import {ChevronDownIcon, MenuIcon, XIcon} from "@heroicons/react/outline";
+import { MenuIcon, XIcon} from "@heroicons/react/outline";
 import React, {Fragment, useEffect, useState} from "react";
 import {useAtom} from "jotai";
-import {LoginState, UserEmail} from "../../jotai";
+import {Language, LoginState, UserEmail} from "../../jotai";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const navigation = [
-    { id:1 ,name: 'Educate', href: '/course' },
-    { id:2 ,name: 'Hackathons', href: '/hackathons' },
-    { id:3 ,name: 'Activities', href: '/meeting' },
-    { id:4 ,name: 'About Us', href: '/#About' },
-    // { id:5 ,name: 'Job Fair', href: '/JobFair/开发' },
-
-]
-
-
-
 const Header = () =>{
     const router = useRouter();
     const [loginState,SetLoginState] = useAtom(LoginState)
-    const [language,setLanguage] = useState(false)
     const [scroll,setScroll]=useState(false)
     const [,setLoginState] = useAtom(LoginState)
     const [userEmail,setUserEmail] =useAtom(UserEmail)
-    function languageChange() {
-        setLanguage(!language);
-    }
+    const [language,setLanguage] =useAtom(Language)
+
+    const [languageState,setLanguageState] = useState(false)
+    const { t } = useTranslation('common')
+
+    const navigation = [
+        { id:1 ,name: `课程`, href: '/course' },
+        { id:2 ,name:`Hackathons`, href: '/hackathons' },
+        { id:3 ,name: `活动`, href: '/meeting' },
+        { id:4 ,name: `关于我们`, href: '/#About' },
+        // { id:5 ,name: 'Job Fair', href: '/JobFair/开发' },
+    ]
+    // { id:4 ,name: `${t("关于我们")}`, href: '/#About' },
+
     if(typeof window !== "undefined"){
         window.onscroll = function() {myFunction()};
     }
@@ -46,14 +47,29 @@ const Header = () =>{
         setUserEmail({user_email:"",username:""})
         router.push('/')
     }
+    function languageChange() {
+        // if(language =="zn"){
+        //     setLanguage("en");
+        //     router.push(`en`)
+        // }else {
+        //     setLanguage("zn")
+        //     router.push(`zn`)
+        // }
 
+    }
     useEffect(()=>{
-            if(userEmail.user_email==""){
-                setLoginState(false)
-            }else {
-                setLoginState(true)
-            }
-    },[])
+        console.log(router.pathname)
+            // if(language=="zn"){
+            //     setLanguageState(false)
+            //     setLanguage("zn")
+            //     router.push(`zn`)
+            //
+            // }else {
+            //     setLanguage("en");
+            //     router.push(`en`)
+            //     setLanguageState(true)
+            // }
+    },[language])
 
     return (
         <header>
@@ -80,7 +96,7 @@ const Header = () =>{
                     <Tab.Group as="nav" className="hidden  lg:flex  space-x-8  text-white ">
                         {navigation.map((item) => (
                             <div key={item.name}>
-                                <Link  href={item.href}>
+                                <Link  href={item.href} >
                                     <a  className=" ">
                                         <div  className='w-20 py-2.5 text-sm leading-5 text-center  rounded-lg text-sm font-medium text-black '>
                                             {item.name}
@@ -95,7 +111,7 @@ const Header = () =>{
                     <div className="hidden lg:flex w-full justify-end  items-center">
                         <div className="flex justify-center items-center">
                             <Switch
-                                checked={language}
+                                checked={languageState}
                                 onChange={languageChange}
                                 className={classNames(
                                     'relative inline-flex flex-shrink-0 h-7 w-12  border border-gray-500 rounded-full cursor-pointer transition-colors ease-in-out duration-200 items-center bg-gray-200 '
@@ -107,79 +123,73 @@ const Header = () =>{
                                     aria-hidden="true"
                                     className={classNames(
 
-                                        'pointer-events-none inline-block   w-5 rounded-full   transform ring-0 transition ease-in-out duration-200'
+                                        'pointer-events-none inline-block   w-5 rounded-full   transform ring-0 transition ease-in-out'
                                     )}
                                 >
                                     <div className="flex justify-between items-center  w-12  text-xs">
-                                        <div className={language?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
+                                        <div className={languageState?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
                                               中
                                         </div>
-                                         <div className={language?"bg-black rounded-full w-12   w-6  py-1  text-white":"w-12   w-6  py-1"}>
+                                         <div className={languageState?"bg-black rounded-full w-12   w-6  py-1  text-white":"w-12 w-6  py-1"}>
                                           EN
                                         </div>
                             </div>
                                 </span>
                             </Switch>
-                            {/*<div>*/}
-                            {/*    <Link href="/login">*/}
-                            {/*        <a className="text-xs ml-2 text-black border border-black rounded-full  px-5 py-1.5">*/}
-                            {/*            登陆*/}
-                            {/*        </a>*/}
-                            {/*    </Link>*/}
-                            {/*</div>*/}
+
                         </div>
-                        <Link href="/login">
-                            <a className={loginState?"hidden":" ml-4 text-base border border-gray-500 rounded-full cursor-pointer px-5"}>
-                                登陆
-                            </a>
-                        </Link>
-                        <div className={loginState?"mt-1.5 ml-4":"hidden"}>
-                            <Menu as="div" className=" relative ">
-                                    <Menu.Button className="inline-flex w-7  rounded-full ">
-                                        <img className="rounded-full " src="/login.png" alt=""/>
-                                    </Menu.Button>
-                                <Transition
-                                    as={Fragment}
-                                    enter="transition ease-out duration-100"
-                                    enterFrom="transform opacity-0 scale-95"
-                                    enterTo="transform opacity-100 scale-100"
-                                    leave="transition ease-in duration-75"
-                                    leaveFrom="transform opacity-100 scale-100"
-                                    leaveTo="transform opacity-0 scale-95"
-                                >
-                                    <Menu.Items className="absolute right-0 mt-2 w-28  divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <div className="px-1 py-1 text-center">
-                                            <Menu.Item>
-                                                    <Link href="/homepage">
-                                                        <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
-                                                            个人主页
-                                                        </a>
-                                                    </Link>
-                                            </Menu.Item>
-                                        </div>
-                                        <div className="px-1 py-1 ">
-                                            <Menu.Item>
-                                                <Link  href="/dashboard">
-                                                    <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
-                                                        Dashboard
-                                                    </a>
-                                                </Link>
-                                            </Menu.Item>
-                                        </div>
-                                        <div className="px-1 py-1 ">
-                                            <Menu.Item>
+                        {/*<Link href="/login">*/}
+                        {/*    <a className={loginState?"hidden":" ml-4 text-base border border-gray-500 rounded-full cursor-pointer px-5"}>*/}
+                        {/*        登陆*/}
+                        {/*    </a>*/}
+                        {/*</Link>*/}
+                        {/*<div className={loginState?"mt-1.5 ml-4":"hidden"}>*/}
+                        {/*    <Menu as="div" className=" relative ">*/}
+                        {/*            <Menu.Button className="inline-flex w-7  rounded-full ">*/}
+                        {/*                <img className="rounded-full " src="/login.png" alt=""/>*/}
+                        {/*            </Menu.Button>*/}
+                        {/*        <Transition*/}
+                        {/*            as={Fragment}*/}
+                        {/*            enter="transition ease-out duration-100"*/}
+                        {/*            enterFrom="transform opacity-0 scale-95"*/}
+                        {/*            enterTo="transform opacity-100 scale-100"*/}
+                        {/*            leave="transition ease-in duration-75"*/}
+                        {/*            leaveFrom="transform opacity-100 scale-100"*/}
+                        {/*            leaveTo="transform opacity-0 scale-95"*/}
+                        {/*        >*/}
+                        {/*            <Menu.Items className="absolute right-0 mt-2 w-28  divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">*/}
+                        {/*                <div className="px-1 py-1 text-center">*/}
+                        {/*                    <Menu.Item>*/}
+                        {/*                            <Link href="/homepage">*/}
+                        {/*                                <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">*/}
+                        {/*                                    个人主页*/}
+                        {/*                                </a>*/}
+                        {/*                            </Link>*/}
+                        {/*                    </Menu.Item>*/}
+                        {/*                </div>*/}
+                        {/*                <div className="px-1 py-1 ">*/}
+                        {/*                    <Menu.Item>*/}
+                        {/*                        <Link  href="/dashboard">*/}
+                        {/*                            <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">*/}
+                        {/*                                Dashboard*/}
+                        {/*                            </a>*/}
+                        {/*                        </Link>*/}
+                        {/*                    </Menu.Item>*/}
+                        {/*                </div>*/}
+                        {/*                <div className="px-1 py-1 ">*/}
+                        {/*                    <Menu.Item>*/}
 
-                                                    <button onClick={loginOut} className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
-                                                        登出
-                                                    </button>
-                                            </Menu.Item>
-                                        </div>
+                        {/*                            <button onClick={loginOut} className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">*/}
+                        {/*                                登出*/}
+                        {/*                            </button>*/}
+                        {/*                    </Menu.Item>*/}
+                        {/*                </div>*/}
 
 
-                                    </Menu.Items>
-                                </Transition>
-                            </Menu>
-                        </div>
+                        {/*            </Menu.Items>*/}
+                        {/*        </Transition>*/}
+                        {/*    </Menu>*/}
+                        {/*</div>*/}
 
                     </div>
 
@@ -240,7 +250,7 @@ const Header = () =>{
                                 <div className="flex justify-between  p-5 items-center">
                                         <div className="flex justify-between">
                                             <Switch
-                                                checked={language}
+                                                checked={languageState}
                                                 onChange={languageChange}
                                                 className={classNames(
                                                     'relative inline-flex flex-shrink-0 h-7 w-12  border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 items-center bg-gray-200 '
@@ -256,69 +266,70 @@ const Header = () =>{
                                                     )}
                                                 >
                                     <div className="flex justify-between items-center  w-12  text-xs">
-                                        <div className={language?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
-                                                EN
+                                        <div className={languageState?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
+                                              中
                                         </div>
-                                         <div className={language?"bg-black rounded-full w-12   w-6  py-1  text-white":"w-12   w-6  py-1"}>
-                                          中
+                                         <div className={languageState?"bg-black rounded-full w-12   w-6  py-1  text-white":"w-12   w-6  py-1"}>
+                                          EN
                                         </div>
                             </div>
                                 </span>
                                             </Switch>
                                         </div>
-                                    <Link href="/login">
-                                        <a className={loginState?"hidden":" ml-4 text-base border border-gray-500 rounded-full cursor-pointer px-5"}>
-                                            登陆
-                                        </a>
-                                    </Link>
 
-                                    <div className={loginState?"mt-1.5 ml-4":"hidden"}>
-                                        <Menu as="div" className=" relative ">
-                                            <Menu.Button className="inline-flex w-7  rounded-full ">
-                                                <img className="rounded-full " src="/login.png" alt=""/>
-                                            </Menu.Button>
-                                            <Transition
-                                                as={Fragment}
-                                                enter="transition ease-out duration-100"
-                                                enterFrom="transform opacity-0 scale-95"
-                                                enterTo="transform opacity-100 scale-100"
-                                                leave="transition ease-in duration-75"
-                                                leaveFrom="transform opacity-100 scale-100"
-                                                leaveTo="transform opacity-0 scale-95"
-                                            >
-                                                <Menu.Items className="absolute right-0 mt-2 w-28  divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                    <div className="px-1 py-1 text-center">
-                                                        <Menu.Item>
-                                                            <Link href="/homepage">
-                                                                <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
-                                                                    个人主页
-                                                                </a>
-                                                            </Link>
-                                                        </Menu.Item>
-                                                    </div>
-                                                    <div className="px-1 py-1 ">
-                                                        <Menu.Item>
-                                                            <Link  href="/dashboard">
-                                                                <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
-                                                                    Dashboard
-                                                                </a>
-                                                            </Link>
-                                                        </Menu.Item>
-                                                    </div>
-                                                    <div className="px-1 py-1 ">
-                                                        <Menu.Item>
+                                    {/*<Link href="/login">*/}
+                                    {/*    <a className={loginState?"hidden":" ml-4 text-base border border-gray-500 rounded-full cursor-pointer px-5"}>*/}
+                                    {/*        登陆*/}
+                                    {/*    </a>*/}
+                                    {/*</Link>*/}
 
-                                                            <button onClick={loginOut} className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">
-                                                                登出
-                                                            </button>
-                                                        </Menu.Item>
-                                                    </div>
+                                    {/*<div className={loginState?"mt-1.5 ml-4":"hidden"}>*/}
+                                    {/*    <Menu as="div" className=" relative ">*/}
+                                    {/*        <Menu.Button className="inline-flex w-7  rounded-full ">*/}
+                                    {/*            <img className="rounded-full " src="/login.png" alt=""/>*/}
+                                    {/*        </Menu.Button>*/}
+                                    {/*        <Transition*/}
+                                    {/*            as={Fragment}*/}
+                                    {/*            enter="transition ease-out duration-100"*/}
+                                    {/*            enterFrom="transform opacity-0 scale-95"*/}
+                                    {/*            enterTo="transform opacity-100 scale-100"*/}
+                                    {/*            leave="transition ease-in duration-75"*/}
+                                    {/*            leaveFrom="transform opacity-100 scale-100"*/}
+                                    {/*            leaveTo="transform opacity-0 scale-95"*/}
+                                    {/*        >*/}
+                                    {/*            <Menu.Items className="absolute right-0 mt-2 w-28  divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">*/}
+                                    {/*                <div className="px-1 py-1 text-center">*/}
+                                    {/*                    <Menu.Item>*/}
+                                    {/*                        <Link href="/homepage">*/}
+                                    {/*                            <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">*/}
+                                    {/*                                个人主页*/}
+                                    {/*                            </a>*/}
+                                    {/*                        </Link>*/}
+                                    {/*                    </Menu.Item>*/}
+                                    {/*                </div>*/}
+                                    {/*                <div className="px-1 py-1 ">*/}
+                                    {/*                    <Menu.Item>*/}
+                                    {/*                        <Link  href="/dashboard">*/}
+                                    {/*                            <a className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">*/}
+                                    {/*                                Dashboard*/}
+                                    {/*                            </a>*/}
+                                    {/*                        </Link>*/}
+                                    {/*                    </Menu.Item>*/}
+                                    {/*                </div>*/}
+                                    {/*                <div className="px-1 py-1 ">*/}
+                                    {/*                    <Menu.Item>*/}
+
+                                    {/*                        <button onClick={loginOut} className="group flex w-full justify-center items-center rounded-md px-2 py-2 text-sm">*/}
+                                    {/*                            登出*/}
+                                    {/*                        </button>*/}
+                                    {/*                    </Menu.Item>*/}
+                                    {/*                </div>*/}
 
 
-                                                </Menu.Items>
-                                            </Transition>
-                                        </Menu>
-                                    </div>
+                                    {/*            </Menu.Items>*/}
+                                    {/*        </Transition>*/}
+                                    {/*    </Menu>*/}
+                                    {/*</div>*/}
                                 </div>
                             </div>
                         </Popover.Panel>
@@ -329,5 +340,8 @@ const Header = () =>{
         </header>
     )
 }
+
+
+
 
 export default Header

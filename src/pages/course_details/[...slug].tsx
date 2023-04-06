@@ -31,7 +31,6 @@ const  Details = () =>{
     const [courseDetail] = useAtom(Course_Detail)
     useEffect(()=>{
     },[])
-
     return(
         <>
             <div className={classNames("hidden xl:flex bg-white justify-between rounded-xl xl:px-20 py-5")}>
@@ -246,9 +245,10 @@ const CourseDetails = () =>{
     }
     useEffect(()=>{
         if (router.isReady){
-            const course = router.query.slug[0]
-            const fetchUserBounty = async () => {
 
+            const course = router.query.slug[0]
+
+            const fetchUserBounty = async () => {
                 const newDetail = {
                     id:Course_info[course].id ,
                     img: Course_info[course].img,

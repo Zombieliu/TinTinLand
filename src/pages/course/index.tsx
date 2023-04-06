@@ -275,7 +275,7 @@ const Course = () =>{
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3  gap-10 ">
                         {Course_info.map(items=>(
                             <div key={items.id} className={classNames(items.state || items.AboutStart?"rounded-2xl  ":"hidden")}>
-                                <img className="rounded-t-2xl" src={items.img} alt=""/>
+                                <img className="rounded-t-2xl xl:h-60 2xl:h-80" src={items.img} alt=""/>
                                 <div className="px-10 py-8 bg-white rounded-b-2xl">
                                     <div className="flex  h-20 overflow-hidden  flex-wrap">
                                         {items.type.map(list=>(
@@ -288,12 +288,18 @@ const Course = () =>{
                                         {items.h1}
                                     </div>
                                     <div className="flex mt-5 ">
-                                        <button onClick={()=>{Signup(items.img,items.h1)}}>
-                                            <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
+                                        {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
+                                        {/*    <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >*/}
+                                        {/*        立刻报名*/}
+                                        {/*    </div>*/}
+                                        {/*</button>*/}
+                                        <Link href={items.link}>
+                                            <a  target="_blank" className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                 立刻报名
-                                            </div>
-                                        </button>
-                                        <button onClick={()=>{Signup(items.img,items.h1)}} >
+                                            </a>
+                                        </Link>
+                                        {/*onClick={()=>{Signup(items.img,items.h1)}}*/}
+                                        <button  >
                                             <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                 即将开始
                                             </div>
@@ -317,7 +323,7 @@ const Course = () =>{
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3  gap-10 ">
                         {Course_info.map(items=>(
                             <div key={items.id} className={classNames(items.state || items.AboutStart?"hidden":"rounded-2xl")}>
-                                <img className="rounded-t-2xl" src={items.img} alt=""/>
+                                <img className="rounded-t-2xl xl:h-60 2xl:h-80" src={items.img} alt=""/>
                                 <div className="px-10 py-8 bg-white rounded-b-2xl">
                                     <div className="flex  h-20 overflow-hidden  flex-wrap">
                                         {items.type.map(list=>(
