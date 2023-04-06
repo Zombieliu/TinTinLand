@@ -35,11 +35,7 @@ const Test1 = () =>{
                 英文
             </Link>
             <div>
-                {navigation.map(item=>(
-                    <div>
-                        {item.name}
-                    </div>
-                ))}
+
             </div>
         </div>
     )

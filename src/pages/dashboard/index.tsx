@@ -13,7 +13,7 @@ import {Pop_up_box} from "../../components/pop_up_box";
 import {ConnectButton, useChainModal, useConnectModal} from "@rainbow-me/rainbowkit";
 import Loading from "../../components/loading";
 import {useAccount, useNetwork} from "wagmi";
-import getMerkleProof from "../../nft/getMerkleProof";
+
 
 
 function classNames(...classes) {
