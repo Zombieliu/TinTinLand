@@ -21,7 +21,7 @@ import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
 import {client} from "../../client";
 import Loading from "../../components/loading";
 import {WaitPayPoPUpBox} from "../../components/payState";
-import {CourseDatabaseId} from "../../constants";
+import {CourseDatabaseId, https} from "../../constants";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -446,7 +446,7 @@ export async function getStaticPaths() {
     let data = {
         databaseId: CourseDatabaseId
     }
-    const ret = await fetch('http://localhost:3001/v1/Course/GetCourseAllDetails',{
+    const ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -476,7 +476,7 @@ export async function getStaticProps({params:{id}}){
         databaseId: CourseDatabaseId,
         id
     }
-    const ret = await fetch('http://localhost:3001/v1/Course/GetCourseDetails',{
+    const ret = await fetch(`${https}/v1/Course/GetCourseDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'

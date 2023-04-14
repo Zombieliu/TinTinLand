@@ -10,7 +10,7 @@ import {
     CommunityDatabaseID,
     CommunityMemberDatabaseID,
     CourseDatabaseId,
-    HackathonsDatabaseID,
+    HackathonsDatabaseID, https,
     MediaDatabaseID
 } from "../constants";
 
@@ -56,7 +56,7 @@ export default IndexPage
 
 export async function getStaticProps(){
     let course_data = {databaseId: CourseDatabaseId,}
-    const course_ret = await fetch('http://localhost:3001/v1/Course/GetCourseAllDetails',{
+    const course_ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ export async function getStaticProps(){
     let course_details = await course_result.res.project_details
 
     let hackathons_data = {databaseId:HackathonsDatabaseID}
-    const hackathons_ret = await fetch('http://localhost:3001/v1/Hackathons/GetHackathonsDetails',{
+    const hackathons_ret = await fetch(`${https}/v1/Hackathons/GetHackathonsDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ export async function getStaticProps(){
     let  hackathons_details = await hackathons_result.res.project_details
 
     let activity_data = {databaseId:ActivityDatabaseID}
-    const activity_ret = await fetch('http://localhost:3001/v1/Activity/GetActivityAllDetails',{
+    const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ export async function getStaticProps(){
     let  activity_details = await activity_result.res.project_details
 
     let media_data = {databaseId: MediaDatabaseID,}
-    const media_ret = await fetch('http://localhost:3001/v1/Media/GetMediaDetails',{
+    const media_ret = await fetch(`${https}/v1/Media/GetMediaDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ export async function getStaticProps(){
 
 
     let community_data = {databaseId: CommunityDatabaseID}
-    const community_ret = await fetch('http://localhost:3001/v1/Media/GetMediaDetails',{
+    const community_ret = await fetch(`${https}/v1/Media/GetMediaDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -113,7 +113,7 @@ export async function getStaticProps(){
     let  community_details = await community_result.res.project_details
 
     let communityMember_data = {databaseId: CommunityMemberDatabaseID}
-    const communityMember_ret = await fetch('http://localhost:3001/v1/CommunityMember/GetCommunityMemberDetails',{
+    const communityMember_ret = await fetch(`${https}/v1/CommunityMember/GetCommunityMemberDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'

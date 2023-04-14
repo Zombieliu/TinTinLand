@@ -8,11 +8,15 @@ const CommunityMemberDatabaseID = "3270d9cc180446349a8082df97d59d45"
 const HackathonsDatabaseID = "d80b204a1aed41bc98a4acf9397062e9"
 
 const ActivityDatabaseID = "580eb646b37f4acaafcd5832a50a2ce3"
+
+
+const https = "https://notionbackend-production.up.railway.app"
 export {
     CourseDatabaseId,
     MediaDatabaseID,
     CommunityDatabaseID,
     CommunityMemberDatabaseID,
     HackathonsDatabaseID,
-    ActivityDatabaseID
+    ActivityDatabaseID,
+    https
 }
