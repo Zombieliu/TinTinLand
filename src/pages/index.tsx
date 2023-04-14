@@ -123,7 +123,7 @@ export async function getStaticProps(){
     const communityMember_result = await communityMember_ret.json()
     let  communityMember_details = await communityMember_result.res.project_details
 
-
+    {fallback: false}
     return {
         props:{
             course_details,
