@@ -621,7 +621,7 @@ const Activity = (data)=>{
 
                     </div>
                     {/*小*/}
-                    <div className="relative mt-4 2xl:mt-9  " >
+                    <div className="relative mt-5 2xl:mt-10  " >
                         <div className="flex flex-col-reverse md:flex-row 2xl:mt-0.5 p-8 bg-white rounded-2xl  items-center">
                             <div className="">
                                     <img className="md:hidden xl:block rounded-xl mt-5  md:mt-0  md:mr-5 md:w-82 " src={activityList[2].activityList[0].poster_2} alt=""/>
