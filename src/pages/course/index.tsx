@@ -8,6 +8,7 @@ import Heads from "../../components/head";
 import {client} from "../../client";
 import {useAtom} from "jotai";
 import {
+    Course_data,
     LoginState,
     OpenLoginState,
     PopUpBoxInfo,
@@ -31,6 +32,7 @@ const Course = () =>{
 
             {
                 id: "EVM_104",
+                h1:"以太坊开发快速入门-轻松创建智能合约",
                 img: "/course/EVM_104.png",
                 type: [
                     {
@@ -49,7 +51,6 @@ const Course = () =>{
                         content: "ERC721"
                     },
                 ],
-                h1:"以太坊开发快速入门-轻松创建智能合约",
                 state: false,
                 link: "https://hkr.xet.tech/s/4sKJGh",
                 AboutStart:true,
@@ -231,6 +232,8 @@ const Course = () =>{
 
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
+
+    const [course_info,setCourse_info] = useAtom(Course_data)
     const Signup = (img,courseName) =>{
         setSignUpCourseBox(true)
         setSignUpCourseData({
@@ -273,8 +276,8 @@ const Course = () =>{
                         火热报名中🔥
                     </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3  gap-10 ">
-                        {Course_info.map(items=>(
-                            <div key={items.id} className={classNames(items.state || items.AboutStart?"rounded-2xl  ":"hidden")}>
+                        {course_info.map(items=>(
+                            <div key={items.id} className={classNames(items.state == "In progress" || items.state == "About to start" ?"rounded-2xl  ":"hidden")}>
                                 <img className="rounded-t-2xl xl:h-60 2xl:h-80" src={items.img} alt=""/>
                                 <div className="px-10 py-8 bg-white rounded-b-2xl">
                                     <div className="flex  h-20 overflow-hidden  flex-wrap">
@@ -285,7 +288,7 @@ const Course = () =>{
                                         ))}
                                     </div>
                                     <div className="line-clamp-2  h-12 mt-2">
-                                        {items.h1}
+                                        {items.name}
                                     </div>
                                     <div className="flex mt-5 ">
                                         {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
@@ -294,13 +297,13 @@ const Course = () =>{
                                         {/*    </div>*/}
                                         {/*</button>*/}
                                         <Link href={items.link}>
-                                            <a  target="_blank" className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
+                                            <a  target="_blank" className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                 立刻报名
                                             </a>
                                         </Link>
                                         {/*onClick={()=>{Signup(items.img,items.h1)}}*/}
-                                        <button  >
-                                            <div className={items.AboutStart?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                        <button >
+                                            <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
                                                 即将开始
                                             </div>
                                         </button>
@@ -321,8 +324,8 @@ const Course = () =>{
                         往期回顾
                     </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3  gap-10 ">
-                        {Course_info.map(items=>(
-                            <div key={items.id} className={classNames(items.state || items.AboutStart?"hidden":"rounded-2xl")}>
+                        {course_info.map(items=>(
+                            <div key={items.id} className={classNames(items.state == "In progress" || items.state == "About to start"?"hidden":"rounded-2xl")}>
                                 <img className="rounded-t-2xl xl:h-60 2xl:h-80" src={items.img} alt=""/>
                                 <div className="px-10 py-8 bg-white rounded-b-2xl">
                                     <div className="flex  h-20 overflow-hidden  flex-wrap">
@@ -333,17 +336,28 @@ const Course = () =>{
                                         ))}
                                     </div>
                                     <div className="line-clamp-2  h-12 mt-2">
-                                        {items.h1}
+                                        {items.name}
                                     </div>
                                     <div className="flex mt-5 ">
+                                        {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
+                                        {/*    <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >*/}
+                                        {/*        立刻报名*/}
+                                        {/*    </div>*/}
+                                        {/*</button>*/}
                                         <Link href={items.link}>
-                                            <a className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                            <a  target="_blank" className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
                                                 立刻报名
                                             </a>
                                         </Link>
+                                        {/*onClick={()=>{Signup(items.img,items.h1)}}*/}
+                                        <button >
+                                            <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                                即将开始
+                                            </div>
+                                        </button>
 
                                         <Link href={`/course_details/${items.id}`}>
-                                            <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5">
+                                            <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" >
                                                 了解更多
                                             </a>
                                         </Link>

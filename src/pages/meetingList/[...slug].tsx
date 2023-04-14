@@ -5,6 +5,8 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import Activity_Info from "../../components/activity_info";
 import Heads from "../../components/head";
+import {Activity_detail} from "../../jotai";
+import {useAtom} from "jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -12,60 +14,16 @@ function classNames(...classes) {
 
 const Meeting = () =>{
     const router = useRouter()
-    const info = {
-        title:"",
-        h1:"",
-        latestIssue:{
-            id:"",
-            type:"",
-            name:"",
-            time:"",
-            data:"",
-            h1:"",
-            img:"",
-            subscriptionLink:"",
-            more:"",
-            state:false,
-        },
-        history:[
-            {
+    const [activityList,setActivityList] = useAtom(Activity_detail)
 
-                id:"",
-                type:"",
-                name:"",
-                time:"",
-                data:"",
-                h1:"",
-                img:"",
-                subscriptionLink:"",
-                more:"",
-                state:false,
-            },
-
-]
-
-}
-    const [type,setType] = useState(info)
-
+    const [index,setIndex] = useState(0)
     useEffect(()=>{
         if (router.isReady){
             const type = router.query.slug[0]
-            const fetchUserBounty = async () => {
-                const newInfo = {
-                    title:Activity_Info[type].title,
-                    h1:Activity_Info[type].h1,
-                    latestIssue:Activity_Info[type].latestIssue,
-                    history: Activity_Info[type].history
-
-                }
-                setType(newInfo)
-                console.log(Activity_Info[type].history)
+            setIndex(Number(type)-1)
 
             }
-            fetchUserBounty()
-
-        }
-    },[router.isReady])
+        },[router.isReady])
     return (
 
         <div className="mx-auto relative bg-fixed overflow-hidden"
@@ -73,57 +31,58 @@ const Meeting = () =>{
             <Heads/>
             <Header/>
             <div className=" lg:px-10 xl:px-20 relative px-5 pt-24    mx-auto ">
-                <div className="   py-10     xl:flex justify-between " >
+                <div className=" py-10     xl:flex justify-between " >
                     <div className=" xl:w-4/12 2xl:w-1/2 ">
                         <div className="text-2xl md:text-4xl xl:text-6xl ">
                             <div>
-                                {type.title}
+                                {activityList[index].name}
                             </div>
 
                         </div>
                         <div className="mt-10 text-base  2xl:text-2xl font-light">
                             <div>
-                                {type.h1}
+                                {activityList[index].des}
                             </div>
                         </div>
                     </div>
                     <div className="xl:w-9/12  xl:ml-4 mt-10 xl:mt-0 ">
                         <div className="" >
                             <div className="md:flex  w-full   py-8 md:bg-white rounded-2xl">
-                                <img className="rounded-t-2xl md:rounded-xl md:mx-8 md:w-7/12  " src={type.latestIssue.img} alt=""/>
+                                <img className="rounded-t-2xl md:rounded-xl md:mx-8 md:w-7/12  " src={activityList[index].activityList[0].poster_1} alt=""/>
                                 <div className=" bg-white p-5 xl:p-0  rounded-b-2xl ">
                                     <div className="pt-4 md:pt-0 flex ">
                                         <div className="rounded-full bg-gray-200 text-gray-700 px-2.5 py-0.5 text-sm">
-                                            {type.latestIssue.name}
+                                            {activityList[index].activityList[0].activity}
                                         </div>
                                     </div>
                                     <div className="text-2xl  mt-5">
-                                        {type.latestIssue.time}
+                                        {activityList[index].activityList[0].time}
                                     </div>
                                     <div className="font-light font-semibold">
-                                        {type.latestIssue.data}
+                                        {activityList[index].activityList[0].date}
                                     </div>
 
                                         <div className='pr-1 font-semibold  text-xl xl:text-2xl line-clamp-3 xl:line-clamp-5 h-20 xl:h-32 mt-6'>
-                                            {type.latestIssue.h1}
+                                            {activityList[index].activityList[0].name}
                                         </div>
 
                                     <div className="flex  pt-6  xl:pt-20">
 
                                         <div className="flex justify-between  items-center">
                                             <div className="">
-                                                <Link href={type.latestIssue.subscriptionLink}>
-                                                    <a className={classNames(type.latestIssue.state?"bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden")} target="_blank">
+                                                <Link href={activityList[index].activityList[0].subLink}>
+                                                    <a className={classNames(activityList[index].activityList[0].status =="In progress"|| activityList[index].activityList[0].status =="Not started"?"bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden")} target="_blank">
                                                         订阅
                                                     </a>
                                                 </Link>
                                             </div>
                                             <div className="">
-                                                <Link href={type.latestIssue.more}>
-                                                    <a className=" text-black border border-black rounded-full  px-4 py-2.5" target="_blank">
+                                                <Link href={activityList[index].activityList[0].videoLink}>
+                                                    <a className={activityList[index].activityList[0].status !=="Done"?"hidden":" text-black border border-black rounded-full  px-4 py-2.5"} target="_blank">
                                                         了解更多
                                                     </a>
                                                 </Link>
+
                                             </div>
                                         </div>
                                     </div>
@@ -139,21 +98,28 @@ const Meeting = () =>{
                         往期回顾
                     </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 ">
-                        {type.history.map(item=>(
-                            <div key={item.id} className="rounded-2xl  ">
-                                <img className="rounded-t-2xl w-99 h-52" src={item.img} alt=""/>
+                        {activityList[index].activityList.map((item,index)=>(
+                            <div key={item.activity} className={ index ==0?"hidden":"rounded-2xl"}>
+                                <img className="rounded-t-2xl w-99 h-60" src={item.poster_1} alt=""/>
                                 <div className="px-10 py-8 bg-white rounded-b-2xl">
                                     <div className="flex   flex-wrap">
                                         <div  className="bg-gray-200 rounded-full text-center text-gray-700 px-3 py-1 mr-2 mb-4 text-sm" >
-                                            {item.name}
+                                            {item.activity}
                                         </div>
                                     </div>
                                     <div className=" text-2xl line-clamp-2 h-16">
-                                        {item.h1}
+                                        {item.name}
                                     </div>
-                                    <div className="flex mt-5 ">
-                                        <Link href={item.more}>
-                                            <a className=" text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
+                                    <div className="flex mt-5 items-center ">
+                                        <div className="mt-4">
+                                            <Link href={item.subLink}>
+                                                <a className={item.status == "In progress"||item.status == "Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
+                                                    订阅
+                                                </a>
+                                            </Link>
+                                        </div>
+                                        <Link href={item.videoLink}>
+                                            <a className={item.status !== "Done"?"hidden":" text-black border border-black rounded-full  px-8 py-2.5"} target="_blank">
                                                 了解更多
                                             </a>
                                         </Link>

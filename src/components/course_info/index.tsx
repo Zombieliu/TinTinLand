@@ -104,8 +104,6 @@ const suitableForTheCrowd = {
     Solidity开发人员: {
         h1:"Solidity开发人员",
     },
-
-
 }
 
 const LearningHighlights = {
@@ -454,7 +452,6 @@ const Course_info =
                 Course_student.CRG,
                 Course_student.Kurtis,
             ],
-
             suitable_ForTheCrowd:[
                 suitableForTheCrowd.以太坊或其他区块链生态开发者,
                 suitableForTheCrowd.即将毕业的计算机专业大学生,

@@ -32,10 +32,8 @@ const Role = [
 const Experience = [
     { id: 1, name: '一年不到' },
     { id: 2, name: '刚来' },
-
 ]
 
-// @ts-ignore
 const UserInfo = () =>{
     const router = useRouter();
     const [emailType,setEmailType] = useState(true)

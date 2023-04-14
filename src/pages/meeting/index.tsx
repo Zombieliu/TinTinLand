@@ -2,9 +2,12 @@ import Header from "../../components/header";
 import Tail from "../../components/tail";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
-import {useRouter} from "next/router";
+
 import Activity_Info from "../../components/activity_info";
 import Heads from "../../components/head";
+
+import {Activity_detail} from "../../jotai";
+import {useAtom} from "jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -12,7 +15,7 @@ function classNames(...classes) {
 
 const Meeting = () =>{
 
-
+    const [activityList,setActivityList] = useAtom(Activity_detail)
     return (
 
         <div className="mx-auto relative bg-fixed overflow-hidden"
@@ -41,10 +44,11 @@ const Meeting = () =>{
 
                 </div>
                 <div>
-                    <div className="mt-10">
+                    {activityList.map((items=>(
+                    <div key={items.id} className="mt-10">
                         <div className="text-indigo-700 text-xl flex justify-between">
-                            {Activity_Info.TinTinMeeting.title}
-                            <Link href={`/meetingList/${Activity_Info.TinTinMeeting.latestIssue.type}`}>
+                            {items.name}
+                            <Link href={`/meetingList/${items.id}`}>
                             <div className="flex bg-white text-black rounded-full cursor-pointer text-sm items-center px-4 py-1.5">
                                 <div className="mr-1" >
                                     查看更多
@@ -55,25 +59,32 @@ const Meeting = () =>{
                             </div>
                             </Link>
                         </div>
-                        <div className="md:w-1/2 text-sm mt-2">
-                            {Activity_Info.TinTinMeeting.h1}
+                        <div className="md:w-2/3 text-sm mt-2">
+                            {items.des}
                         </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3   gap-10 ">
-                        {Activity_Info.TinTinMeeting.history.map((item,index)=>(
-                            <div key={item.id} className={index>2?"hidden":"rounded-2xl"}>
-                                <img className="rounded-t-2xl w-full h-64 2xl:h-72" src={item.img} alt=""/>
+                        {items.activityList.map((item,index)=>(
+                            <div key={item.activity} className={index>2?"hidden":"rounded-2xl"}>
+                                <img className="rounded-t-2xl w-full h-64 2xl:h-72" src={item.poster_1} alt=""/>
                                 <div className="px-10 py-8 bg-white rounded-b-2xl">
                                     <div className="flex   flex-wrap">
                                         <div  className="bg-gray-200 rounded-full text-center text-gray-700 px-3 py-1 mr-2 mb-4 text-sm" >
-                                            {item.name}
+                                            {item.activity}
                                         </div>
                                     </div>
                                     <div className=" text-2xl line-clamp-2 h-16">
-                                        {item.h1}
+                                        {item.name}
                                     </div>
-                                    <div className="flex mt-5 ">
-                                        <Link href={item.more}>
-                                            <a className=" text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
+                                    <div className="flex mt-5 items-center ">
+                                        <div className="mt-4">
+                                            <Link href={item.subLink}>
+                                                <a className={item.status == "In progress"||item.status == "Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
+                                                    订阅
+                                                </a>
+                                            </Link>
+                                        </div>
+                                        <Link href={item.videoLink}>
+                                            <a className={item.status !== "Done"?"hidden":" text-black border border-black rounded-full  px-8 py-2.5"} target="_blank">
                                                 了解更多
                                             </a>
                                         </Link>
@@ -84,135 +95,7 @@ const Meeting = () =>{
 
                     </div>
                     </div>
-                    <div className="mt-10">
-                        <div className="text-indigo-700 text-xl flex justify-between">
-                            {Activity_Info.DTalk.title}
-                            <Link href={`/meetingList/${Activity_Info.DTalk.latestIssue.type}`}>
-                                <div className="flex bg-white text-black rounded-full cursor-pointer text-sm items-center px-4 py-1.5">
-                                    <div className="mr-1" >
-                                        查看更多
-                                    </div>
-                                    <div>
-                                        <i className="fa fa-arrow-right" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                        <div className="md:w-1/2 text-sm mt-2">
-                            {Activity_Info.DTalk.h1}
-                        </div>
-                        <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3   gap-10 ">
-                            {Activity_Info.DTalk.history.map((item,index)=>(
-                                <div key={item.id} className={index>2?"hidden":"rounded-2xl"}>
-                                    <img className="rounded-t-2xl w-full h-64 2xl:h-72" src={item.img} alt=""/>
-                                    <div className="px-10 py-8 bg-white rounded-b-2xl">
-                                        <div className="flex   flex-wrap">
-                                            <div  className="bg-gray-200 rounded-full text-center text-gray-700 px-3 py-1 mr-2 mb-4 text-sm" >
-                                                {item.name}
-                                            </div>
-                                        </div>
-                                        <div className=" text-2xl line-clamp-2 h-16">
-                                            {item.h1}
-                                        </div>
-                                        <div className="flex mt-5 ">
-                                            <Link href={item.more}>
-                                                <a className=" text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                                    了解更多
-                                                </a>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-
-                        </div>
-                    </div>
-                    <div className="mt-10">
-                        <div className="text-indigo-700 text-xl flex justify-between">
-                            {Activity_Info.TinTinJobFair.title}
-                            <Link href={`/meetingList/${Activity_Info.TinTinJobFair.latestIssue.type}`}>
-                                <div className="flex bg-white text-black rounded-full cursor-pointer text-sm items-center px-4 py-1.5">
-                                    <div className="mr-1" >
-                                        查看更多
-                                    </div>
-                                    <div>
-                                        <i className="fa fa-arrow-right" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                        <div className="md:w-1/2 text-sm mt-2">
-                            {Activity_Info.TinTinJobFair.h1}
-                        </div>
-                        <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3   gap-10 ">
-                            {Activity_Info.TinTinJobFair.history.map((item,index)=>(
-                                <div key={item.id} className={index>2?"hidden":"rounded-2xl"}>
-                                    <img className="rounded-t-2xl w-full h-64 2xl:h-72" src={item.img} alt=""/>
-                                    <div className="px-10 py-8 bg-white rounded-b-2xl">
-                                        <div className="flex   flex-wrap">
-                                            <div  className="bg-gray-200 rounded-full text-center text-gray-700 px-3 py-1 mr-2 mb-4 text-sm" >
-                                                {item.name}
-                                            </div>
-                                        </div>
-                                        <div className=" text-2xl line-clamp-2 h-16">
-                                            {item.h1}
-                                        </div>
-                                        <div className="flex mt-5 ">
-                                            <Link href={item.more}>
-                                                <a className=" text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                                    了解更多
-                                                </a>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-
-                        </div>
-                    </div>
-                    <div className="mt-10">
-                        <div className="text-indigo-700 text-xl flex justify-between">
-                            {Activity_Info.TinTinLand.title}
-                            <Link href={`/meetingList/${Activity_Info.TinTinLand.latestIssue.type}`}>
-                                <div className="flex bg-white text-black rounded-full cursor-pointer text-sm items-center px-4 py-1.5">
-                                    <div className="mr-1" >
-                                        查看更多
-                                    </div>
-                                    <div>
-                                        <i className="fa fa-arrow-right" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                        <div className="md:w-1/2 text-sm mt-2">
-                            {Activity_Info.TinTinLand.h1}
-                        </div>
-                        <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3   gap-10 ">
-                            {Activity_Info.TinTinLand.history.map((item,index)=>(
-                                <div key={item.id} className={index>2?"hidden":"rounded-2xl"}>
-                                    <img className="rounded-t-2xl w-full h-64 2xl:h-72" src={item.img} alt=""/>
-                                    <div className="px-10 py-8 bg-white rounded-b-2xl">
-                                        <div className="flex   flex-wrap">
-                                            <div  className="bg-gray-200 rounded-full text-center text-gray-700 px-3 py-1 mr-2 mb-4 text-sm" >
-                                                {item.name}
-                                            </div>
-                                        </div>
-                                        <div className=" text-2xl line-clamp-2 h-16">
-                                            {item.h1}
-                                        </div>
-                                        <div className="flex mt-5 ">
-                                            <Link href={item.more}>
-                                                <a className=" text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                                    了解更多
-                                                </a>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-
-                        </div>
-                    </div>
+                    )))}
                 </div>
             </div>
             <Tail/>

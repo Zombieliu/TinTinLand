@@ -1,41 +1,137 @@
 import { useAtom ,atom} from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-
-const detail = {
-    id: "",
-    img: "",
-    cycle:"",
+const data  = {
+    id:"",
     name:"",
-    state:false,
-    AboutStart:true,
-    startTime:"",
-    registrationDeadline:"",
+    cycle:"",
+    img:"",
+    title:"",
     link:"",
-    h1:"",
-    type: [{content:""}],
-    Course_data:[{
-        title:"",
+    state:"",
+    homeDisplay:"",
+    startTime:"",
+    endTime:"",
+    type:[{content:""}],
+    course_data:[{
+        name:"",
         content:[
-            { h1: "" }
+            { text: "" }
         ]
     }],
-    Learning_Highlights:[{icon:"", h1:"",}],
-    teacher:[{img:"",name:"",title:"",introduction:""}],
-    project_Provider: [],
     community_recommendation: [{
-        avatar:"",
         name:"",
+        img:"",
         position:"",
-        avatar2:"",
+        img2:"",
         name2:"",
         position2:"",
-        h1:"",
+        text:"",
     }],
-    suitable_ForTheCrowd:[],
-    community_support:[],
+    teacher:[{name:"",img:"",title:"",introduction:""}],
+    project_provider: [{name:"",img:""}],
+    method:[{name:"",img:""}],
+    target:[{name:""}],
+    community_support:[{name:"",icon:""}]
+
 }
 
+const courseData = [
+    {
+        id:"",
+        name:"",
+        img:"",
+        link:"",
+        state:"",
+        homeDisplay:"",
+        type:[
+            {content:""}
+        ]
+    }
+]
+const hackathonsData = [
+    {
+        id:"",
+        activityLink:"",
+        name:"",
+        img:"",
+        registrationLink:"",
+        state:"",
+        text:"",
+        time:"",
+    },
+    {
+        id:"",
+        activityLink:"",
+        name:"",
+        img:"",
+        registrationLink:"",
+        state:"",
+        text:"",
+        time:"",
+    },
+    {
+        id:"",
+        activityLink:"",
+        name:"",
+        img:"",
+        registrationLink:"",
+        state:"",
+        text:"",
+        time:"",
+    }
+]
+const activityData = [
+    {
+        id: "",
+        name: "",
+        des: "",
+        activityList: [{
+            activity: "",
+            name: "",
+            status: "",
+            time: "",
+            date: "",
+            subLink: "",
+            videoLink: "",
+            poster_1: "",
+            poster_2: "",
+        },]
+    },
+
+    {
+        id: "",
+        name: "",
+        des: "",
+        activityList: [{
+            activity: "",
+            name: "",
+            status: "",
+            time: "",
+            date: "",
+            subLink: "",
+            videoLink: "",
+            poster_1: "",
+            poster_2: "",
+        },]
+    },
+    {
+        id: "",
+        name: "",
+        des: "",
+        activityList: [{
+            activity: "",
+            name: "",
+            status: "",
+            time: "",
+            date: "",
+            subLink: "",
+            videoLink: "",
+            poster_1: "",
+            poster_2: "",
+        },]
+    },
+]
 const PopUpBoxInfo = atom({
     type:"",
     state:false,
@@ -44,7 +140,13 @@ const PopUpBoxInfo = atom({
 })
 const PopUpBoxState = atom(false)
 
-const Course_Detail = atom(detail)
+const Course_data = atom(courseData)
+
+const Course_Detail = atom(data)
+
+const Activity_detail = atom(activityData)
+
+const Hackathons_detail = atom(hackathonsData)
 
 const JobFairInfoState = atom(false)
 
@@ -77,4 +179,4 @@ const SignUpCourseBoxData = atom({
 
 
 const Language = atom("zn")
-export {Language,Course_Detail,JobFairInfoState,LoginState,UserEmail,PopUpBoxState,PopUpBoxInfo,OpenLoginState,OpenPayState,PayState,PendingPayState,PromptBoxState,SignUpCourseBoxState,SignUpCourseBoxData}
+export {Activity_detail,Course_data,Hackathons_detail,Language,Course_Detail,JobFairInfoState,LoginState,UserEmail,PopUpBoxState,PopUpBoxInfo,OpenLoginState,OpenPayState,PayState,PendingPayState,PromptBoxState,SignUpCourseBoxState,SignUpCourseBoxData}
