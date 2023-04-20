@@ -21,218 +21,17 @@ import {Dialog, Transition} from "@headlessui/react";
 import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
 import Loading from "../../components/loading";
 import {WaitPayPoPUpBox} from "../../components/payState";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 const Course = () =>{
-    const Course_info =
-        [
-
-            {
-                id: "EVM_104",
-                h1:"以太坊开发快速入门-轻松创建智能合约",
-                img: "/course/EVM_104.png",
-                type: [
-                    {
-                        content: "Solidity"
-                    },
-                    {
-                        content: "智能合约"
-                    },
-                    {
-                        content: "合约安全"
-                    },
-                    {
-                        content: "ERC20"
-                    },
-                    {
-                        content: "ERC721"
-                    },
-                ],
-                state: false,
-                link: "https://hkr.xet.tech/s/4sKJGh",
-                AboutStart:true,
-            },
-            {
-                id: "EVM_103",
-                img: "/course/EVM_103.png",
-                type: [
-                    {
-                        content: "Solidity"
-                    },
-                    {
-                        content: "智能合约"
-                    },
-                    {
-                        content: "合约安全"
-                    },
-                    {
-                        content: "ERC20"
-                    },
-                    {
-                        content: "ERC721"
-                    },
-
-                ],
-                h1:"区块链入门课程——0基础创建以太坊智能合约",
-                link: "https://hkr.xet.tech/s/Pe8p8",
-                state: false,
-                AboutStart:false,
-            },
-            {
-                id: "EVM_102",
-                img: "/course/EVM_102.png",
-                type: [
-                    {
-                        content: "Solidity"
-                    },
-                    {
-                        content: "The Graph"
-                    },
-                    {
-                        content: "链上合约数据的读取与写入"
-                    },
-                    {
-                        content: "合约安全"
-                    },
-                    {
-                        content: "Arbitrum-sdk"
-                    },
-
-                ],
-                h1: "第二期｜以太坊开发快速入门-轻松创建智能合约",
-                link: "https://hkr.h5.xeknow.com/s/2yYwKx",
-                state: false,
-                AboutStart:false,
-            },
-            {
-                id: "IC_104",
-                img: "/course/IC_104.png",
-                type: [
-                    {
-                        content: "Motoko"
-                    },
-                    {
-                        content: "Canister"
-                    },
-                    {
-                        content: "Javescript"
-                    },
-                    {
-                        content: "静态网站"
-                    },
-                ],
-                h1:"Internet Computer：从核心技术入门到开发实战",
-                state: false,
-                link: "https://hkr.xet.tech/s/1RNB1X",
-                AboutStart:true,
-            },
-            {
-                id: "IC_103",
-                img: "/course/IC_103.png",
-                type: [
-                    {
-                        content: "Motoko"
-                    },
-                    {
-                        content: "Canister"
-                    },
-                    {
-                        content: "Javescript"
-                    },
-
-                ],
-                h1: "第4期｜Internet Computer：从核心技术入门到开发实战",
-                link: "https://hkr.h5.xeknow.com/s/xRaCr",
-                state: false,
-                AboutStart:false,
-
-            },
-            {
-                id: "BAC_101",
-                img: "/course/BAC_101.png",
-                type: [
-                    {
-                        content: "比特币脚本系统"
-                    },
-                    {
-                        content: "基础数据结构"
-                    },
-                    {
-                        content: "执行模型"
-                    },
-
-                    {
-                        content: "UTXO 模型"
-                    },
-
-                    {
-                        content: "账户模型"
-                    },
-                ],
-                h1:"从0开始学区块链：工程师眼中的比特币和以太坊",
-                state: true,
-                link: "https://hkr.h5.xeknow.com/s/VRdMD",
-                AboutStart:false,
-
-            },
-            {
-                id: "FLOW_101",
-                img: "/course/FLOW_101.png",
-                type: [
-                    {
-                        content: "Cadence"
-                    },
-                    {
-                        content: "Flow FT"
-                    },
-                    {
-                        content: "Flow NFT"
-                    },
-                    {
-                        content: "NFT Metadata"
-                    },
-                    {
-                        content: "FCL(Flow Client Library)"
-                    },
-                ],
-                h1: "Flow DApp 开发：从初识 Candence 到搭建 Makertplace",
-                link: "https://hkr.h5.xeknow.com/s/PGm9a",
-                state: true,
-                AboutStart:false,
-
-            },
-            {
-                id: "IC_201",
-                img: "/course/IC_201.png",
-                type: [
-                    {
-                        content: "Motoko"
-                    },
-                    {
-                        content: "Canister"
-                    },
-                    {
-                        content: "ICP系统服务"
-                    },
-                    {
-                        content: "Ti Jar"
-                    },
-
-                ],
-                h1: "第一期｜Internet Computer：从核心技术入门到开发实战进阶",
-                link: "",
-                state: false,
-                AboutStart:false,
-
-            },
-        ]
-
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
-
+    const { t } = useTranslation('common')
     const [course_info,setCourse_info] = useAtom(Course_data)
     const Signup = (img,courseName) =>{
         setSignUpCourseBox(true)
@@ -253,18 +52,19 @@ const Course = () =>{
                 <div className="   p-10  rounded-xl  bg-left md:bg-cover overflow-hidden "  style={{backgroundImage:"url('/课程_bg.png')"}}>
                     <div className="">
                         <div className="text-[#5448AE] text-xl mb-5">
-                            TinTin课程
+                            {t("TinTin课程")}
                         </div>
                         <div className="text-4xl mb-5">
                         <div className="mb-2">
-                            学习最前沿的 Web3 技术，
+                            {t("学习最前沿的 Web3 技术")}
                         </div>
                         <div>
-                            创造未来开放网络
+                            {t("创造未来开放网络")}
                         </div>
                         </div>
                         <div className="text-xl ">
-                            生态官方合作课程，项目 CTO &核心开发者亲自授课 <br/>配套高质量社群，全球一线开发者助教全程陪伴，社区同学交流讨论。
+                            {t("生态官方合作课程，项目 CTO &核心开发者亲自授课")}
+                            <br/> {t("配套高质量社群，全球一线开发者助教全程陪伴，社区同学交流讨论")}
                         </div>
                         <button className="bg-black text-white px-4 py-2 rounded-full mt-5">
                             TinTin EDU
@@ -273,7 +73,7 @@ const Course = () =>{
                 </div>
                 <div>
                     <div className="text-indigo-700 text-xl mt-10">
-                        火热报名中🔥
+                        {t("火热报名中")} 🔥
                     </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3  gap-10 ">
                         {course_info.map(items=>(
@@ -293,24 +93,24 @@ const Course = () =>{
                                     <div className="flex mt-5 ">
                                         {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
                                         {/*    <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >*/}
-                                        {/*        立刻报名*/}
+                                        {/*           {t("立刻报名")}*/}
                                         {/*    </div>*/}
                                         {/*</button>*/}
                                         <Link href={items.link}>
                                             <a  target="_blank" className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
-                                                立刻报名
+                                                {t("立刻报名")}
                                             </a>
                                         </Link>
                                         {/*onClick={()=>{Signup(items.img,items.h1)}}*/}
                                         <button >
                                             <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                                即将开始
+                                                {t("即将开始")}
                                             </div>
                                         </button>
 
                                         <Link href={`/course_details/${items.id}`}>
                                             <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" >
-                                                了解更多
+                                                {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -321,7 +121,7 @@ const Course = () =>{
 
                     </div>
                     <div className="text-indigo-700 text-xl mt-10">
-                        往期回顾
+                        {t("往期回顾")}
                     </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3  gap-10 ">
                         {course_info.map(items=>(
@@ -341,24 +141,24 @@ const Course = () =>{
                                     <div className="flex mt-5 ">
                                         {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
                                         {/*    <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >*/}
-                                        {/*        立刻报名*/}
+                                        {/*           {t("立刻报名")}*/}
                                         {/*    </div>*/}
                                         {/*</button>*/}
                                         <Link href={items.link}>
                                             <a  target="_blank" className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
-                                                立刻报名
+                                                   {t("立刻报名")}
                                             </a>
                                         </Link>
                                         {/*onClick={()=>{Signup(items.img,items.h1)}}*/}
                                         <button >
                                             <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                                即将开始
+                                                {t("即将开始")}
                                             </div>
                                         </button>
 
                                         <Link href={`/course_details/${items.id}`}>
                                             <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" >
-                                                了解更多
+                                                {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -383,3 +183,9 @@ const Course = () =>{
     )
 }
 export default Course
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+    }
+})

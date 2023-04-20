@@ -140,13 +140,13 @@ const PopUpBoxInfo = atom({
 })
 const PopUpBoxState = atom(false)
 
-const Course_data = atom(courseData)
+const Course_data = atomWithStorage("courseData",courseData)
 
-const Course_Detail = atom(data)
+const Course_Detail = atomWithStorage("courseAllData",data)
 
-const Activity_detail = atom(activityData)
+const Activity_detail = atomWithStorage("activityData",activityData)
 
-const Hackathons_detail = atom(hackathonsData)
+const Hackathons_detail = atomWithStorage("hackathonsData",hackathonsData)
 
 const JobFairInfoState = atom(false)
 
@@ -178,5 +178,5 @@ const SignUpCourseBoxData = atom({
 })
 
 
-const Language = atom("zn")
+const Language = atomWithStorage("Language","zn")
 export {Activity_detail,Course_data,Hackathons_detail,Language,Course_Detail,JobFairInfoState,LoginState,UserEmail,PopUpBoxState,PopUpBoxInfo,OpenLoginState,OpenPayState,PayState,PendingPayState,PromptBoxState,SignUpCourseBoxState,SignUpCourseBoxData}

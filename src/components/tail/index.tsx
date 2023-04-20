@@ -2,50 +2,53 @@ import {Dialog, Popover, Transition } from "@headlessui/react"
 import { CheckIcon } from "@heroicons/react/outline"
 import Link from "next/link"
 import React, { Fragment, useState } from "react"
+import {useTranslation} from "next-i18next";
 
-const ends =[
-    {
-        title:"联系我们",
-        content:[
-            {
-                h1:"Twitter",
-                href:"https://twitter.com/Tintinland2021",
-            },
-            {
-                h1:"Youtube",
-                href:"https://www.youtube.com/channel/UCfHiMcFt-4btbC75FsReQhQ"
-            },
 
-        ],
-        weixin:"WeChat",
-        weixinimg:"https://cdn.discordapp.com/attachments/876498266550853642/994172638886903848/unknown.png"
-
-    },
-    {
-        title:"产品",
-        content:[
-            {
-                h1:"课程",
-                href:"#Educate",
-            },
-            {
-                h1:"Hackathons",
-                href:"#Hackathons",
-            },
-            {
-                h1:"活动",
-                href:"#Activities",
-            }
-        ]
-
-    },
-
-]
 const WeiXinImg = {
     img:"/tintinVX.png"
 }
 const Tail=()=>{
+    const { t } = useTranslation('footer')
     const [open, setOpen] = useState(false)
+    const ends =[
+        {
+            title:`${t("联系我们")}`,
+            content:[
+                {
+                    h1:"Twitter",
+                    href:"https://twitter.com/Tintinland2021",
+                },
+                {
+                    h1:"Youtube",
+                    href:"https://www.youtube.com/channel/UCfHiMcFt-4btbC75FsReQhQ"
+                },
+
+            ],
+            weixin:`${t("WeChat")}`,
+            weixinimg:"https://cdn.discordapp.com/attachments/876498266550853642/994172638886903848/unknown.png"
+
+        },
+        {
+            title:`${t("产品")}`,
+            content:[
+                {
+                    h1:`${t("课程")}`,
+                    href:"#Educate",
+                },
+                {
+                    h1:"Hackathons",
+                    href:"#Hackathons",
+                },
+                {
+                    h1:`${t("活动")}`,
+                    href:"#Activities",
+                }
+            ]
+
+        },
+
+    ]
     return(
         <div className="relative border-t border-gray-400 pt-4 2xl:pt-12 pb-1 px-10   bg-stone-900  rounded-t-3xl">
             <div className="md:hidden">
@@ -60,7 +63,7 @@ const Tail=()=>{
                             <a  target="_blank">
                         <div className="text-white text-3xl flex items-center font-light justify-center" >
                             <div>
-                                加入TinTinLand社区
+                                {t("加入TinTinLand社区")}
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transform rotate-45" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd"
@@ -72,7 +75,7 @@ const Tail=()=>{
                             </a>
                         </Link>
                         <div className="my-2 text-gray-500 text-sm flex justify-center  ">
-                            点击进入discord
+                              {t("点击进入discord")}
                         </div>
                     </div>
 
@@ -104,7 +107,7 @@ const Tail=()=>{
                         <Link href="https://discord.gg/6b2QNSYgmz">
                             <a  className="text-white text-3xl flex items-center font-light justify-center"  target="_blank">
                             <div>
-                                加入TinTinLand社区
+                                   {t("加入TinTinLand社区")}
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 transform rotate-45" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd"
@@ -114,7 +117,7 @@ const Tail=()=>{
                             </a>
                         </Link>
                         <div className="my-2 text-gray-500 text-sm flex justify-center md:justify-start ">
-                            点击进入discord
+                                {t("点击进入discord")}
                         </div>
                     </div>
                     <div>
@@ -133,17 +136,14 @@ const Tail=()=>{
                                             </Link>
 
                                         </div>))}
-                                    <div className="">
 
-                                    </div>
                                     <div className="w-full max-w-sm mx-auto ">
                                         <Popover className="">
                                                     <Popover.Button
                                                         className=
-                                                            'flex my-3 mx-4 md:justify-start justify-center  text-gray-400 text-sm transition  duration-300 transform hover:translate-x-1 '
+                                                            'flex my-3 mx-4 md:justify-start justify-center  text-gray-400 text-sm transition  duration-300 transform translate-x-2.5 '
                                                         >
-                                                        {end.weixin}
-
+                                                         {end.weixin}
                                                     </Popover.Button>
                                                     <Transition
                                                         as={Fragment}

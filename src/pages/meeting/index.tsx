@@ -8,13 +8,15 @@ import Heads from "../../components/head";
 
 import {Activity_detail} from "../../jotai";
 import {useAtom} from "jotai";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 const Meeting = () =>{
-
+    const { t } = useTranslation('common')
     const [activityList,setActivityList] = useAtom(Activity_detail)
     return (
 
@@ -26,18 +28,20 @@ const Meeting = () =>{
                 <div className="   p-10  rounded-xl  bg-left md:bg-cover overflow-hidden "  style={{backgroundImage:"url('/活动_bg.png')"}}>
                     <div className="">
                         <div className="text-[#5448AE] text-xl mb-5">
-                            TinTin活动
+                            {t("TinTin活动")}
                         </div>
                         <div className="text-4xl mb-5">
                             <div className="mb-2">
-                                与顶尖项目面对面讨论，
+                                {t("与顶尖项目面对面讨论")}
                             </div>
                             <div>
-                                获得热点趋势与开发实战经验
+                                {t("获得热点趋势与开发实战经验")}
                             </div>
                         </div>
                         <div className="text-xl ">
-                            最新的多链技术分享，众多赛道实时资讯 <br/> 生态项目代码实操演练，与 Web3 领军人物现场讨论。
+                            {t("最新的多链技术分享，众多赛道实时资讯")}
+                            <br/>
+                            {t("生态项目代码实操演练，与 Web3 领军人物现场讨论")}
                             </div>
                     </div>
 
@@ -51,7 +55,7 @@ const Meeting = () =>{
                             <Link href={`/meetingList/${items.id}`}>
                             <div className="flex bg-white text-black rounded-full cursor-pointer text-sm items-center px-4 py-1.5">
                                 <div className="mr-1" >
-                                    查看更多
+                                    {t("查看更多")}
                                 </div>
                                 <div>
                                     <i className="fa fa-arrow-right" aria-hidden="true"></i>
@@ -79,13 +83,13 @@ const Meeting = () =>{
                                         <div className="mt-4">
                                             <Link href={item.subLink}>
                                                 <a className={item.status == "In progress"||item.status == "Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
-                                                    订阅
+                                                    {t("订阅")}
                                                 </a>
                                             </Link>
                                         </div>
                                         <Link href={item.videoLink}>
                                             <a className={item.status !== "Done"?"hidden":" text-black border border-black rounded-full  px-8 py-2.5"} target="_blank">
-                                                了解更多
+                                                {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -105,3 +109,10 @@ const Meeting = () =>{
     )
 }
 export default Meeting
+
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+    }
+})

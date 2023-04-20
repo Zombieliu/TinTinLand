@@ -9,6 +9,7 @@ import {UserEmail,} from "../../jotai";
 import {client} from "../../client";
 import {useRouter} from "next/router";
 import {PromptBox} from "../../components/pop_up_box";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
 function classNames(...classes) {
@@ -197,3 +198,9 @@ const Homepage= () =>{
 }
 
 export default Homepage
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+    }
+})

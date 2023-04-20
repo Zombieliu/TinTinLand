@@ -22,14 +22,18 @@ import {client} from "../../client";
 import Loading from "../../components/loading";
 import {WaitPayPoPUpBox} from "../../components/payState";
 import {CourseDatabaseId, https} from "../../constants";
+import {GetStaticPaths, InferGetStaticPropsType} from "next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-
+type GspPageProps = InferGetStaticPropsType<typeof getStaticProps>
 const  Details = () =>{
     const [courseDetail] = useAtom(Course_Detail)
+    const { t } = useTranslation('common')
     useEffect(()=>{
     },[])
     return(
@@ -88,12 +92,12 @@ const  Details = () =>{
 }
 const CourseInfo = () =>{
     const [courseDetail] = useAtom(Course_Detail)
-
+    const { t } = useTranslation('common')
     return(
         <div className="md:flex mb-20">
             <div className="md:w-7/12 xl:w-8/12 md:mr-10">
                 <div className="text-indigo-700 text-2xl mt-20 mb-2">
-                    课程大纲
+                    {t("课程大纲")}
                 </div>
                 <div className="mx-auto w-full rounded-2xl   bg-white ">
                     {courseDetail.course_data.map(item=>(
@@ -133,7 +137,7 @@ const CourseInfo = () =>{
                 {/*ProjectProvider*/}
                 <div className="border-b border-gray-400 py-6">
                     <div className="text-indigo-700 text-2xl mt-14 ">
-                        课程提供方
+                        {t("课程提供方")}
                     </div>
                     <div className="flex w-full grid grid-cols-2  xl:grid-cols-3 gap-4 mt-3 ">
                         {courseDetail.project_provider.map(item=>(
@@ -150,7 +154,7 @@ const CourseInfo = () =>{
                 {/*Suitable for the crowd*/}
                 <div className="border-b border-gray-400 py-6">
                     <div className="text-indigo-700 text-2xl  ">
-                        适合人群
+                        {t("适合人群")}
                     </div>
                     <div className=" items-center w-full grid grid-cols-1 gap-4 mt-3 ">
                         {courseDetail.target.map(item=>(
@@ -166,7 +170,7 @@ const CourseInfo = () =>{
                 {/*Community support*/}
                 <div className="border-b border-gray-400 py-6">
                     <div className="text-indigo-700 text-2xl  ">
-                        社区支持
+                        {t("社区支持")}
                     </div>
                     <div className=" items-center w-full grid grid-cols-1 gap-4 mt-3 ">
                         {courseDetail.community_support.map(item=>(
@@ -182,7 +186,7 @@ const CourseInfo = () =>{
 
                 <div className={classNames(courseDetail.community_recommendation.length !=0?"py-6":" hidden ")}>
                     <div className="text-indigo-700 text-2xl">
-                        课程推荐
+                        {t("课程推荐")}
                     </div>
                     <div className="h-96 overflow-x-auto pr-2">
                     <div className=" items-center w-full grid grid-cols-1 gap-4 mt-3 ">
@@ -228,11 +232,11 @@ const CourseInfo = () =>{
 
 const CourseDetails = (props) =>{
     const router = useRouter()
-    console.log("sss",router.query)
     const [open, setOpen] = useState(false)
     const [courseDetail,setCourseDetail] = useAtom(Course_Detail)
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
+    const { t } = useTranslation('common')
     const WeiXinImg = {
         img:"/tintinVX.png"
     }
@@ -246,14 +250,10 @@ const CourseDetails = (props) =>{
     // }
 
     useEffect(()=>{
-        console.log("sss",router.query.id)
         if (router.isReady){
-
-
             const fetchUserBounty = async () => {
                 const project_details_list = JSON.parse(props.project_details)
                 const project_details = project_details_list[0]
-
                 setCourseDetail(project_details)
             }
             fetchUserBounty()
@@ -288,7 +288,7 @@ const CourseDetails = (props) =>{
                                     <div className="flex justify-between items-center">
                                         <div className="xl:pr-20">
                                             <div>
-                                                开课时间
+                                                {t("开课时间")}
                                             </div>
                                             <div className="text-xl">
                                                 {courseDetail.startTime}
@@ -299,7 +299,7 @@ const CourseDetails = (props) =>{
                                         </div>
                                         <div className="xl:pl-20">
                                             <div>
-                                                报名截止
+                                                {t("报名截止")}
                                             </div>
                                             <div className="text-xl">
                                                 {courseDetail.endTime}
@@ -309,12 +309,12 @@ const CourseDetails = (props) =>{
                                     <div className="mt-10 xl:mt-0 flex justify-center">
                                         <Link href={courseDetail.link}>
                                             <a target="_blank"  className={courseDetail.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
-                                                立刻报名
+                                                {t("立刻报名")}
                                             </a>
                                         </Link>
                                         <button  >
                                             <div className={courseDetail.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                                即将开始
+                                                {t("即将开始")}
                                             </div>
                                         </button>
                                     </div>
@@ -345,7 +345,7 @@ const CourseDetails = (props) =>{
                                 <div className="flex justify-between items-center">
                                     <div className="xl:pr-20">
                                         <div>
-                                            开课时间
+                                             {t("开课时间")}
                                         </div>
                                         <div className="text-xl">
                                             {courseDetail.startTime}
@@ -356,7 +356,7 @@ const CourseDetails = (props) =>{
                                     </div>
                                     <div className="xl:pl-20">
                                         <div>
-                                            报名截止
+                                            {t("报名截止")}
                                         </div>
                                         <div className="text-xl">
                                             {courseDetail.endTime}
@@ -366,12 +366,12 @@ const CourseDetails = (props) =>{
                                 <div className="mt-10 xl:mt-0 flex justify-center">
                                     <Link href={courseDetail.link}>
                                         <a target="_blank"  className={courseDetail.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
-                                            立刻报名
+                                            {t("立刻报名")}
                                         </a>
                                     </Link>
                                     <button  >
                                         <div className={courseDetail.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                            即将开始
+                                              {t("即将开始")}
                                         </div>
                                     </button>
                                 </div>
@@ -425,7 +425,7 @@ const CourseDetails = (props) =>{
                                    </div>
                                     <div>
                                         <div className="text-center mt-2 text-xl font-semibold">
-                                            加入Web3技术社区，与全球10000+开发者共同交流
+                                            {t("加入Web3技术社区，与全球10000+开发者共同交流")}
                                         </div>
                                         <img src={WeiXinImg.img} alt=""/>
                                     </div>
@@ -441,8 +441,11 @@ const CourseDetails = (props) =>{
     )
 }
 
-export async function getStaticPaths() {
-
+type Props = {
+    locale?: string
+    locales?: string[]
+}
+export const   getStaticPaths: GetStaticPaths  = async ({locales= []}) => {
     let data = {
         databaseId: CourseDatabaseId
     }
@@ -456,14 +459,24 @@ export async function getStaticPaths() {
     const result = await ret.json()
 
     const project_details = await JSON.parse(result.res.project_details)
-    const paths = project_details.map((project: any)=>{
-        return {
-            params:{id:(project.id).toString()}
-        }
-    })
-    // console.log(paths)
-    // console.log(project_details)
 
+    let paths=[]
+    for (let i= 0 ;i<project_details.length;i++){
+        for (const locale of locales) {
+            paths.push({ params:{id:(project_details[i].id).toString()},locale})
+        }
+    }
+    // const paths = project_details.map((project: any)=>{
+    //         return {
+    //             params:{id:(project.id).toString(),locale:"en"}
+    //         }
+    // })
+    // for (const locale of locales) {
+    //     paths.push({ params:{id:(project.id).toString(),locale}  })
+    //     paths.push({ locale })
+    // }
+    console.log(paths)
+    console.log(project_details)
     return {
         paths,
         fallback: false
@@ -471,7 +484,7 @@ export async function getStaticPaths() {
 }
 
 
-export async function getStaticProps({params:{id}}){
+export async function getStaticProps({params:{id},locale}){
     let data = {
         databaseId: CourseDatabaseId,
         id
@@ -484,11 +497,12 @@ export async function getStaticProps({params:{id}}){
         body:JSON.stringify(data)
     })
     const result = await ret.json()
-
+    {fallback: false}
     let project_details = result.res.project_details
     return {
         props:{
-            project_details
+            project_details,
+            ...await serverSideTranslations(locale, ['common', 'footer','header']),
         }
     }
 

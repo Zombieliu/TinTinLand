@@ -6,16 +6,16 @@ import Heads from "../../components/head";
 import HackathonsState from "../../components/state";
 import {useAtom} from "jotai";
 import {Hackathons_detail} from "../../jotai";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 const Hackathons = () =>{
-
+    const { t } = useTranslation('common')
     const [hackathonsData,setHackathonsData] = useAtom(Hackathons_detail)
-
-
     return (
 
         <div className="mx-auto relative bg-fixed overflow-hidden"
@@ -30,14 +30,16 @@ const Hackathons = () =>{
                         </div>
                         <div className="text-4xl mb-5">
                             <div className="mb-2">
-                                建立与全球开发者的联系，
+                                {t("建立与全球开发者的联系")}
                             </div>
                             <div>
-                                一起组队玩转黑客松
+                                {t("一起组队玩转黑客松")}
                             </div>
                         </div>
                         <div className="text-xl ">
-                            用区块链技术创建 Web3 世界 <br/>协助开发者创建团队，提供技术指导，引入投资。
+                            {t("用区块链技术创建 Web3 世界")}<br/>
+                            {t("协助开发者创建团队，提供技术指导，引入投资")}
+
                         </div>
                     </div>
 
@@ -67,13 +69,13 @@ const Hackathons = () =>{
                                     <div className="flex mt-5 ">
                                         <Link href={items.registrationLink}>
                                             <a className={items.state=="ComingSoon" || items.state=="OnGoing"  ?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                                立刻报名
+                                                {t("立刻报名")}
                                             </a>
                                         </Link>
 
                                         <Link href={items.activityLink}>
                                             <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                                了解更多
+                                                {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -94,3 +96,9 @@ const Hackathons = () =>{
     )
 }
 export default Hackathons
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+    }
+})

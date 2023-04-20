@@ -14,23 +14,21 @@ function classNames(...classes) {
 
 const Header = () =>{
     const router = useRouter();
+    const { pathname, query, asPath } = router
     const [loginState,SetLoginState] = useAtom(LoginState)
     const [scroll,setScroll]=useState(false)
     const [,setLoginState] = useAtom(LoginState)
     const [userEmail,setUserEmail] =useAtom(UserEmail)
     const [language,setLanguage] =useAtom(Language)
-
-    const [languageState,setLanguageState] = useState(false)
-    const { t } = useTranslation('common')
+    const { t } = useTranslation('header')
 
     const navigation = [
-        { id:1 ,name: `课程`, href: '/course' },
-        { id:2 ,name:`Hackathons`, href: '/hackathons' },
-        { id:3 ,name: `活动`, href: '/meeting' },
-        { id:4 ,name: `关于我们`, href: '/#About' },
+        { id:1 ,name:`${t("课程")}`, href: '/course' },
+        { id:2 ,name:`${t("Hackathons")}`, href: '/hackathons' },
+        { id:3 ,name: `${t("活动")}`, href: '/meeting' },
+        { id:4 ,name: `${t("关于我们")}`, href: '/#About' },
         // { id:5 ,name: 'Job Fair', href: '/JobFair/开发' },
     ]
-    // { id:4 ,name: `${t("关于我们")}`, href: '/#About' },
 
     if(typeof window !== "undefined"){
         window.onscroll = function() {myFunction()};
@@ -48,28 +46,21 @@ const Header = () =>{
         router.push('/')
     }
     function languageChange() {
-        // if(language =="zn"){
-        //     setLanguage("en");
-        //     router.push(`en`)
-        // }else {
-        //     setLanguage("zn")
-        //     router.push(`zn`)
-        // }
+        console.log("--------------------",language)
+        if(language =="zn"){
+            setLanguage("en")
+            router.push({ pathname, query }, asPath, { locale: "en" })
+        }else {
+            setLanguage("zn")
+            router.push({ pathname, query }, asPath, { locale: "zn" })
+        }
 
     }
     useEffect(()=>{
-        console.log(router.pathname)
-            // if(language=="zn"){
-            //     setLanguageState(false)
-            //     setLanguage("zn")
-            //     router.push(`zn`)
-            //
-            // }else {
-            //     setLanguage("en");
-            //     router.push(`en`)
-            //     setLanguageState(true)
-            // }
-    },[language])
+
+        // console.log(router.pathname)
+
+    },[])
 
     return (
         <header>
@@ -111,7 +102,7 @@ const Header = () =>{
                     <div className="hidden lg:flex w-full justify-end  items-center">
                         <div className="flex justify-center items-center">
                             <Switch
-                                checked={languageState}
+                                // checked={languageState}
                                 onChange={languageChange}
                                 className={classNames(
                                     'relative inline-flex flex-shrink-0 h-7 w-12  border border-gray-500 rounded-full cursor-pointer transition-colors ease-in-out duration-200 items-center bg-gray-200 '
@@ -127,13 +118,15 @@ const Header = () =>{
                                     )}
                                 >
                                     <div className="flex justify-between items-center  w-12  text-xs">
-                                        <div className={languageState?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
-                                              中
+
+                                        <div className={language==="zn"?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
+                                              EN
                                         </div>
-                                         <div className={languageState?"bg-black rounded-full w-12   w-6  py-1  text-white":"w-12 w-6  py-1"}>
-                                          EN
+                                         <div className={language==="en"?" w-12   w-6  py-1":"bg-black rounded-full w-12   w-6  py-1  text-white"}>
+                                          中
                                         </div>
                             </div>
+
                                 </span>
                             </Switch>
 
@@ -250,7 +243,7 @@ const Header = () =>{
                                 <div className="flex justify-between  p-5 items-center">
                                         <div className="flex justify-between">
                                             <Switch
-                                                checked={languageState}
+                                                // checked={languageState}
                                                 onChange={languageChange}
                                                 className={classNames(
                                                     'relative inline-flex flex-shrink-0 h-7 w-12  border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 items-center bg-gray-200 '
@@ -266,11 +259,11 @@ const Header = () =>{
                                                     )}
                                                 >
                                     <div className="flex justify-between items-center  w-12  text-xs">
-                                        <div className={languageState?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
-                                              中
+                                         <div className={language==="zn"?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
+                                              EN
                                         </div>
-                                         <div className={languageState?"bg-black rounded-full w-12   w-6  py-1  text-white":"w-12   w-6  py-1"}>
-                                          EN
+                                         <div className={language==="en"?" w-12   w-6  py-1":"bg-black rounded-full w-12   w-6  py-1  text-white"}>
+                                          中
                                         </div>
                             </div>
                                 </span>

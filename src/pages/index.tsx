@@ -18,7 +18,7 @@ const IndexPage: NextPage = (props) => {
     const router = useRouter()
     const { t } = useTranslation('common')
     console.log(t('change-locale'))
-    console.log(router.locale)
+
 
   return (
       <main>
@@ -53,8 +53,18 @@ export default IndexPage
 //     }
 // })
 
+// export const getStaticPaths = ({ locales }) => {
+//     return {
+//         paths: [
+//             // if no `locale` is provided only the defaultLocale will be generated
+//             { params: { slug: 'post-1' }, locale: 'en-US' },
+//             { params: { slug: 'post-1' }, locale: 'fr' },
+//         ],
+//         fallback: true,
+//     }
+// }
 
-export async function getStaticProps(){
+export async function getStaticProps({ locale }){
     let course_data = {databaseId: CourseDatabaseId,}
     const course_ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
         method:'POST',
@@ -99,8 +109,6 @@ export async function getStaticProps(){
     const media_result = await media_ret.json()
     let media_details = await media_result.res.project_details
 
-
-
     let community_data = {databaseId: CommunityDatabaseID}
     const community_ret = await fetch(`${https}/v1/Media/GetMediaDetails`,{
         method:'POST',
@@ -131,7 +139,8 @@ export async function getStaticProps(){
             community_details,
             communityMember_details,
             hackathons_details,
-            activity_details
+            activity_details,
+            ...await serverSideTranslations(locale, ['common', 'footer','header']),
         }
     }
 

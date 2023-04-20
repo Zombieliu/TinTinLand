@@ -1,3 +1,10 @@
 {
-  "description": "This is a non-page component that requires its own namespace"
+  "加入TinTinLand社区": "Join our Discord",
+  "点击进入discord": "Click to join TinTinLand's discord",
+  "联系我们": "Contact Us",
+  "产品": "Product",
+  "课程": "Course",
+  "Hackathons": "Hackathons",
+  "活动": "Activities",
+  "WeChat": "WeChat"
 }

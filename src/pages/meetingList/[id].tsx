@@ -7,6 +7,10 @@ import Activity_Info from "../../components/activity_info";
 import Heads from "../../components/head";
 import {Activity_detail} from "../../jotai";
 import {useAtom} from "jotai";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {GetStaticPaths} from "next";
+import {CourseDatabaseId, https} from "../../constants";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -15,11 +19,11 @@ function classNames(...classes) {
 const Meeting = () =>{
     const router = useRouter()
     const [activityList,setActivityList] = useAtom(Activity_detail)
-
+    const { t } = useTranslation('common')
     const [index,setIndex] = useState(0)
     useEffect(()=>{
         if (router.isReady){
-            const type = router.query.slug[0]
+            const type = router.query.id
             setIndex(Number(type)-1)
 
             }
@@ -72,14 +76,14 @@ const Meeting = () =>{
                                             <div className="">
                                                 <Link href={activityList[index].activityList[0].subLink}>
                                                     <a className={classNames(activityList[index].activityList[0].status =="In progress"|| activityList[index].activityList[0].status =="Not started"?"bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden")} target="_blank">
-                                                        订阅
+                                                        {t("订阅")}
                                                     </a>
                                                 </Link>
                                             </div>
                                             <div className="">
                                                 <Link href={activityList[index].activityList[0].videoLink}>
                                                     <a className={activityList[index].activityList[0].status !=="Done"?"hidden":" text-black border border-black rounded-full  px-4 py-2.5"} target="_blank">
-                                                        了解更多
+                                                        {t("了解更多")}
                                                     </a>
                                                 </Link>
 
@@ -95,7 +99,7 @@ const Meeting = () =>{
                 </div>
                 <div>
                     <div className="text-indigo-700 text-2xl">
-                        往期回顾
+                        {t("往期回顾")}
                     </div>
                     <div className="mt-5 mb-20 grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-10 ">
                         {activityList[index].activityList.map((item,index)=>(
@@ -114,13 +118,13 @@ const Meeting = () =>{
                                         <div className="mt-4">
                                             <Link href={item.subLink}>
                                                 <a className={item.status == "In progress"||item.status == "Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
-                                                    订阅
+                                                    {t("订阅")}
                                                 </a>
                                             </Link>
                                         </div>
                                         <Link href={item.videoLink}>
                                             <a className={item.status !== "Done"?"hidden":" text-black border border-black rounded-full  px-8 py-2.5"} target="_blank">
-                                                了解更多
+                                                {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -139,3 +143,22 @@ const Meeting = () =>{
     )
 }
 export default Meeting
+
+export const getStaticPaths = ({ locales = [] }) => {
+    const paths = []
+
+    for (const locale of locales) {
+        paths.push({ params: { id: '1' }, locale })
+    }
+
+    return {
+        paths,
+        fallback: true,
+    }
+}
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+    }
+})

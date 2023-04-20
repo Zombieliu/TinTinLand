@@ -23,6 +23,8 @@ import {Pop_up_box, SignUpCourseBox} from "../../components/pop_up_box";
 import Loading from "../../components/loading";
 import {WaitPayPoPUpBox} from "../../components/payState";
 import {CourseData} from "../../components/course_data";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -41,11 +43,10 @@ const Course_info =
         }
     ]
 const Course = (data) => {
-
-    const [language,setLanguage] =useAtom(Language)
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
     const [course_info,setCourse_info] = useAtom(Course_data)
+    const { t } = useTranslation('common')
     let index = 0
     let autoTimer
 
@@ -60,7 +61,6 @@ const Course = (data) => {
 
         const query = async () =>{
 
-            // CourseData()
             const project_details = JSON.parse(data.data)
             setCourse_info(project_details)
         }
@@ -117,30 +117,29 @@ const Course = (data) => {
 
 
                     <div  className="text-indigo-700 text-2xl ">
-                        TinTin课程
+                        {t("TinTin课程")}
                     </div>
                     <div className="text-2xl md:text-4xl my-5">
                         <div>
-                            学习最前沿的 Web3 技术，
-                        </div>
-                        <div>
-                            创造未来开放网络
+                            {t("学习最前沿的 Web3 技术")}
+                          <br/>
+                            {t("创造未来开放网络")}
                         </div>
                     </div>
 
                     <div className="mb-5 text-sm md:text-base">
                         <div>
-                            生态官方合作课程，项目 CTO &核心开发者亲自授课
+                            {t("生态官方合作课程，项目 CTO &核心开发者亲自授课")}
                         </div>
                         <div>
-                            配套高质量社群，全球一线开发者助教全程陪伴，社区同学交流讨论。
+                            {t("配套高质量社群，全球一线开发者助教全程陪伴，社区同学交流讨论")}
                         </div>
 
                 <div className="flex justify-end md:-mt-10">
                     <Link href="/course">
                 <div className="flex  bg-white text-black rounded-full cursor-pointer text-sm items-center  px-4 py-1.5">
                     <div className="mr-1" >
-                        查看更多
+                        {t("查看更多")}
                     </div>
                     <div>
                         <i className="fa fa-arrow-right" aria-hidden="true"></i>
@@ -181,23 +180,25 @@ const Course = (data) => {
                                         <div className="flex mt-5 ">
                                             {/*<button onClick={()=>{Signup(items.img,items.h1)}}>*/}
                                             {/*    <div   className={items.state?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >*/}
-                                            {/*        立刻报名*/}
+                                            {/*            {t("立刻报名")}*/}
                                             {/*    </div>*/}
                                             {/*</button>*/}
                                             <Link href={items.link}>
                                                 <a target="_blank"  className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
-                                                    立刻报名
+                                                        {t("立刻报名")}
+
                                                 </a>
                                             </Link>
                                             <Link  href={items.link}>
                                                 <a  target="_blank" className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                                    即将开始
+                                                         {t("即将开始")}
                                                 </a>
                                             </Link>
 
                                             <Link href={`/course_details/${items.id}`}>
                                                 <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" >
-                                                    了解更多
+                                                          {t("了解更多")}
+
                                                 </a>
                                             </Link>
                                         </div>
@@ -230,17 +231,17 @@ const Course = (data) => {
                                                 <div className="flex mt-5 ">
                                                     <Link href={items.link}>
                                                         <a target="_blank"  className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
-                                                            立刻报名
+                                                                {t("立刻报名")}
                                                         </a>
                                                     </Link>
                                                     <button  >
                                                         <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
-                                                            即将开始
+                                                                 {t("即将开始")}
                                                         </div>
                                                     </button>
                                                     <Link href={`/course_details/${items.id}`}>
                                                         <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5">
-                                                            了解更多
+                                                                  {t("了解更多")}
                                                         </a>
                                                     </Link>
                                                 </div>
@@ -257,7 +258,7 @@ const Course = (data) => {
 }
 
 const Hackathons = (data)=>{
-
+    const { t } = useTranslation('common')
     const [hackathonsData,setHackathonsData] = useAtom(Hackathons_detail)
     useEffect(()=>{
         setHackathonsData(JSON.parse(data.data))
@@ -270,25 +271,26 @@ const Hackathons = (data)=>{
             </div>
             <div className="text-2xl md:text-4xl my-5">
                 <div>
-                    建立与全球开发者的联系，
+                    {t("建立与全球开发者的联系")}
                 </div>
                 <div>
-                    一起组队玩转黑客松
+                    {t("一起组队玩转黑客松")}
                 </div>
             </div>
             <div className="mb-5 text-sm md:text-base">
                 <div>
-                    用区块链技术创建 Web3 世界
+                    {t("用区块链技术创建 Web3 世界")}
                 </div>
                 <div>
-                    协助开发者创建团队，提供技术指导，引入投资。
+                    {t("协助开发者创建团队，提供技术指导，引入投资")}
                 </div>
             </div>
             <div className="flex justify-end md:-mt-10">
                 <Link href="/hackathons">
                     <div className="flex  bg-white text-black rounded-full cursor-pointer text-sm items-center  px-4 py-1.5">
                         <div className="mr-1" >
-                            查看更多
+                              {t("查看更多")}
+
                         </div>
                         <div>
                             <i className="fa fa-arrow-right" aria-hidden="true"></i>
@@ -313,13 +315,13 @@ const Hackathons = (data)=>{
                         <div className="flex mt-5 2xl:mt-10 items-center">
                             <Link href={hackathonsData[0].registrationLink}>
                                 <a className={classNames(hackathonsData[0].state=="ComingSoon" || hackathonsData[0].state=="OnGoing" ?"":"hidden","text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5")} target="_blank">
-                                    立刻报名
+                                        {t("立刻报名")}
                                 </a>
                             </Link>
 
                             <Link href={hackathonsData[0].activityLink}>
                                 <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                    了解更多
+                                          {t("了解更多")}
                                 </a>
                             </Link>
                         </div>
@@ -344,13 +346,13 @@ const Hackathons = (data)=>{
                                 <div className="flex my-5  items-center">
                                     <Link href={hackathonsData[1].registrationLink}>
                                         <a className={classNames(hackathonsData[1].state=="ComingSoon" || hackathonsData[1].state=="OnGoing" ?"":"hidden","text-xs 2xl:text-xl bg-black text-white rounded-full px-8 py-2.5 mr-5")} target="_blank">
-                                            立刻报名
+                                                {t("立刻报名")}
                                         </a>
                                     </Link>
 
                                     <Link href={hackathonsData[1].activityLink}>
                                         <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                            了解更多
+                                                  {t("了解更多")}
                                         </a>
                                     </Link>
                                 </div>
@@ -376,13 +378,13 @@ const Hackathons = (data)=>{
                                     <div className="flex mt-5 ">
                                         <Link href={hackathonsData[2].registrationLink}>
                                             <a className={classNames(hackathonsData[2].state=="ComingSoon" || hackathonsData[2].state=="OnGoing" ?"":"hidden","text-xs 2xl:text-xl bg-black text-white rounded-full px-8 py-2.5 mr-5")} target="_blank">
-                                                立刻报名
+                                                    {t("立刻报名")}
                                             </a>
                                         </Link>
 
                                         <Link href={hackathonsData[2].activityLink}>
                                             <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5" target="_blank">
-                                                了解更多
+                                                      {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -399,7 +401,7 @@ const Hackathons = (data)=>{
 }
 
 const Activity = (data)=>{
-
+    const { t } = useTranslation('common')
     const [activityList,setActivityList] = useAtom(Activity_detail)
 
     useEffect(()=>{
@@ -411,29 +413,29 @@ const Activity = (data)=>{
     return(
         <div id="Activities"  className="pt-20">
             <div className="text-indigo-700 text-2xl">
-                TinTin活动
+                {t("TinTin活动")}
             </div>
             <div className="text-2xl md:text-4xl my-5">
                 <div>
-                    与顶尖项目面对面讨论，
+                    {t("与顶尖项目面对面讨论")}
                 </div>
                 <div>
-                    获得热点趋势与开发实战经验
+                    {t("获得热点趋势与开发实战经验")}
                 </div>
             </div>
             <div className="mb-5 text-sm md:text-base">
                 <div>
-                    最新的多链技术分享，众多赛道实时资讯
+                    {t("最新的多链技术分享，众多赛道实时资讯")}
                 </div>
                 <div>
-                    生态项目代码实操演练，与 Web3 领军人物现场讨论。
+                    {t("生态项目代码实操演练，与 Web3 领军人物现场讨论")}
                 </div>
             </div>
             <div className="flex justify-end md:-mt-10">
                 <Link href="/meeting">
                     <div className="flex  bg-white text-black rounded-full cursor-pointer text-sm items-center  px-4 py-1.5">
                         <div className="mr-1 " >
-                            查看更多
+                              {t("查看更多")}
                         </div>
                         <div>
                             <i className="fa fa-arrow-right" aria-hidden="true"></i>
@@ -467,14 +469,14 @@ const Activity = (data)=>{
                                     <div className="">
                                         <Link href={activityList[0].activityList[0].subLink}>
                                             <a className={activityList[0].activityList[0].status == "In progress"||activityList[0].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-7  py-2.5 mr-5 ":"hidden"}>
-                                                订阅
+                                                {t("订阅")}
                                             </a>
                                         </Link>
                                     </div>
                                     <div className=" text-sm">
                                         <Link href={`/meetingList/${activityList[0].id}`}>
                                             <a className="text-xs 2xl:text-xl text-black border border-black rounded-full px-4  py-2.5">
-                                                了解更多
+                                                      {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -493,14 +495,14 @@ const Activity = (data)=>{
                                     <div className="">
                                         <Link href={activityList[0].activityList[0].subLink}>
                                             <a className={activityList[0].activityList[0].status == "In progress"||activityList[0].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
-                                                订阅
+                                                   {t("订阅")}
                                             </a>
                                         </Link>
                                     </div>
                                     <div className="xl:w-52 text-sm">
                                         <Link href={`/meetingList/${activityList[0].id}`}>
                                             <a className={activityList[0].activityList[0].status !== "Done"?"hidden":"text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5"}>
-                                                了解更多
+                                                      {t("了解更多")}
                                             </a>
                                         </Link>
                                     </div>
@@ -534,12 +536,12 @@ const Activity = (data)=>{
                                 <div className="flex   items-center">
                                         <Link href={activityList[0].activityList[0].subLink}>
                                             <a className={activityList[0].activityList[0].status == "In progress"||activityList[0].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full px-8 xl:px-10 py-2.5 mr-5 ":"hidden"}>
-                                                订阅
+                                                   {t("订阅")}
                                             </a>
                                         </Link>
                                         <Link href={`/meetingList/${activityList[0].id}`}>
                                             <a className={activityList[0].activityList[0].status !== "Done"?"hidden":"text-xs 2xl:text-xl text-black border border-black rounded-full  px-4 xl:px-8 py-2.5"}>
-                                                了解更多
+                                                      {t("了解更多")}
                                             </a>
                                         </Link>
 
@@ -561,14 +563,14 @@ const Activity = (data)=>{
                                         <div className="">
                                             <Link href={activityList[1].activityList[0].subLink}>
                                                 <a className={activityList[1].activityList[0].status == "In progress"||activityList[1].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
-                                                    订阅
+                                                       {t("订阅")}
                                                 </a>
                                             </Link>
                                         </div>
                                         <div className="xl:w-52 text-sm">
                                             <Link href={`/meetingList/${activityList[1].id}`}>
                                                 <a className={activityList[1].activityList[0].status !== "Done"?"hidden":"text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5"}>
-                                                    了解更多
+                                                          {t("了解更多")}
                                                 </a>
                                             </Link>
                                         </div>
@@ -603,14 +605,14 @@ const Activity = (data)=>{
                                         <div className="  ">
                                             <Link href={activityList[1].activityList[0].subLink}>
                                                 <a className={activityList[1].activityList[0].status == "In progress"||activityList[1].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full px-7   py-2.5 mr-5 ":"hidden"}>
-                                                    订阅
+                                                       {t("订阅")}
                                                 </a>
                                             </Link>
                                         </div>
                                         <div className="  ">
                                             <Link href={`/meetingList/${activityList[1].id}`}>
                                                 <a className={activityList[1].activityList[0].status !== "Done"?"hidden":"text-xs 2xl:text-xl text-black border border-black rounded-full  px-4  py-2.5"}>
-                                                    了解更多
+                                                          {t("了解更多")}
                                                 </a>
                                             </Link>
                                         </div>
@@ -629,14 +631,14 @@ const Activity = (data)=>{
                                         <div className="">
                                             <Link href={activityList[2].activityList[0].subLink}>
                                                 <a className={activityList[2].activityList[0].status == "In progress"||activityList[2].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-10 py-2.5 mr-5 ":"hidden"}>
-                                                    订阅
+                                                       {t("订阅")}
                                                 </a>
                                             </Link>
                                         </div>
                                         <div className="xl:w-52 text-sm">
                                             <Link href={`/meetingList/${activityList[2].id}`}>
                                                 <a className={activityList[2].activityList[0].status !== "Done"?"hidden":"text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5"}>
-                                                    了解更多
+                                                          {t("了解更多")}
                                                 </a>
                                             </Link>
                                         </div>
@@ -669,14 +671,14 @@ const Activity = (data)=>{
                                         <div className="  ">
                                             <Link href={activityList[2].activityList[0].subLink}>
                                                 <a className={activityList[2].activityList[0].status == "In progress"||activityList[2].activityList[0].status =="Not started"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-7   py-2.5 mr-5 ":"hidden"}>
-                                                    订阅
+                                                       {t("订阅")}
                                                 </a>
                                             </Link>
                                         </div>
                                         <div className="">
                                             <Link href={`/meetingList/${activityList[2].id}`}>
                                                 <a className={activityList[2].activityList[0].status !== "Done"?"hidden":"text-xs 2xl:text-xl text-black border border-black rounded-full  px-4  py-2.5"}>
-                                                    了解更多
+                                                          {t("了解更多")}
                                                 </a>
                                             </Link>
                                         </div>
@@ -693,29 +695,28 @@ const Activity = (data)=>{
 }
 
 const AboutUs = ()=>{
+    const { t } = useTranslation('common')
     return(
         <div id="About" className="pt-20">
             <div className="xl:flex justify-between items-center">
 
                 <div className='xl:w-1/2  xl:mr-9'>
                     <div className="text-indigo-700 text-2xl ">
-                        About Us
+                        {t("关于我们")}
                     </div>
                     <div className="text-2xl xl:text-4xl 2xl:text-5xl my-5">
-                        赋能下一代开发者的技术社区
+                        {t("赋能下一代开发者的技术社区")}
                     </div>
                     <div className="2xl:mt-14 text-base 2xl:text-xl">
                         <div>
-                            TinTinLand 是赋能下一代开发者的技术社区，能够通过聚集、培育、输送
-                                开发者到各开放网络，共同定义并构建未来。
+                            {t("TinTinLand 是赋能下一代开发者的技术社区，能够通过聚集、培育、输送 开发者到各开放网络，共同定义并构建未来")}
                         </div>
                         <div className="mt-5">
-                            我们也将和行业有商业洞察力、有经验的开发者、社区、媒体合作，提供
-                            技术课程、技术内容解读、AMA、线下开发者活动等。
+                            {t("我们也将和行业有商业洞察力、有经验的开发者、社区、媒体合作，提供 技术课程、技术内容解读、AMA、线下开发者活动等")}
                         </div>
                     </div>
                     <p className="mt-4 flex">
-                        联系我们:
+                        {t('联系我们')}:
                         <a href="mailto:tintinland2022@gmail.com" className="cursor-pointer ml-1 text-blue-600">
                             tintinland2022@gmail.com
                     </a>
@@ -734,6 +735,7 @@ const AboutUs = ()=>{
 }
 
 const Media = (data) =>{
+
     const Media = [{href:"", img:""}]
     const [media,setMedia] = useState(Media)
     useEffect(()=>{
@@ -852,6 +854,7 @@ const Media = (data) =>{
 }
 
 const Community = (data) =>{
+
     const Community = [{href:"", img:""}]
     const [community,setCommunity] = useState(Community)
     useEffect(()=>{
@@ -991,6 +994,7 @@ const Community = (data) =>{
 }
 
 const CommunityMember = (data) =>{
+    const { t } = useTranslation('common')
     const CommunityMember = [{img:"", name:"", position:"", text:"",},]
     const [communityMember,setCommunityMember] = useState(CommunityMember)
     useEffect(()=>{
@@ -1044,7 +1048,7 @@ const CommunityMember = (data) =>{
         <>
             <div className="w-full mt-10  mb-32">
                 <div className="text-indigo-700 text-2xl mb-10">
-                    社区成员
+                    {t("社区成员")}
                 </div>
                 <div className=" xl:hidden   relative overflow-x-auto w-full h-64 snap-x snap-mandatory" >
                     <div className="flex  absolute mb-2">
@@ -1096,6 +1100,7 @@ const CommunityMember = (data) =>{
 }
 
 const Home = (data) =>{
+    const { t } = useTranslation('common')
 
     return (
 
@@ -1108,6 +1113,7 @@ const Home = (data) =>{
                 <div className=" backdrop-blur-sm bg-white/60 w-full rounded-2xl py-10 px-5  md:px-10 ">
                     <div className="text-2xl md:text-4xl xl:text-6xl ">
                     <div>
+
                         A Global Web3.0 Dev DAO
                     </div>
                         <div>
@@ -1119,10 +1125,10 @@ const Home = (data) =>{
                     </div>
                     <div className="mt-10 text-xs md:text-sm">
                         <div>
-                            赋能下一代开发者。
+                            {t("赋能下一代开发者")}
                         </div>
                         <div>
-                            通过聚集、培育、输送开发者到各开放网络，共同定义并构建未来。
+                            {t("通过聚集、培育、输送开发者到各开放网络，共同定义并构建未来")}
                         </div>
                     </div>
                 </div>
@@ -1156,5 +1162,11 @@ const Home = (data) =>{
 
 
 export default Home
+
+export const getStaticProps = async ({ locale }) => ({
+    props: {
+        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+    }
+})
 
 
