@@ -230,17 +230,17 @@ const Course = (data) => {
                                                     </div>
                                                 <div className="flex mt-5 ">
                                                     <Link href={items.link}>
-                                                        <a target="_blank"  className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
+                                                        <a target="_blank"  className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-5 py-2.5 mr-5":"hidden"} >
                                                                 {t("立刻报名")}
                                                         </a>
                                                     </Link>
                                                     <button  >
-                                                        <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                                        <div className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-5 py-2.5 mr-5":"hidden"}>
                                                                  {t("即将开始")}
                                                         </div>
                                                     </button>
                                                     <Link href={`/course_details/${items.id}`}>
-                                                        <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-8 py-2.5">
+                                                        <a className="text-xs 2xl:text-xl text-black border border-black rounded-full  px-5 py-2.5">
                                                                   {t("了解更多")}
                                                         </a>
                                                     </Link>
