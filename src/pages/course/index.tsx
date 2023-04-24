@@ -23,12 +23,13 @@ import Loading from "../../components/loading";
 import {WaitPayPoPUpBox} from "../../components/payState";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
+import {https} from "../../constants";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const Course = () =>{
+const Course = (props) =>{
     const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
     const { t } = useTranslation('common')
@@ -41,6 +42,10 @@ const Course = () =>{
             price: "100"
         })
     }
+    useEffect(()=>{
+        const course_details_list = JSON.parse(props.course_details)
+        setCourse_info(course_details_list)
+    },[])
 
     return (
 
@@ -184,8 +189,25 @@ const Course = () =>{
 }
 export default Course
 
-export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+
+
+
+export async function getStaticProps({locale}){
+    let data ={ locale }
+    const course_ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(data)
+    })
+    const course_result = await course_ret.json()
+    let course_details = await course_result.res.project_details
+    return {
+        props: {
+            course_details,
+            ...await serverSideTranslations(locale, ['common', 'footer','header']),
+        }
     }
-})
+
+}
