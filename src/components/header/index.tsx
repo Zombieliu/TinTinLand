@@ -195,7 +195,7 @@ const Header = () =>{
                     </div>
                 </div>
 
-                <div className="fixed z-20 inset-x-0">
+                <div className="fixed z-50 inset-x-0">
                     <Transition
                         as={Fragment}
                         enter="duration-200 ease-out"
@@ -206,7 +206,7 @@ const Header = () =>{
                         leaveTo="opacity-0 scale-95"
                     >
                         <Popover.Panel
-                            className="absolute my-auto  fixed z-20 inset-x-0  min-h-screen  inset-y-auto   p-2 transition transform origin-top-right lg:hidden"
+                            className="absolute my-auto  fixed z-50 inset-x-0  min-h-screen  inset-y-auto   p-2 transition transform origin-top-right lg:hidden"
                         >
                             <div className="rounded-lg  shadow-lg ring-1 ring-black ring-opacity-5 bg-white   transition duration-700 divide-y-2 divide-gray-50">
                                 <div className="pt-5 pb-6 px-5">
