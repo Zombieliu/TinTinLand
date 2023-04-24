@@ -6,18 +6,28 @@ import Link from "next/link";
 import Activity_Info from "../../components/activity_info";
 import Heads from "../../components/head";
 
-import {Activity_detail} from "../../jotai";
+import {Activity_Alldetail} from "../../jotai";
 import {useAtom} from "jotai";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
+import {https} from "../../constants";
+import {GetStaticPaths} from "next";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const Meeting = () =>{
+const Meeting = (props) =>{
     const { t } = useTranslation('common')
-    const [activityList,setActivityList] = useAtom(Activity_detail)
+    const [activityList,setActivityList] = useAtom(Activity_Alldetail)
+    useEffect(()=>{
+        const fetchUserBounty = async () => {
+            const activity_details_list = JSON.parse(props.activity_details)
+            setActivityList(activity_details_list)
+        }
+        fetchUserBounty()
+
+    },[])
     return (
 
         <div className="mx-auto relative bg-fixed overflow-hidden"
@@ -111,8 +121,52 @@ const Meeting = () =>{
 export default Meeting
 
 
-export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+// export const   getStaticPaths: GetStaticPaths  = async ({locales= [],defaultLocale}) => {
+//     let data = {
+//         locale:defaultLocale
+//     }
+//     const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`,{
+//         method:'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body:JSON.stringify(data)
+//     })
+//     const activity_result = await activity_ret.json()
+//     let  activity_details = await JSON.parse(activity_result.res.project_details)
+//     let paths=[]
+//     for (let i= 0 ;i<activity_details.length;i++){
+//         for (const locale of locales) {
+//             paths.push({ params:{id:(activity_details[i].id).toString()},locale})
+//         }
+//     }
+//     return {
+//         paths,
+//         fallback: false
+//     };
+// }
+
+export async function getStaticProps({locale}){
+    let data = {
+        // databaseId: CourseDatabaseId,
+        locale
     }
-})
+    const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`,{
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(data)
+    })
+    const activity_result = await activity_ret.json()
+    let  activity_details = await activity_result.res.project_details
+    return {
+        props: {
+            activity_details,
+            ...await serverSideTranslations(locale, ['common', 'footer','header']),
+        }
+    }
+
+}
+
+

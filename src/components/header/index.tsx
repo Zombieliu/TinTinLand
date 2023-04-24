@@ -57,10 +57,14 @@ const Header = () =>{
 
     }
     useEffect(()=>{
-
-        // console.log(router.pathname)
-
-    },[])
+        if(router.isReady){
+            if(router.locale == "cn"){
+                setLanguage("cn")
+            }else {
+                setLanguage("en")
+            }
+        }
+    },[router.isReady])
 
     return (
         <header>

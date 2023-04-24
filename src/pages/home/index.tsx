@@ -7,7 +7,7 @@ import Activity_Info from "../../components/activity_info";
 import Heads from "../../components/head";
 import {useAtom} from "jotai";
 import {
-    Activity_detail,
+    Activity_Alldetail,
     Course_data,
     Hackathons_detail,
     Language,
@@ -402,7 +402,7 @@ const Hackathons = (data)=>{
 
 const Activity = (data)=>{
     const { t } = useTranslation('common')
-    const [activityList,setActivityList] = useAtom(Activity_detail)
+    const [activityList,setActivityList] = useAtom(Activity_Alldetail)
 
     useEffect(()=>{
         setActivityList(JSON.parse(data.data))
