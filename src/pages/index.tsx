@@ -17,9 +17,6 @@ import {
 const IndexPage: NextPage = (props) => {
     const router = useRouter()
     const { t } = useTranslation('common')
-    console.log(t('change-locale'))
-
-
   return (
       <main>
         <div>
@@ -65,35 +62,34 @@ export default IndexPage
 // }
 
 export async function getStaticProps({ locale }){
-    let course_data = {databaseId: CourseDatabaseId,}
+    let data = {locale}
     const course_ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(course_data)
+        body:JSON.stringify(data)
     })
     const course_result = await course_ret.json()
     let course_details = await course_result.res.project_details
 
-    let hackathons_data = {databaseId:HackathonsDatabaseID}
     const hackathons_ret = await fetch(`${https}/v1/Hackathons/GetHackathonsDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(hackathons_data)
+        body:JSON.stringify(data)
     })
     const hackathons_result = await hackathons_ret.json()
     let  hackathons_details = await hackathons_result.res.project_details
 
-    let activity_data = {databaseId:ActivityDatabaseID}
+
     const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(activity_data)
+        body:JSON.stringify(data)
     })
     const activity_result = await activity_ret.json()
     let  activity_details = await activity_result.res.project_details
@@ -104,7 +100,7 @@ export async function getStaticProps({ locale }){
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(media_data)
+        body:JSON.stringify(data)
     })
     const media_result = await media_ret.json()
     let media_details = await media_result.res.project_details
@@ -115,7 +111,7 @@ export async function getStaticProps({ locale }){
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(community_data)
+        body:JSON.stringify(data)
     })
     const community_result = await community_ret.json()
     let  community_details = await community_result.res.project_details
@@ -126,7 +122,7 @@ export async function getStaticProps({ locale }){
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(communityMember_data)
+        body:JSON.stringify(data)
     })
     const communityMember_result = await communityMember_ret.json()
     let  communityMember_details = await communityMember_result.res.project_details

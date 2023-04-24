@@ -39,7 +39,7 @@ const Login = () =>{
               const ret = await client.callApi('v1/email/SendEmail', {
                   email: (document.getElementById("email") as HTMLInputElement).value
               });
-          console.log(ret)
+
               if(ret.isSucc){
                   setLoginState(false)
                   await  router.push(

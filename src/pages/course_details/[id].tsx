@@ -445,16 +445,16 @@ type Props = {
     locale?: string
     locales?: string[]
 }
-export const   getStaticPaths: GetStaticPaths  = async ({locales= []}) => {
-    let data = {
-        databaseId: CourseDatabaseId
+export const   getStaticPaths: GetStaticPaths  = async ({locales= [],defaultLocale}) => {
+    let course_data = {
+        locale:defaultLocale
     }
     const ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body:JSON.stringify(data)
+        body:JSON.stringify(course_data)
     })
     const result = await ret.json()
 
@@ -466,17 +466,7 @@ export const   getStaticPaths: GetStaticPaths  = async ({locales= []}) => {
             paths.push({ params:{id:(project_details[i].id).toString()},locale})
         }
     }
-    // const paths = project_details.map((project: any)=>{
-    //         return {
-    //             params:{id:(project.id).toString(),locale:"en"}
-    //         }
-    // })
-    // for (const locale of locales) {
-    //     paths.push({ params:{id:(project.id).toString(),locale}  })
-    //     paths.push({ locale })
-    // }
-    console.log(paths)
-    console.log(project_details)
+
     return {
         paths,
         fallback: false
@@ -486,8 +476,9 @@ export const   getStaticPaths: GetStaticPaths  = async ({locales= []}) => {
 
 export async function getStaticProps({params:{id},locale}){
     let data = {
-        databaseId: CourseDatabaseId,
-        id
+        // databaseId: CourseDatabaseId,
+        id,
+        locale
     }
     const ret = await fetch(`${https}/v1/Course/GetCourseDetails`,{
         method:'POST',
@@ -498,7 +489,7 @@ export async function getStaticProps({params:{id},locale}){
     })
     const result = await ret.json()
     {fallback: false}
-    let project_details = result.res.project_details
+        let project_details = result.res.project_details
     return {
         props:{
             project_details,

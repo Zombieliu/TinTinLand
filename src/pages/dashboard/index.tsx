@@ -705,7 +705,6 @@ const UserCourse = () =>{
                 const ret = await client.callApi('v1/user/GetUserCourseList', {
                     email: user_email.user_email
                 });
-                console.log(ret.res.courses)
                 if(JSON.parse(ret.res.courses).length !==0){
                    const data = JSON.parse(ret.res.courses)
                     let course_list = []
@@ -726,7 +725,6 @@ const UserCourse = () =>{
                         // console.log(survey,"survey")
                         const userCourseWj =  await CreateUserCourseWj(data[i].course_name)
                         let Url_list = []
-                        console.log(userCourseWj.res)
                         if(userCourseWj.res){
 
                             const UserCourseWj = JSON.parse(userCourseWj.res.user_course_wj_url_list)

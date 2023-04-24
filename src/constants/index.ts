@@ -9,8 +9,8 @@ const HackathonsDatabaseID = "d80b204a1aed41bc98a4acf9397062e9"
 
 const ActivityDatabaseID = "580eb646b37f4acaafcd5832a50a2ce3"
 
-
-const https = "https://notionbackend-production.up.railway.app"
+// const https = "https://notionbackend-production.up.railway.app"
+const https = "http://localhost:3001"
 export {
     CourseDatabaseId,
     MediaDatabaseID,

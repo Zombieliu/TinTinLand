@@ -184,13 +184,13 @@ const Course = (data) => {
                                             {/*    </div>*/}
                                             {/*</button>*/}
                                             <Link href={items.link}>
-                                                <a target="_blank"  className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"} >
+                                                <a target="_blank"  className={items.state=="In progress"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-4 2xl:px-8 py-2.5 mr-5":"hidden"} >
                                                         {t("立刻报名")}
 
                                                 </a>
                                             </Link>
                                             <Link  href={items.link}>
-                                                <a  target="_blank" className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-8 py-2.5 mr-5":"hidden"}>
+                                                <a  target="_blank" className={items.state=="About to start"?"text-xs 2xl:text-xl bg-black text-white rounded-full  px-4 2xl:px-8 py-2.5  mr-5":"hidden"}>
                                                          {t("即将开始")}
                                                 </a>
                                             </Link>
@@ -407,8 +407,6 @@ const Activity = (data)=>{
     useEffect(()=>{
         setActivityList(JSON.parse(data.data))
     },[])
-
-
 
     return(
         <div id="Activities"  className="pt-20">
@@ -735,7 +733,6 @@ const AboutUs = ()=>{
 }
 
 const Media = (data) =>{
-
     const Media = [{href:"", img:""}]
     const [media,setMedia] = useState(Media)
     useEffect(()=>{
@@ -787,42 +784,6 @@ const Media = (data) =>{
         onload()
     },[media])
 
-   const  partner = [
-       {
-           href:"https://twitter.com/blocklikecom?s=20&t=l_Ve7fQVbE6so0EHlp9FbQ",
-           img:"/partner/Blocklike-color.svg",
-       },
-       {
-           href:"https://twitter.com/8BTC_OFFICIAL?s=20&t=16hIrZG9bvB0YvCzXzAerA",
-           img:"/partner/defi之道-color.svg",
-       },
-       {
-           href:"https://twitter.com/Foresight_News?s=20&t=A51w8xu6srB4VYPSysKX_A",
-           img:"partner/Foresight-News-color.svg",
-       },
-       {
-           href:"https://twitter.com/PANewsCN?s=20&t=A51w8xu6srB4VYPSysKX_A",
-           img:"/partner/PANews-color.svg",
-       },
-       {
-           href:"https://twitter.com/OdailyChina?s=20&t=l_Ve7fQVbE6so0EHlp9FbQ",
-           img:"/partner/星球日报-color.svg",
-       },
-       {
-           href:"https://twitter.com/TechFlowPost?s=20&t=16hIrZG9bvB0YvCzXzAerA",
-           img:"/partner/深潮-color.svg",
-       },
-       {
-           href:"https://twitter.com/MarsBit_CN?s=20&t=l_Ve7fQVbE6so0EHlp9FbQ",
-           img:"/partner/火星财经-color.svg",
-       },
-       {
-           href:"https://www.tuoluo.cn/",
-           img:"/partner/陀螺科技-color.svg",
-       },
-
-
-   ]
     return(
         <div className="mt-20 mx-4 relative" id="div1">
             <div className="flex   relative overflow-hidden w-full h-20" >
@@ -854,14 +815,12 @@ const Media = (data) =>{
 }
 
 const Community = (data) =>{
-
     const Community = [{href:"", img:""}]
     const [community,setCommunity] = useState(Community)
     useEffect(()=>{
         setCommunity(JSON.parse(data.data))
     },[])
     useEffect(()=>{
-
       const onload = () =>{
           if(community[0].img !=="") {
               const Div2 = document.getElementById('div2');
@@ -1158,8 +1117,6 @@ const Home = (data) =>{
 
     )
 }
-
-
 
 export default Home
 

@@ -41,8 +41,6 @@ const Personal_info = () =>{
 
             });
 
-
-            console.log((document.getElementById("name") as HTMLInputElement).value)
             if(ret.isSucc){
                 const EnrollUser = await client.callApi('v1/teachable/EnrollUser', {
                     name: (document.getElementById("name") as HTMLInputElement).value,

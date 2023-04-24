@@ -57,7 +57,7 @@ const Verify = () =>{
          const data =  await client.callApi('v1/email/SendEmail', {
                 email: router.query.email as string,
             });
-            console.log(data);
+
              (document.getElementById("inpo1") as HTMLInputElement).value = "";
              (document.getElementById("inpo2") as HTMLInputElement).value = "";
              (document.getElementById("inpo3") as HTMLInputElement).value = "";
@@ -78,7 +78,7 @@ const Verify = () =>{
         +(document.getElementById("inpo4") as HTMLInputElement).value
         +(document.getElementById("inpo5") as HTMLInputElement).value
         +(document.getElementById("inpo6") as HTMLInputElement).value;
-        console.log(code)
+
 
         const ret = await client.callApi('v1/email/CheckEmail', {
             email: router.query.email as string,
