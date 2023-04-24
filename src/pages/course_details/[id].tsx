@@ -446,9 +446,7 @@ type Props = {
     locales?: string[]
 }
 export const   getStaticPaths: GetStaticPaths  = async ({locales= [],defaultLocale}) => {
-    let course_data = {
-        locale:defaultLocale
-    }
+    let course_data = { locale:defaultLocale }
     const ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{
         method:'POST',
         headers: {
@@ -474,12 +472,8 @@ export const   getStaticPaths: GetStaticPaths  = async ({locales= [],defaultLoca
 }
 
 
-export async function getStaticProps({params:{id},locale}){
-    let data = {
-        // databaseId: CourseDatabaseId,
-        id,
-        locale
-    }
+export async function getStaticProps({params:{ id },locale}){
+    let data = { id, locale }
     const ret = await fetch(`${https}/v1/Course/GetCourseDetails`,{
         method:'POST',
         headers: {
@@ -488,7 +482,7 @@ export async function getStaticProps({params:{id},locale}){
         body:JSON.stringify(data)
     })
     const result = await ret.json()
-    {fallback: false}
+    { fallback: false }
         let project_details = result.res.project_details
     return {
         props:{
@@ -496,7 +490,6 @@ export async function getStaticProps({params:{id},locale}){
             ...await serverSideTranslations(locale, ['common', 'footer','header']),
         }
     }
-
 }
 
 export default CourseDetails

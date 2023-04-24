@@ -8,14 +8,20 @@ import {useAtom} from "jotai";
 import {Hackathons_detail} from "../../jotai";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
+import {https} from "../../constants";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const Hackathons = () =>{
+const Hackathons = (props) =>{
     const { t } = useTranslation('common')
     const [hackathonsData,setHackathonsData] = useAtom(Hackathons_detail)
+
+    useEffect(()=>{
+            const hackathons_details_list = JSON.parse(props.hackathons_details)
+            setHackathonsData(hackathons_details_list)
+    },[])
     return (
 
         <div className="mx-auto relative bg-fixed overflow-hidden"
@@ -97,8 +103,23 @@ const Hackathons = () =>{
 }
 export default Hackathons
 
-export const getStaticProps = async ({ locale }) => ({
-    props: {
-        ...await serverSideTranslations(locale, ['common', 'footer','header']),
+
+export async function getStaticProps({locale}){
+    let data ={ locale }
+    const hackathons_ret = await fetch(`${https}/v1/Hackathons/GetHackathonsDetails`,{
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(data)
+    })
+    const hackathons_result = await hackathons_ret.json()
+    let  hackathons_details = await hackathons_result.res.project_details
+    return {
+        props: {
+            hackathons_details,
+            ...await serverSideTranslations(locale, ['common', 'footer','header']),
+        }
     }
-})
+
+}

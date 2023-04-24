@@ -21,12 +21,8 @@ const Meeting = (props) =>{
     const { t } = useTranslation('common')
     const [activityList,setActivityList] = useAtom(Activity_Alldetail)
     useEffect(()=>{
-        const fetchUserBounty = async () => {
             const activity_details_list = JSON.parse(props.activity_details)
             setActivityList(activity_details_list)
-        }
-        fetchUserBounty()
-
     },[])
     return (
 
@@ -121,36 +117,8 @@ const Meeting = (props) =>{
 export default Meeting
 
 
-// export const   getStaticPaths: GetStaticPaths  = async ({locales= [],defaultLocale}) => {
-//     let data = {
-//         locale:defaultLocale
-//     }
-//     const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`,{
-//         method:'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body:JSON.stringify(data)
-//     })
-//     const activity_result = await activity_ret.json()
-//     let  activity_details = await JSON.parse(activity_result.res.project_details)
-//     let paths=[]
-//     for (let i= 0 ;i<activity_details.length;i++){
-//         for (const locale of locales) {
-//             paths.push({ params:{id:(activity_details[i].id).toString()},locale})
-//         }
-//     }
-//     return {
-//         paths,
-//         fallback: false
-//     };
-// }
-
 export async function getStaticProps({locale}){
-    let data = {
-        // databaseId: CourseDatabaseId,
-        locale
-    }
+    let data = { locale }
     const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`,{
         method:'POST',
         headers: {
