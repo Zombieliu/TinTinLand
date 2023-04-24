@@ -47,12 +47,12 @@ const Header = () =>{
     }
     function languageChange() {
         console.log("--------------------",language)
-        if(language =="zn"){
+        if(language =="cn"){
             setLanguage("en")
             router.push({ pathname, query }, asPath, { locale: "en" })
         }else {
-            setLanguage("zn")
-            router.push({ pathname, query }, asPath, { locale: "zn" })
+            setLanguage("cn")
+            router.push({ pathname, query }, asPath, { locale: "cn" })
         }
 
     }
@@ -119,7 +119,7 @@ const Header = () =>{
                                 >
                                     <div className="flex justify-between items-center  w-12  text-xs">
 
-                                        <div className={language==="zn"?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
+                                        <div className={language==="cn"?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
                                               EN
                                         </div>
                                          <div className={language==="en"?" w-12   w-6  py-1":"bg-black rounded-full w-12   w-6  py-1  text-white"}>
@@ -259,7 +259,7 @@ const Header = () =>{
                                                     )}
                                                 >
                                     <div className="flex justify-between items-center  w-12  text-xs">
-                                         <div className={language==="zn"?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
+                                         <div className={language==="cn"?"w-12   w-6  py-1":"bg-black rounded-full w-12  w-6 py-1 text-center text-white"}>
                                               EN
                                         </div>
                                          <div className={language==="en"?" w-12   w-6  py-1":"bg-black rounded-full w-12   w-6  py-1  text-white"}>

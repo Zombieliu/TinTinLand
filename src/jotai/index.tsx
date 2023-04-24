@@ -178,5 +178,5 @@ const SignUpCourseBoxData = atom({
 })
 
 
-const Language = atomWithStorage("Language","zn")
+const Language = atomWithStorage("Language","cn")
 export {Activity_detail,Course_data,Hackathons_detail,Language,Course_Detail,JobFairInfoState,LoginState,UserEmail,PopUpBoxState,PopUpBoxInfo,OpenLoginState,OpenPayState,PayState,PendingPayState,PromptBoxState,SignUpCourseBoxState,SignUpCourseBoxData}

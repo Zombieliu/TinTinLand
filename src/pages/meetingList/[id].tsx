@@ -144,13 +144,26 @@ const Meeting = () =>{
 }
 export default Meeting
 
-export const getStaticPaths = ({ locales = [] }) => {
-    const paths = []
-
-    for (const locale of locales) {
-        paths.push({ params: { id: '1' }, locale })
+export const getStaticPaths = async ({locales = [], defaultLocale}) => {
+    let data = {
+        locale: defaultLocale
     }
+    const paths = []
+    const activity_ret = await fetch(`${https}/v1/Activity/GetActivityAllDetails`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    const activity_result = await activity_ret.json()
+    let activity_details = await JSON.parse(activity_result.res.project_details)
 
+    for (let i= 0 ;i<activity_details.length;i++){
+        for (const locale of locales) {
+            paths.push({ params:{id:(activity_details[i].id).toString()},locale})
+        }
+    }
     return {
         paths,
         fallback: true,
