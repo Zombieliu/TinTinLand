@@ -140,15 +140,15 @@ const PopUpBoxInfo = atom({
 })
 const PopUpBoxState = atom(false)
 
-const Course_data = atomWithStorage("courseData",courseData)
+const Course_data = atom(courseData)
 
-const Course_Detail = atomWithStorage("courseAllData",data)
+const Course_Detail = atom(data)
 
-const Activity_Alldetail = atomWithStorage("activityData",activityData)
+const Activity_Alldetail = atom(activityData)
 
-const Activity_detail = atomWithStorage("Activity_detail",activityData[0])
+const Activity_detail = atom(activityData[0])
 
-const Hackathons_detail = atomWithStorage("hackathonsData",hackathonsData)
+const Hackathons_detail = atom(hackathonsData)
 
 const JobFairInfoState = atom(false)
 

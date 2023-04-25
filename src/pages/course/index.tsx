@@ -190,8 +190,6 @@ const Course = (props) =>{
 export default Course
 
 
-
-
 export async function getStaticProps({locale}){
     let data ={ locale }
     const course_ret = await fetch(`${https}/v1/Course/GetCourseAllDetails`,{

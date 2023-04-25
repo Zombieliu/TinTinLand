@@ -71,7 +71,7 @@ const  Details = () =>{
                 {courseDetail.teacher.map(item=>(
                     <div key={item.name} className="rounded-2xl   p-5">
                         <div className="flex items-center">
-                            <img className="rounded-full w-16" src={item.img} alt=""/>
+                            <img className="rounded-full w-16 h-16" src={item.img} alt=""/>
                             <div className="ml-2">
                                 <div className='text-xl font-semibold'>
                                     {item.name}
@@ -184,14 +184,14 @@ const CourseInfo = () =>{
                     </div>
                 </div>
 
-                <div className={classNames(courseDetail.community_recommendation.length !=0?"py-6":" hidden ")}>
+                <div className={classNames(courseDetail.community_recommendation[0].name ==""?"py-6":" hidden ")}>
                     <div className="text-indigo-700 text-2xl">
                         {t("课程推荐")}
                     </div>
                     <div className="h-96 overflow-x-auto pr-2">
                     <div className=" items-center w-full grid grid-cols-1 gap-4 mt-3 ">
                         {courseDetail.community_recommendation.map(item=>(
-                            <div key={item.text} className="rounded-2xl   ">
+                            <div key={item.text} className={item.name== ""?"hidden":"rounded-2xl   "}>
                                 <div className="grid xl:grid-cols-2 gap-4">
                                     <div className="flex items-center">
                                     <img className="rounded-full w-10 h-10 bg-white" src={item.img} alt=""/>
@@ -250,16 +250,10 @@ const CourseDetails = (props) =>{
     // }
 
     useEffect(()=>{
-        if (router.isReady){
-            const fetchUserBounty = async () => {
                 const project_details_list = JSON.parse(props.project_details)
                 const project_details = project_details_list[0]
                 setCourseDetail(project_details)
-            }
-            fetchUserBounty()
-
-        }
-    },[router.isReady])
+    },[])
     return (
 
         <div className="mx-auto relative bg-fixed overflow-hidden"

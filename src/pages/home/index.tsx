@@ -161,11 +161,11 @@ const Course = (data) => {
                     </div>
                 </div>
                 <div className="w-full  h-full relative  transition-all duration-700 " id="carousel">
-                    <div className="flex gap-8"  id="container">
+                    <div className="flex gap-8  "  id="container">
                         {course_info.map(items=>(
-                            <div key={items.id} className={items.homeDisplay=="False"?"hidden":"w-full"}>
-                                <div  className="rounded-2xl  xl:w-96 2xl:w-99 ">
-                                    <img className="rounded-t-2xl h-56 2xl:h-72" src={items.img} alt=""/>
+                            <div key={items.id} className={items.homeDisplay=="False"?"hidden":"xl:w-96 2xl:w-99"}>
+                                <div  className="rounded-2xl   ">
+                                    <img className="rounded-t-2xl w-full h-56 2xl:h-72" src={items.img} alt=""/>
                                     <div className="px-10 py-8 bg-white rounded-b-2xl">
                                         <div className="flex  h-20 overflow-hidden flex-wrap ">
                                             {items.type.map(list=>(

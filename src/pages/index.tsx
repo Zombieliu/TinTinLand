@@ -94,7 +94,6 @@ export async function getStaticProps({ locale }){
     const activity_result = await activity_ret.json()
     let  activity_details = await activity_result.res.project_details
 
-    let media_data = {databaseId: MediaDatabaseID,}
     const media_ret = await fetch(`${https}/v1/Media/GetMediaDetails`,{
         method:'POST',
         headers: {
@@ -105,8 +104,7 @@ export async function getStaticProps({ locale }){
     const media_result = await media_ret.json()
     let media_details = await media_result.res.project_details
 
-    let community_data = {databaseId: CommunityDatabaseID}
-    const community_ret = await fetch(`${https}/v1/Media/GetMediaDetails`,{
+    const community_ret = await fetch(`${https}/v1/Community/GetCommunity`,{
         method:'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -116,7 +114,6 @@ export async function getStaticProps({ locale }){
     const community_result = await community_ret.json()
     let  community_details = await community_result.res.project_details
 
-    let communityMember_data = {databaseId: CommunityMemberDatabaseID}
     const communityMember_ret = await fetch(`${https}/v1/CommunityMember/GetCommunityMemberDetails`,{
         method:'POST',
         headers: {
