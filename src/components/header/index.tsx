@@ -43,6 +43,7 @@ const Header = () =>{
     const loginOut = () =>{
         setLoginState(false);
         setUserEmail({user_email:"",username:""})
+        
         router.push('/')
     }
     function languageChange() {
