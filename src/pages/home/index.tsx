@@ -79,7 +79,7 @@ const Course = (data) => {
         if(typeof window !== 'undefined'){
             if(document.getElementById("carousel")){
             const left = document.getElementById("carousel")
-            if (index <= Number((Course_info.length - Course_info.length/2) * 24)) {
+            if (index <= Number((course_info.length - course_info.length/2) * 24)) {
                 left.style.marginLeft  = -index + "rem"
             } else {
                 index = 0
@@ -163,8 +163,8 @@ const Course = (data) => {
                 <div className="w-full  h-full relative  transition-all duration-700 " id="carousel">
                     <div className="flex gap-8  "  id="container">
                         {course_info.map(items=>(
-                            <div key={items.id} className={items.homeDisplay=="False"?"hidden":"xl:w-96 2xl:w-99"}>
-                                <div  className="rounded-2xl   ">
+                            <div key={items.id} className={items.homeDisplay=="False"?"hidden":""}>
+                                <div  className="rounded-2xl   xl:w-96 2xl:w-99">
                                     <img className="rounded-t-2xl w-full h-56 2xl:h-72" src={items.img} alt=""/>
                                     <div className="px-10 py-8 bg-white rounded-b-2xl">
                                         <div className="flex  h-20 overflow-hidden flex-wrap ">
