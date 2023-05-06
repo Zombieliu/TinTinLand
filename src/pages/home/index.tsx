@@ -50,53 +50,6 @@ const Course = (data) => {
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
     const [course_info,setCourse_info] = useAtom(Course_data)
     const { t } = useTranslation('common')
-    const styles = {
-        slide: {
-            background: '#ccc'
-        },
-        activeSlide: {
-            background: '#000'
-        }
-    };
-    // useEffect(()=>{
-    //     return ()=> {
-    //         clearInterval(autoTimer)
-    //     }
-    // },[])
-    // let index = 0
-    // const  createAuto = () => {
-    //     return  setInterval(() => {
-    //         index = index + 26
-    //         run()
-    //     }, 8000)
-    // }
-    // let autoTimer = createAuto()
-    // function run() {
-    //     clearInterval(autoTimer)
-    //     if(typeof window !== 'undefined'){
-    //         if(document.getElementById("carousel")){
-    //             const left = document.getElementById("carousel")
-    //             if (index <= Number((course_info.length - course_info.length/2) * 24)) {
-    //                 left.style.marginLeft  = -index + "rem"
-    //             } else {
-    //                 index = 0
-    //                 left.style.marginLeft = 0 + "rem"
-    //             }
-    //             autoTimer = createAuto()
-    //         }
-    //     }
-    // }
-    // const left = ()=>{
-    //     if(index !== 0){
-    //         index = index-26
-    //         run()
-    //     }
-    // }
-    // const right = ()=>{
-    //     index = index + 26
-    //     run()
-    // }
-
 
     const Signup = (img,courseName) =>{
         setSignUpCourseBox(true)
@@ -145,16 +98,7 @@ const Course = (data) => {
             </div>
 
             <div className="w-full relative hidden overflow-hidden xl:flex">
-                {/*<div className="z-20 absolute  text-black  mx-auto bottom-0 top-0 text-2xl items-center  text-black  flex justify-center">*/}
-                {/*    <div onClick={left}  className="bg-white  px-6 py-3 cursor-pointer items-center opacity-50 rounded-full hover:opacity-80 transition duration-300">*/}
-                {/*        <i className="fa fa-angle-left" aria-hidden="true"></i>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-                {/*<div  className="z-20 absolute  text-black  mx-auto bottom-0 top-0 text-2xl right-0 items-center  text-black  flex justify-center">*/}
-                {/*    <div onClick={right} className="bg-white  px-6 py-3 cursor-pointer items-center opacity-50 rounded-full hover:opacity-80 transition duration-300">*/}
-                {/*        <i className="fa fa-angle-right" aria-hidden="true"></i>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+
                 <div className="w-full  h-full relative  transition-all duration-700 " id="carousel">
                     <Swiper
                         // loop={true}
