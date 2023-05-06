@@ -49,7 +49,7 @@ const Course = (data) => {
         }
     },[])
     let index = 0
-    function createAuto() {
+    const  createAuto = () => {
         return  setInterval(() => {
             index = index + 26
             run()
@@ -81,7 +81,6 @@ const Course = (data) => {
         index = index + 26
         run()
     }
-
 
     const Signup = (img,courseName) =>{
         setSignUpCourseBox(true)
