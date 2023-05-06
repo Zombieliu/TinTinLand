@@ -93,6 +93,7 @@ const  Details = () =>{
 const CourseInfo = () =>{
     const [courseDetail] = useAtom(Course_Detail)
     const { t } = useTranslation('common')
+
     return(
         <div className="md:flex mb-20">
             <div className="md:w-7/12 xl:w-8/12 md:mr-10">
@@ -184,7 +185,7 @@ const CourseInfo = () =>{
                     </div>
                 </div>
 
-                <div className={classNames(courseDetail.community_recommendation[0].name ==""?"py-6":" hidden ")}>
+                <div className="py-6">
                     <div className="text-indigo-700 text-2xl">
                         {t("课程推荐")}
                     </div>
@@ -194,7 +195,7 @@ const CourseInfo = () =>{
                             <div key={item.text} className={item.name== ""?"hidden":"rounded-2xl   "}>
                                 <div className="grid xl:grid-cols-2 gap-4">
                                     <div className="flex items-center">
-                                    <img className="rounded-full w-10 h-10 bg-white" src={item.img} alt=""/>
+                                    <img className="rounded-full w-10 h-10 " src={item.img} alt=""/>
                                     <div className="ml-2">
                                         <div className=' font-semibold'>
                                             {item.name}
