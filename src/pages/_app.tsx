@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next'
 import '@rainbow-me/rainbowkit/styles.css';
 import "../css/font-awesome.css"
+
 import {WagmiConfig} from "wagmi";
 import {chains, CustomAvatar, wagmiClient} from "../wallet_configuration";
 import {RainbowKitProvider} from "@rainbow-me/rainbowkit";

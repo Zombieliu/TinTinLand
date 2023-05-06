@@ -25,6 +25,14 @@ import {WaitPayPoPUpBox} from "../../components/payState";
 import {CourseData} from "../../components/course_data";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
+import { Swiper, SwiperSlide } from "swiper/react";
+import  {Keyboard, Autoplay, Navigation, Pagination, Scrollbar} from "swiper";
+
+import "swiper/css";
+import "swiper/css/scrollbar";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -42,45 +50,53 @@ const Course = (data) => {
     const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
     const [course_info,setCourse_info] = useAtom(Course_data)
     const { t } = useTranslation('common')
+    const styles = {
+        slide: {
+            background: '#ccc'
+        },
+        activeSlide: {
+            background: '#000'
+        }
+    };
+    // useEffect(()=>{
+    //     return ()=> {
+    //         clearInterval(autoTimer)
+    //     }
+    // },[])
+    // let index = 0
+    // const  createAuto = () => {
+    //     return  setInterval(() => {
+    //         index = index + 26
+    //         run()
+    //     }, 8000)
+    // }
+    // let autoTimer = createAuto()
+    // function run() {
+    //     clearInterval(autoTimer)
+    //     if(typeof window !== 'undefined'){
+    //         if(document.getElementById("carousel")){
+    //             const left = document.getElementById("carousel")
+    //             if (index <= Number((course_info.length - course_info.length/2) * 24)) {
+    //                 left.style.marginLeft  = -index + "rem"
+    //             } else {
+    //                 index = 0
+    //                 left.style.marginLeft = 0 + "rem"
+    //             }
+    //             autoTimer = createAuto()
+    //         }
+    //     }
+    // }
+    // const left = ()=>{
+    //     if(index !== 0){
+    //         index = index-26
+    //         run()
+    //     }
+    // }
+    // const right = ()=>{
+    //     index = index + 26
+    //     run()
+    // }
 
-    useEffect(()=>{
-        return ()=> {
-            clearInterval(autoTimer)
-        }
-    },[])
-    let index = 0
-    const  createAuto = () => {
-        return  setInterval(() => {
-            index = index + 26
-            run()
-        }, 8000)
-    }
-    let autoTimer = createAuto()
-    function run() {
-        clearInterval(autoTimer)
-        if(typeof window !== 'undefined'){
-            if(document.getElementById("carousel")){
-                const left = document.getElementById("carousel")
-                if (index <= Number((course_info.length - course_info.length/2) * 24)) {
-                    left.style.marginLeft  = -index + "rem"
-                } else {
-                    index = 0
-                    left.style.marginLeft = 0 + "rem"
-                }
-                autoTimer = createAuto()
-            }
-        }
-    }
-    const left = ()=>{
-        if(index !== 0){
-            index = index-26
-            run()
-        }
-    }
-    const right = ()=>{
-        index = index + 26
-        run()
-    }
 
     const Signup = (img,courseName) =>{
         setSignUpCourseBox(true)
@@ -90,6 +106,7 @@ const Course = (data) => {
             price: "100"
         })
     }
+
     return(
         <div id="Educate" className="pt-20">
 
@@ -128,22 +145,48 @@ const Course = (data) => {
             </div>
 
             <div className="w-full relative hidden overflow-hidden xl:flex">
-                <div className="z-20 absolute  text-black  mx-auto bottom-0 top-0 text-2xl items-center  text-black  flex justify-center">
-                    <div onClick={left}  className="bg-white  px-6 py-3 cursor-pointer items-center opacity-50 rounded-full hover:opacity-80 transition duration-300">
-                        <i className="fa fa-angle-left" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <div  className="z-20 absolute  text-black  mx-auto bottom-0 top-0 text-2xl right-0 items-center  text-black  flex justify-center">
-                    <div onClick={right} className="bg-white  px-6 py-3 cursor-pointer items-center opacity-50 rounded-full hover:opacity-80 transition duration-300">
-                        <i className="fa fa-angle-right" aria-hidden="true"></i>
-                    </div>
-                </div>
+                {/*<div className="z-20 absolute  text-black  mx-auto bottom-0 top-0 text-2xl items-center  text-black  flex justify-center">*/}
+                {/*    <div onClick={left}  className="bg-white  px-6 py-3 cursor-pointer items-center opacity-50 rounded-full hover:opacity-80 transition duration-300">*/}
+                {/*        <i className="fa fa-angle-left" aria-hidden="true"></i>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div  className="z-20 absolute  text-black  mx-auto bottom-0 top-0 text-2xl right-0 items-center  text-black  flex justify-center">*/}
+                {/*    <div onClick={right} className="bg-white  px-6 py-3 cursor-pointer items-center opacity-50 rounded-full hover:opacity-80 transition duration-300">*/}
+                {/*        <i className="fa fa-angle-right" aria-hidden="true"></i>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
                 <div className="w-full  h-full relative  transition-all duration-700 " id="carousel">
-                    <div className="flex gap-8  "  id="container">
+                    <Swiper
+                        // loop={true}
+                        slidesPerView={1}
+                        centeredSlides={false}
+                        slidesPerGroupSkip={1}
+                         grabCursor={false}
+                         keyboard={{
+                             enabled: true,
+                         }}
+                         breakpoints={{
+                             769: {
+                                 slidesPerView: 3,
+                                 slidesPerGroup: 3,
+                             },
+                         }}
+                         autoplay={{
+                             delay: 8000,
+                             disableOnInteraction: false,
+                         }}
+                         scrollbar={false}
+                         navigation={true}
+                         pagination={{
+                             clickable: true,
+                         }}
+                         modules={[Autoplay,Keyboard, Scrollbar,Navigation, Pagination]}
+                        className="swiper-container gap-4"
+                       >
                         {course_info.map(items=>(
-                            <div key={items.id} className={items.homeDisplay=="False"?"hidden":""}>
-                                <div  className="rounded-2xl   xl:w-96 2xl:w-99">
-                                    <img className="rounded-t-2xl w-full h-56 2xl:h-72" src={items.img} alt=""/>
+                            <SwiperSlide key={items.id} className={items.homeDisplay=="False"?"hidden":""}>
+                                <div  className="rounded-2xl  mr-4">
+                                    <img className="rounded-t-2xl w-full h-56 2xl:h-80" src={items.img} alt=""/>
                                     <div className="px-10 py-8 bg-white rounded-b-2xl">
                                         <div className="flex  h-20 overflow-hidden flex-wrap ">
                                             {items.type.map(list=>(
@@ -182,9 +225,26 @@ const Course = (data) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </SwiperSlide>
                         ))}
-                    </div>
+                    </Swiper>
+                    <style jsx global>
+                        {`.swiper-button-next,
+                          .swiper-button-prev {
+                            border-radius: 9999px;
+                          background-color: white;
+                          background-color: rgba(255, 255, 255, 0.5);
+                          padding:1.5rem;
+                          color: #000 !important;
+                          }  
+                          .swiper-button-prev:after, .swiper-button-next:after {
+                            font-size: 1.5rem!important;
+                          }
+                          .swiper-pagination-bullet-active {
+                          background: black;
+                          }
+                        `}
+                    </style>
                 </div>
             </div>
 
