@@ -172,7 +172,7 @@ const Course = (data) => {
                              },
                          }}
                          autoplay={{
-                             delay: 8000,
+                             delay: 7000,
                              disableOnInteraction: false,
                          }}
                          scrollbar={false}
