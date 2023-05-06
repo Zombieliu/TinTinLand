@@ -29,78 +29,59 @@ import {useTranslation} from "next-i18next";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
-const Course_info =
-    [
-        {
-            id:"",
-            name:"",
-            img:"",
-            link:"",
-            state:"",
-            type:[
-                {content:""}
-            ]
-        }
-    ]
+
 const Course = (data) => {
-    const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
-    const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
-    const [course_info,setCourse_info] = useAtom(Course_data)
-    const { t } = useTranslation('common')
-    let index = 0
-    let autoTimer
-
     useEffect(()=>{
-        autoTimer = createAuto()
-        return ()=> {
-            clearInterval(autoTimer)
-        }
-    },[])
-
-    useEffect(()=>{
-
         const query = async () =>{
-
             const project_details = JSON.parse(data.data)
             setCourse_info(project_details)
         }
         query()
     },[])
+    const [,setSignUpCourseBox] = useAtom(SignUpCourseBoxState)
+    const [,setSignUpCourseData] =useAtom(SignUpCourseBoxData)
+    const [course_info,setCourse_info] = useAtom(Course_data)
+    const { t } = useTranslation('common')
 
-
+    useEffect(()=>{
+        return ()=> {
+            clearInterval(autoTimer)
+        }
+    },[])
+    let index = 0
     function createAuto() {
         return  setInterval(() => {
             index = index + 26
             run()
         }, 8000)
     }
+    let autoTimer = createAuto()
     function run() {
         clearInterval(autoTimer)
         if(typeof window !== 'undefined'){
             if(document.getElementById("carousel")){
-            const left = document.getElementById("carousel")
-            if (index <= Number((course_info.length - course_info.length/2) * 24)) {
-                left.style.marginLeft  = -index + "rem"
-            } else {
-                index = 0
-                left.style.marginLeft = 0 + "rem"
-            }
-            autoTimer = createAuto()
+                const left = document.getElementById("carousel")
+                if (index <= Number((course_info.length - course_info.length/2) * 24)) {
+                    left.style.marginLeft  = -index + "rem"
+                } else {
+                    index = 0
+                    left.style.marginLeft = 0 + "rem"
+                }
+                autoTimer = createAuto()
             }
         }
     }
     const left = ()=>{
-        clearInterval(autoTimer)
         if(index !== 0){
             index = index-26
             run()
         }
     }
     const right = ()=>{
-        clearInterval(autoTimer)
         index = index + 26
         run()
     }
+
 
     const Signup = (img,courseName) =>{
         setSignUpCourseBox(true)
@@ -110,8 +91,6 @@ const Course = (data) => {
             price: "100"
         })
     }
-
-
     return(
         <div id="Educate" className="pt-20">
 
@@ -865,63 +844,6 @@ const Community = (data) =>{
         onload()
     },[community])
 
-    // const community = [
-    //     {
-    //         href:"https://learnblockchain.cn/",
-    //         img:"/partner/登链社区-color.svg"
-    //     },
-    //     {
-    //         href:"https://www.sunrecruitment.co.nz/",
-    //         img:"/partner/APG-color.svg"
-    //     },
-    //     {
-    //         href:"https://mp.weixin.qq.com/s/o4Q9US-Nl26s7gHhLDnPXw",
-    //         img:"/partner/BTCU-高校区块链技术社区-color.svg"
-    {/*    },*/}
-    {/*    {*/}
-    {/*        href:"https://www.sunrecruitment.co.nz/",*/}
-    {/*        img:"/partner/SUN-RECRUITMENT-color.svg"*/}
-    {/*    },*/}
-    {/*    {*/}
-    {/*        href:"https://twitter.com/ICPL_Community",*/}
-    {/*        img:"/partner/icpl.svg"*/}
-    //     },
-    //     {
-    //         href:"https://twitter.com/D_PlusCommunity?s=20&t=dtI_hlfd5jdBlz9weG-aDA",
-    {/*        img:"/partner/Dplus-color.svg"*/}
-    {/*    },*/}
-    {/*    {*/}
-    {/*        href:"https://www.chainnode.com/",*/}
-    {/*        img:"/partner/ChainNode-color.svg"*/}
-    {/*    },*/}
-    {/*    {*/}
-    {/*        href:"https://twitter.com/EthereumCN?s=20&t=MyUrO-0Dh45O9tBhz7HBwA",*/}
-    {/*        img:"/partner/ECN-color.svg"*/}
-    {/*    },*/}
-    {/*    {*/}
-    {/*        href:"https://twitter.com/metatribe6465?s=20&t=-sX_ekTaDtBhgW0vt7JS_Q",*/}
-    {/*        img:"/partner/Metatribe-color.svg"*/}
-    //     },
-    //     {
-    //         href:"https://twitter.com/OneBlock_?s=20&t=MIkwh32a6Orf2f-2o60yHg",
-    {/*        img:"/partner/oneblock-color.svg"*/}
-    {/*    },*/}
-    {/*    {*/}
-    {/*        href:"https://rebase.network/",*/}
-    {/*        img:"/partner/rebase-color.svg"*/}
-    {/*    },*/}
-    {/*    {*/}
-    //         href:"https://www.thublockchain.org/",
-    //         img:"/partner/THUBA-color.svg"
-    //     },
-    {/*    {*/}
-    //         href:"https://twitter.com/ipfsnews2",
-    //         img:"/partner/ipfsnews.svg"
-    //     },
-    //
-    //
-    //
-    // ]
     return(
         <div className="mt-10 mx-4 relative">
             <div className="flex   relative overflow-hidden w-full h-16" id="div2" >
