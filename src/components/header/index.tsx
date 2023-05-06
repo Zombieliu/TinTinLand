@@ -112,7 +112,7 @@ const Header = () =>{
                                 className={classNames(
                                     'relative inline-flex flex-shrink-0 h-7 w-12  border border-gray-500 rounded-full cursor-pointer transition-colors ease-in-out duration-200 items-center bg-gray-200 '
                                 )}
-                            >
+                             checked>
                                 <span className="sr-only">Use setting</span>
 
                                 <span
@@ -253,7 +253,7 @@ const Header = () =>{
                                                 className={classNames(
                                                     'relative inline-flex flex-shrink-0 h-7 w-12  border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 items-center bg-gray-200 '
                                                 )}
-                                            >
+                                             checked>
                                                 <span className="sr-only">Use setting</span>
 
                                                 <span
